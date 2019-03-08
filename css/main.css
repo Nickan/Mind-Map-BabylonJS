@@ -1,0 +1,14 @@
+#mithril {
+  /* position: absolute;
+  top: 131px;
+  left: 100px; */
+}
+
+.slider {
+  position: absolute;
+  top: 0px;
+  cursor: move;
+  width: 10px;
+  height: 100vw;
+  background: #000000;
+}
