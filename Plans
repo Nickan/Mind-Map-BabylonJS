@@ -1,0 +1,9 @@
+Todo
+  Visualizing tool
+    Implement Reingold-Tilford
+      Will set the breadth position of nodes
+      Depth will be based on the hierarchical level
+
+      Relational positioning will be handled by a different class
+    Implement Node/DataDrawing
+    

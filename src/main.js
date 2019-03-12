@@ -18,11 +18,15 @@ var createScene = function () {
   
   // Add lights to the scene
   var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-  var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+  // var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
 
   // Add and manipulate meshes in the scene
   var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:2}, scene);
 
+
+  // Temporary position to load source codes
+  let dataManager = new DataManager();
+  
   return scene;
 };
 /******* End of the create scene function ******/    
@@ -30,8 +34,9 @@ var createScene = function () {
 var scene = createScene(); //Call the createScene function
 
 // Register a render loop to repeatedly render the scene
-engine.runRenderLoop(function () { 
+engine.runRenderLoop(function () {
   scene.render();
+  
 });
 
 // Watch for browser/canvas resize events
