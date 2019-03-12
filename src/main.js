@@ -11,8 +11,10 @@ var createScene = function () {
   // var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,0,5), scene);
   // camera.attachControl(canvas, true);
 
-  
-  camSlider = CameraSlider(canvas, scene);
+  Utils.createGroundFor3D2DConversion(scene);
+  camManager = new CameraManager();
+  camManager.init(canvas, scene);
+  // camSlider = CameraSlider(canvas, scene);
   
   // Add lights to the scene
   var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);

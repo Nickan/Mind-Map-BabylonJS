@@ -1,3 +1,19 @@
+class Utils {
+  static createGroundFor3D2DConversion(scene) {
+    let ground = BABYLON.Mesh.CreateGround("ground", 100, 100, 1, scene, false);
+
+    let myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+
+    myMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
+    myMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    myMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    myMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+
+    ground.material = myMaterial;
+    ground.material.alpha = 0;
+  }
+}
+
 function makeElementDraggable(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (document.getElementById(elmnt.id + "header")) {
@@ -56,3 +72,29 @@ function getElementLeftRatioToWindow(element) {
   }
   return 0;
 }
+
+
+// Camera
+function rayCast(canvas, scene, cam) {
+  scene.onPointerDown = function(event, pickResult) {
+    console.log("pickResult " + pickResult.pickedPoint);
+    console.log("worldVectorToScreen " + 
+      worldVectorToScreen(pickResult.pickedPoint, cam, scene));
+  }
+
+}
+
+function worldVectorToScreen(v, cam, scene){
+  let iden = BABYLON.Matrix.Identity();
+  let camera = cam || scene.activeCamera;
+
+  let p = BABYLON.Vector3.Project(v, iden, scene.getTransformMatrix(),
+              camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight()));
+
+  return new BABYLON.Vector2(p.x, p.y);
+}
+
+function getActiveCamera() {
+
+}
+
