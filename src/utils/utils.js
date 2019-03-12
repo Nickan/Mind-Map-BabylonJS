@@ -1,6 +1,6 @@
 class Utils {
   static createGroundFor3D2DConversion(scene) {
-    let ground = BABYLON.Mesh.CreateGround("ground", 100, 100, 1, scene, false);
+    let ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1, scene, false);
 
     let myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
 
