@@ -1,6 +1,6 @@
 class ReingoldTilford {
 
-  static get BREADTH_DIST()  {
+  static get BREADTH_DIST() {
     return 1;
   }
 
@@ -13,19 +13,31 @@ class ReingoldTilford {
       throw("startingNode should not be undefined");
     }
 
-    let ft = this.setInitialX(startingNode, allNodes);
-
+    let allNodesY = this.assignValueY(0, startingNode, allNodes);
+    let ft = this.setInitialX(startingNode, allNodesY);
+    
     return ft;
   }
 
-  setInitialX(node, allNodes) {
-    let inX = this.setInitialXRelativeToChildren(node, allNodes);
+  assignValueY(currentY, node, allNodes) {
+    node.y = currentY;
+    let children = this.getChildren(node, allNodes);
 
-    return inX;
+    children.forEach((child) => {
+      this.assignValueY(currentY + 1, child, allNodes);
+    });
+
+    return allNodes;
+  }
+
+  setInitialX(node, allNodes) {
+    this.setInitialXRelativeToChildren(node, allNodes);
+    this.solveConflictingX(node, allNodes);
+    return allNodes;
   }
 
   setInitialXRelativeToChildren(node, allNodes) {
-    let inX = _.cloneDeep(allNodes, true);
+    // let inX = _.cloneDeep(allNodes, true);
 
     let children = this.getChildren(node, allNodes);
     children.forEach((child) => {
@@ -38,6 +50,25 @@ class ReingoldTilford {
 
     return allNodes;
   }
+
+  solveConflictingX(node, allNodes) {
+    // if (!this.leftMost(node) && node.childrenId.length > 0) {
+    //   self.fixConflictingX(node, allNodes);
+    // }
+  }
+
+  fixConflictingX(node, allNodes) {
+    // let leftContour = this.getLeftContour(node, allNodes, 0);
+  }
+
+
+  getLeftContour(node, allNodes) {
+    let contour = {};
+    x = node.x;
+    y = node.y;
+  }
+
+
 
   setLeafInitialX(node, allNodes) {
     if (!this.isLeafNode(node)) {

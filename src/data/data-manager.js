@@ -3,7 +3,6 @@ class DataManager {
     
 
     let allData = this.getAllData();
-    console.log(allData);
 
     this.reingold = new ReingoldTilford();
     let coords = this.reingold.getCoordinates(allData.get(0), allData);
@@ -16,17 +15,43 @@ class DataManager {
   getAllData() {
     let allData = new Map();
 
-    let data1 = new Data(0, "0", -1, new Array(1, 2, 3));
-    let data2 = new Data(1, "1", 0);
-    let data3 = new Data(2, "2", 0);
-    let data4 = new Data(3, "3", 0);
+    this.addNewData("0", -1, allData);
+    this.addNewData("1", 0, allData);
+    this.addNewData("2", 0, allData);
+    this.addNewData("3", 0, allData);
 
-    allData.set(0, data1);
-    allData.set(1, data2);
-    allData.set(2, data3);
-    allData.set(3, data4);
+    this.addNewData("4", 1, allData);
+    this.addNewData("5", 1, allData);
+
+    this.addNewData("6", 2, allData);
+
+    this.addNewData("7", 3, allData);
+    this.addNewData("8", 3, allData);
+    this.addNewData("9", 3, allData);
 
     return allData;
+  }
+
+  addNewData(text, parentId, allData) {
+    let id = this.getHighestId(allData) + 1;
+    let nData = new Data(id, text, parentId);
+
+    if (allData.has(parentId)) {
+      let parent = allData.get(parentId);
+      parent.childrenId.push(nData.id);
+    }
+    allData.set(nData.id, nData);
+  }
+
+  getHighestId(allData) {
+    let highestValue = -1;
+    allData.forEach((value, index) => {
+      if (highestValue < index) {
+        highestValue = index;
+      }
+    });
+
+    return  highestValue;
   }
 
   
