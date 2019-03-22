@@ -58,4 +58,30 @@ class DataContainer {
     return siblings[leftSiblingIndex];
   }
 
+  getLeftMostSibling(nodeId) {
+    let pId = this.allMetaData.get(nodeId).parentId;
+    if (pId == undefined) {
+      throw("Can't get parent id of node id " + nodeId);
+      return undefined;
+    }
+
+    let c = this.getChildren(pId);
+    if (c.length == 0) {
+      throw("No children, please check for error");
+    }
+    return c[0];
+  }
+
+  getRightSibling(nodeId) {
+    let pId = this.allMetaData.get(nodeId).parentId;
+    let children = this.getChildren(pId);
+
+    let data = this.allData.get(nodeId);
+    let rightSiblingIndex = children.indexOf(data) + 1;
+    if (rightSiblingIndex < children.length) {
+      return children[rightSiblingIndex];
+    }
+    return undefined;
+  }
+
 }

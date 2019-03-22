@@ -12,6 +12,17 @@ class Utils {
     ground.material = myMaterial;
     ground.material.alpha = 0;
   }
+
+  
+  static getMaxKey(map) {
+    let max = 0;
+    map.forEach((value, key) => {
+      if (max < key) {
+        max = key;
+      }
+    });
+    return max;
+  }
 }
 
 function makeElementDraggable(elmnt) {
