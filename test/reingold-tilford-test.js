@@ -20,9 +20,6 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
   }
   // Have to separate later
 
-
-
-
   function testReingoldTilford() {
     let dataLoader = new DataLoader();
     let container = dataLoader.loadDataContainer(loadData);
@@ -31,6 +28,7 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
       let rein = new ReingoldTilford();
       testAssignValueY(rein, container);
       testSetInitialX(rein, container);
+      testSetConflictX(rein, container);
 
       function testAssignValueY(rein, container) {
         let a = container.allData;
@@ -58,7 +56,6 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
         let nc = rein.setInitialX(sNode, newC, false);
 
         let nA = nc.allData;
-        console.log(nc);
         assert.ok(nA.get(1).x == 2, "Passed!");
 
         assert.ok(nA.get(2).x == 1, "Passed!");
@@ -67,6 +64,33 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
 
         assert.ok(nA.get(4).x == 3, "Passed!");
         assert.ok(nA.get(4).mod == 2.5, "Passed!");
+
+        assert.ok(nA.get(5).x == 0, "Passed!");
+        assert.ok(nA.get(6).x == 1, "Passed!");
+        assert.ok(nA.get(7).x == 2, "Passed!");
+
+        assert.ok(nA.get(8).x == 0, "Passed!");
+
+        assert.ok(nA.get(9).x == 0, "Passed!");
+        assert.ok(nA.get(10).x == 1, "Passed!");
+      }
+
+      function testSetConflictX(rein, container) {
+        let newC = _.cloneDeep(container);
+        let sNode = newC.allData.get(1);
+        let nc = rein.setInitialX(sNode, newC, true);
+
+        let nA = nc.allData;
+        assert.ok(nA.get(1).x == 2, "Passed!");
+
+        assert.ok(nA.get(2).x == 1, "Passed!");
+        assert.ok(nA.get(2).mod == 0, "Passed!");
+        
+        assert.ok(nA.get(3).x == 3, "Passed!");
+        assert.ok(nA.get(3).mod == 3, "Passed!");
+
+        assert.ok(nA.get(4).x == 4.5, "Passed!");
+        assert.ok(nA.get(4).mod == 4, "Passed!");
 
         assert.ok(nA.get(5).x == 0, "Passed!");
         assert.ok(nA.get(6).x == 1, "Passed!");

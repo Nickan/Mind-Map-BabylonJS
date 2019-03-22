@@ -32,11 +32,6 @@ class ReingoldTilford {
 
   // solveConflicts is needed for unit testing
   setInitialX(node, dataContainer, solveConflicts = true) {
-    let children = dataContainer.getChildren(node.id);
-    children.forEach((child) => {
-      this.setInitialX(child, dataContainer);
-    });
-
     this.setInitialXRelativeToChildren(node, dataContainer);
     if (solveConflicts) {
       this.solveConflictingX(node, dataContainer);
@@ -45,6 +40,11 @@ class ReingoldTilford {
   }
 
   setInitialXRelativeToChildren(node, dataContainer) {
+    let children = dataContainer.getChildren(node.id);
+    children.forEach((child) => {
+      this.setInitialXRelativeToChildren(child, dataContainer);
+    });
+
     this.setLeafInitialX(node, dataContainer);
     this.setNodeWithChildInitialX(node, dataContainer);
     this.setNodeWithChildrenInitialX(node, dataContainer);
@@ -53,6 +53,11 @@ class ReingoldTilford {
   }
 
   solveConflictingX(node, dataContainer) {
+    let children = dataContainer.getChildren(node.id);
+    children.forEach((child) => {
+      this.solveConflictingX(child, dataContainer);
+    });
+
     if (!dataContainer.isLeftMost(node.id) && 
       (dataContainer.hasChild(node.id) ||
       dataContainer.hasChildren(node.id))  ) {
@@ -61,21 +66,57 @@ class ReingoldTilford {
   }
 
   fixConflictingX(node, dataContainer) {
-    let contour = new Map();
-    this.getLeftContour(node, dataContainer, 0, contour);
+    let leftContour = new Map();
+    leftContour = this.getLeftContour(node, dataContainer, 0, leftContour);
 
-    let startingDepth = node.y;
+    let leftData = dataContainer.getLeftMostSibling(node.id);
+
+    while (leftData != undefined && leftData != node) {
+      let rightContour = new Map();
+      rightContour = this.getRightContour(leftData, dataContainer, 0,
+        rightContour);
+      
+      let hD = getHighestDepthContainsBothContourValue(leftContour, 
+        rightContour);
+
+      let shiftValue = 0;
+      let sD = node.y;
+      for (var depth = sD; depth <= hD; depth++) {
+        let rV = rightContour.get(depth);
+        let lV = leftContour.get(depth);
+
+        if (lV <= rV) {
+          let tmpShiftValue = (rV - lV) + ReingoldTilford.BREADTH_DIST;
+          if (tmpShiftValue > shiftValue) {
+            shiftValue = tmpShiftValue;
+          }
+        }
+      }
+
+      if (shiftValue > 0) {
+        node.x += shiftValue;
+        node.mod += shiftValue;
+      }
+
+      leftData = dataContainer.getRightSibling(leftData.id);
+    }
+
+    function getHighestDepthContainsBothContourValue(c1, c2) {
+      let maxKey1 = Utils.getMaxKey(c1);
+      let maxKey2 = Utils.getMaxKey(c2);
+      return Math.min(maxKey1, maxKey2);
+    }
   }
 
 
   getLeftContour(node, dataContainer, modSum, contour) {
     let x = node.x;
     let y = node.y;
-    let cVal = x + modSum;
+    let contourVal = x + modSum;
     if (contour.has(y)) {
-      contour.set(y, Math.min(contour.get(y), cVal));
+      contour.set(y, Math.min(contour.get(y), contourVal));
     } else {
-      contour.set(y, cVal);
+      contour.set(y, contourVal);
     }
 
     if (node.mod == undefined) {
@@ -86,6 +127,28 @@ class ReingoldTilford {
     children.forEach((child) => {
       this.getLeftContour(child, dataContainer, modSum, contour);
     });
+    return contour; // I might to convert it to recursive
+  }
+
+  getRightContour(node, dataContainer, modSum, contour) {
+    let x = node.x;
+    let y = node.y;
+    let contourVal = x + modSum;
+    if (contour.has(y)) {
+      contour.set(y, Math.max(contour.get(y), contourVal));
+    } else {
+      contour.set(y, contourVal);
+    }
+
+    if (node.mod == undefined) {
+      node.mod = 0;
+    }
+    modSum += node.mod;
+    let children = dataContainer.getChildren(node.id);
+    children.forEach((child) => {
+      this.getRightContour(child, dataContainer, modSum, contour);
+    });
+    return contour; // I might to convert it to recursive
   }
 
   setLeafInitialX(node, dataContainer) {

@@ -16,4 +16,6 @@
 #qunit {
   position: absolute;
   top: 0px;
+  overflow-y: auto;
+  height: 100%;
 }
