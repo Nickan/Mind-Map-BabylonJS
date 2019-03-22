@@ -5,5 +5,92 @@ Todo
       Depth will be based on the hierarchical level
 
       Relational positioning will be handled by a different class
+      Pass the data, then return a nodes with coordinates
+
+      Data
+        id
+        text
+        parent
+        children
+      DataState
+        selected
+        ...
+      AllData
+        Flat linear map if data using id as key
     Implement Node/DataDrawing
+
+
+Data
+  Should we keep the array of children in the parents?
+  Have a function that will add children to the parent list
     
+
+Reingold-Tilford
+  Have to create a unit test
+  At least for the major calculation to prove everything is working
+  Create basic tests
+    Component test so that we can detect the error faster
+    Can be applied in every aspect of life
+    Automates checking, therefore frees up resources
+    Implementation
+      Any level that make sense
+      Need to know if there is a Javascript unit testing
+    Current State:
+      Need the unit test to automate checking of errors
+
+
+Chain function
+  Will make coding faster
+    This is just my theory, I want to try it
+    Issues
+      Will return the object instead of the specific state change
+    Pros
+      Easier to understand the chaining of functions
+      This is good for internal chaining of functions
+      This is more of combination of the hard wired values
+        VS pure function that gives versatility of usage
+      This is the classic example of specific vs general
+      Versatility has a cost
+      Even the mind knows at some point, it has to hard wire things
+        to save resources
+      Have to define conventional object oriented vs pure functions
+        Sometimes, hiding the information is better for performance issue
+        This is only true if the thing is already proven mostly right
+    Findings:
+      Have to always have an easy way to uncover the Implementation
+        It has to be debuggable, so that I can fix it easily
+      Should have a way to encapsulate
+
+Priorities
+  List all the things I have to do, choose only 2
+    Artificial intelligence
+    Data visualizer
+    Farm
+    Study high paying job
+    Electronics
+    Work: Software Engineer
+
+Steps to follow to get to the goal faster:
+  Create schedule and follow without fail
+  Distraction is really in our vein, because the brain is trying to be as versatile as possible to increase survivability
+  Therefore I have to guide my brain that we will have a far better chance of survival if:
+    Finish data visualizer
+    Study Artificial intelligence
+    Do better at work as a software Engineer
+    Improve family conditions
+
+Unit test
+  To be able to automate testing
+  Have to always frame what I want to implement
+
+  Implementation
+    Will use the unit test to run checking if the Reingold-Tilford is working as expected
+    It is inevitable to change the checker if the specification has changed
+
+  Should I separate file?
+    For now, whatever that works, I implement
+    Then correct assumptions later on
+
+    Simpler, better
+
+  
