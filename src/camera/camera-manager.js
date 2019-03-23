@@ -5,11 +5,15 @@ class CameraManager {
   }
 
   constructor() {
-    
+    this.onDrag = false;
+    this.currentPos = {};
+
+    this.cam1;
   }
 
   init(canvas, scene) {
-    let cam1 = this.createCam(canvas, scene);
+    this.cam1 = this.createCam(canvas, scene);
+    let cam1 = this.cam1;
     let cam2 = this.createCam(canvas, scene);
 
     cam1.viewport = new BABYLON.Viewport(0, 0, 1.0, 1.0);
@@ -17,6 +21,9 @@ class CameraManager {
 
     scene.activeCameras.push(cam2);
     scene.activeCameras.push(cam1);
+    
+    this.implementScreenScroll(scene);
+    
 
     // this.createTmpSlider(cam1, cam2);
     // makeElementDraggable(document.getElementsByClassName("slider")[0]);
@@ -72,6 +79,49 @@ class CameraManager {
     camera.orthoRight = orthoVal; //5 units to the right
     // camera.attachControl(canvas, true);
     return camera;
+  }
+
+  implementScreenScroll(scene) {
+    scene.onPointerDown = (event, pickResult) => {
+      let worldCoord = pickResult.pickedPoint;
+      this.currentPos = worldCoord;
+      this.onDrag = true;
+    }
+
+    scene.onPointerUp = (event, pickResult) => {
+      let worldCoord = pickResult.pickedPoint;
+      this.currentPos = worldCoord;
+      this.onDrag = false;
+    }
+
+    
+  }
+
+  update(scene, delta) {
+    let ms = delta / 1000.0;
+
+    if (this.onDrag) {
+      this.dragCamera(scene, delta);
+    }
+    
+  }
+
+  dragCamera(scene, delta) {
+    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+    let worldCoord = pickResult.pickedPoint;
+
+    let xDiff = this.currentPos.x - worldCoord.x;
+    let yDiff = this.currentPos.y - worldCoord.y;
+
+    if (xDiff != 0 || yDiff != 0) {
+      this.currentPos = worldCoord;
+      let pos = this.cam1.position;
+      pos.x += xDiff;
+      this.currentPos.x += xDiff;
+
+      pos.y += yDiff;
+      this.currentPos.y += yDiff;
+    }
   }
 }
 

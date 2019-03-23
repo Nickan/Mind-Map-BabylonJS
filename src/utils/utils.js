@@ -1,18 +1,50 @@
+
+
+
+
 class Utils {
   static createGroundFor3D2DConversion(scene) {
-    let ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1, scene, false);
+    // let ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1000, scene, false);
+    let ground = BABYLON.MeshBuilder.CreatePlane("plane", 
+      {width: 100, height: 100});
+    ground.position.z = 10;
 
     let myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
 
-    myMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
-    myMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-    myMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-    myMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+    // myMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
+    // myMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    // myMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    // myMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+
+    myMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    myMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    myMaterial.emissiveColor = new BABYLON.Color3(0, 0, 0);
+    myMaterial.ambientColor = new BABYLON.Color3(0, 0, 0);
 
     ground.material = myMaterial;
-    ground.material.alpha = 0;
+    ground.material.alpha = 1;
   }
 
+
+  // Camera
+  static rayCast(canvas, scene, cam) {
+    scene.onPointerDown = function(event, pickResult) {
+      console.log("pickResult " + pickResult.pickedPoint);
+      console.log("worldVectorToScreen " + 
+        Utils.worldVectorToScreen(pickResult.pickedPoint, cam, scene));
+    }
+
+  }
+
+  static worldVectorToScreen(v, cam, scene){
+    let iden = BABYLON.Matrix.Identity();
+    let camera = cam || scene.activeCamera;
+
+    let p = BABYLON.Vector3.Project(v, iden, scene.getTransformMatrix(),
+                camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight()));
+
+    return new BABYLON.Vector2(p.x, p.y);
+  }
   
   static getMaxKey(map) {
     let max = 0;
@@ -82,27 +114,6 @@ function getElementLeftRatioToWindow(element) {
     return ratio;
   }
   return 0;
-}
-
-
-// Camera
-function rayCast(canvas, scene, cam) {
-  scene.onPointerDown = function(event, pickResult) {
-    console.log("pickResult " + pickResult.pickedPoint);
-    console.log("worldVectorToScreen " + 
-      worldVectorToScreen(pickResult.pickedPoint, cam, scene));
-  }
-
-}
-
-function worldVectorToScreen(v, cam, scene){
-  let iden = BABYLON.Matrix.Identity();
-  let camera = cam || scene.activeCamera;
-
-  let p = BABYLON.Vector3.Project(v, iden, scene.getTransformMatrix(),
-              camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight()));
-
-  return new BABYLON.Vector2(p.x, p.y);
 }
 
 function getActiveCamera() {
