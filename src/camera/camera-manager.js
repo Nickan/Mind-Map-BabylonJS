@@ -1,3 +1,6 @@
+
+
+
 class CameraManager {
   // const ORTHOVALUE = 5; Have to make class variable to work
   static get ORTHOVALUE()  {
@@ -9,6 +12,7 @@ class CameraManager {
     this.currentPos = {};
 
     this.cam1;
+    this.zoomValue = CameraManager.ORTHOVALUE;
   }
 
   init(canvas, scene) {
@@ -83,16 +87,50 @@ class CameraManager {
 
   implementScreenScroll(scene) {
     scene.onPointerDown = (event, pickResult) => {
+      if (pickResult == undefined) {
+        return;
+      }
+
       let worldCoord = pickResult.pickedPoint;
       this.currentPos = worldCoord;
       this.onDrag = true;
     }
 
     scene.onPointerUp = (event, pickResult) => {
+      this.onDrag = false;
+      if (pickResult == undefined) {
+        return;
+      }
+
       let worldCoord = pickResult.pickedPoint;
       this.currentPos = worldCoord;
-      this.onDrag = false;
+      
     }
+
+    scene.onPointerObservable.add((pointerInfo) => {
+      if (pointerInfo.type == BABYLON.PointerEventTypes.POINTERWHEEL) {
+        let dY = pointerInfo.event.deltaY;
+        let zoomScale = 0.5;
+        
+        if (dY > 0) {
+          this.zoomValue += zoomScale;
+          
+        } else {
+          this.zoomValue -= zoomScale;
+        }
+
+        setCamOrthoValue(this.cam1, this.zoomValue);
+        // this.zoom += 0.1;
+        // setCamOrthoValue(this.cam1, )
+
+        function setCamOrthoValue(cam, zoomValue) {
+          cam.orthoTop = zoomValue;
+          cam.orthoBottom = -zoomValue;
+          cam.orthoLeft = -zoomValue;
+          cam.orthoRight = zoomValue;
+        }
+      }
+    });
 
     
   }
