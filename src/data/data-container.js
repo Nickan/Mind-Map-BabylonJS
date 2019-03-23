@@ -84,4 +84,9 @@ class DataContainer {
     return undefined;
   }
 
+  getParent(nodeId) {
+    let pId = this.allMetaData.get(nodeId).parentId;
+    return this.allData.get(pId);
+  }
+
 }
