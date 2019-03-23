@@ -18,8 +18,8 @@ class CameraManager {
     scene.activeCameras.push(cam2);
     scene.activeCameras.push(cam1);
 
-    this.createTmpSlider(cam1, cam2);
-    makeElementDraggable(document.getElementsByClassName("slider")[0]);
+    // this.createTmpSlider(cam1, cam2);
+    // makeElementDraggable(document.getElementsByClassName("slider")[0]);
   }
 
   createTmpSlider(cam1, cam2) {
@@ -61,7 +61,7 @@ class CameraManager {
   }
 
   createCam(canvas, scene) {
-    let camera = new BABYLON.FreeCamera("UniCam", new BABYLON.Vector3(0, 40, 0), scene);
+    let camera = new BABYLON.FreeCamera("UniCam", new BABYLON.Vector3(0, 0, -10), scene);
 
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;

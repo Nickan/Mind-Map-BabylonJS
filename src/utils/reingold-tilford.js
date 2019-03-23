@@ -14,9 +14,20 @@ class ReingoldTilford {
     }
 
     let dataContainerY = this.assignValueY(0, startingNode, dataContainer);
-    let ft = this.setInitialX(startingNode, dataContainerY);
-    
-    // return ft;
+    let dc1 = this.setInitialX(startingNode, dataContainerY);
+    let dc2 = this.calcFinalX(startingNode, dc1, 0);
+    return dc3;
+  }
+
+  calcFinalX(node, dataContainer, modSum) {
+    node.x += modSum;
+    let mod = (node.mod == undefined) ? 0 : node.mod;
+    modSum += mod;
+    let children = dataContainer.getChildren(node.id);
+    children.forEach((child) => {
+      this.calcFinalX(child, dataContainer, modSum);
+    });
+    return dataContainer;
   }
 
   assignValueY(currentY, node, dataContainer) {
@@ -31,10 +42,10 @@ class ReingoldTilford {
   }
 
   // solveConflicts is needed for unit testing
-  setInitialX(node, dataContainer, solveConflicts = true) {
+  setInitialX(node, dataContainer, options) {
     this.setInitialXRelativeToChildren(node, dataContainer);
-    if (solveConflicts) {
-      this.solveConflictingX(node, dataContainer);
+    if (options.solveConflicts) {
+      this.solveConflictingX(node, dataContainer, options);
     }
     return dataContainer;
   }
@@ -52,16 +63,20 @@ class ReingoldTilford {
     return dataContainer;
   }
 
-  solveConflictingX(node, dataContainer) {
+  solveConflictingX(node, dataContainer, options) {
     let children = dataContainer.getChildren(node.id);
     children.forEach((child) => {
-      this.solveConflictingX(child, dataContainer);
+      this.solveConflictingX(child, dataContainer, options);
     });
 
     if (!dataContainer.isLeftMost(node.id) && 
       (dataContainer.hasChild(node.id) ||
       dataContainer.hasChildren(node.id))  ) {
       this.fixConflictingX(node, dataContainer);
+
+      if (options.recenterParentOfSolvedConflictNodes) {
+        this.recenterParent(node, dataContainer);
+      }
     }
   }
 
@@ -105,6 +120,31 @@ class ReingoldTilford {
       let maxKey1 = Utils.getMaxKey(c1);
       let maxKey2 = Utils.getMaxKey(c2);
       return Math.min(maxKey1, maxKey2);
+    }
+  }
+
+  // For now, recenter all the nodes with children
+  // Implement optimization later on
+  recenterParent(node, dataContainer) {
+    let p = dataContainer.getParent(node.id);
+    recenter(p, dataContainer);
+
+    function recenter(node, dataContainer) {
+      if (!dataContainer.hasChildren(node.id)) {
+        return;
+      }
+
+      node.x = getFinalMidX(node, dataContainer)
+
+      function getFinalMidX(node, dataContainer) {
+        let children = dataContainer.getChildren(node.id);
+        let fChild = children[0];
+        let lChild = children[children.length - 1];
+        let mod = (node.mod == undefined) ? 0 : node.mod;
+        let lx = fChild.x + mod;
+        let rx = lChild.x + mod;
+        return (lx + rx) / 2.0;
+      }
     }
   }
 
