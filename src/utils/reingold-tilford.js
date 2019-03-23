@@ -8,15 +8,19 @@ class ReingoldTilford {
 
   }
 
-  getCoordinates(startingNode, dataContainer) {
+  getCoordinates(startingNode, dataContainer, 
+    options = {
+      solveConflicts: true, 
+      recenterParentOfSolvedConflictNodes: true
+    }) {
     if (startingNode == undefined) {
       throw("startingNode should not be undefined");
     }
 
     let dataContainerY = this.assignValueY(0, startingNode, dataContainer);
-    let dc1 = this.setInitialX(startingNode, dataContainerY);
+    let dc1 = this.setInitialX(startingNode, dataContainerY, options);
     let dc2 = this.calcFinalX(startingNode, dc1, 0);
-    return dc3;
+    return dc2;
   }
 
   calcFinalX(node, dataContainer, modSum) {

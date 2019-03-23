@@ -1,5 +1,10 @@
+
+
+
+
 var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+engine.renderEvenInBackground =  false
 
 /******* Add the create scene function ******/
 var createScene = function () {
@@ -8,8 +13,7 @@ var createScene = function () {
   // scene.debugLayer.show();
 
   Utils.createGroundFor3D2DConversion(scene);
-  camManager = new CameraManager();
-  camManager.init(canvas, scene);
+  
   // camSlider = CameraSlider(canvas, scene);
   
   // Add lights to the scene
@@ -28,10 +32,13 @@ var createScene = function () {
 
 var scene = createScene(); //Call the createScene function
 
+camManager = new CameraManager();
+camManager.init(canvas, scene);
+
 // Register a render loop to repeatedly render the scene
 engine.runRenderLoop(function () {
   scene.render();
-  
+  camManager.update(scene, engine.getDeltaTime());
 });
 
 // Watch for browser/canvas resize events

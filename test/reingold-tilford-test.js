@@ -31,6 +31,7 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
       testSetConflictX(rein, container);
       let c1 = testCenterParentOfConflictedNodes(rein, container);
       testCalcFinalX(rein, c1);
+      testGetCoordinates(rein, container);
 
       function testAssignValueY(rein, container) {
         let a = container.allData;
@@ -140,6 +141,30 @@ QUnit.test("Reingold Tilford Test", function( assert ) {
       function testCalcFinalX(rein, container) {
         let sNode = container.allData.get(1);
         let nc = rein.calcFinalX(sNode, container, 0);
+
+        let nA = nc.allData;
+        assert.ok(nA.get(1).x == 2.75, "Passed!");
+
+        assert.ok(nA.get(2).x == 1, "Passed!");
+        assert.ok(nA.get(3).x == 3, "Passed!");
+        assert.ok(nA.get(4).x == 4.5, "Passed!");
+
+        assert.ok(nA.get(5).x == 0, "Passed!");
+        assert.ok(nA.get(6).x == 1, "Passed!");
+        assert.ok(nA.get(7).x == 2, "Passed!");
+
+        assert.ok(nA.get(8).x == 3, "Passed!");
+
+        assert.ok(nA.get(9).x == 4, "Passed!");
+        assert.ok(nA.get(10).x == 5, "Passed!");
+      }
+
+      function testGetCoordinates(rein, container) {
+        let newC = _.cloneDeep(container);
+        let sNode = newC.allData.get(1);
+        let options = {solveConflicts: true,
+          recenterParentOfSolvedConflictNodes: true};
+        let nc = rein.getCoordinates(sNode, newC, options);
 
         let nA = nc.allData;
         assert.ok(nA.get(1).x == 2.75, "Passed!");
