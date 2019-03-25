@@ -82,6 +82,8 @@ class CameraManager {
     camera.orthoLeft = -orthoVal;  //5 units to the left
     camera.orthoRight = orthoVal; //5 units to the right
     // camera.attachControl(canvas, true);
+
+    // camera.minZ = .001;
     return camera;
   }
 
@@ -91,14 +93,32 @@ class CameraManager {
         return;
       }
 
+      if (pickResult.pickedMesh.id == "plane") {
+        return;
+      }
+
+      if (pickResult.pickedMesh.id == "textplane") {
+        pickResult.pickedMesh.textBlock.text = "Edit";
+        this.createInputText(pickResult.pickedMesh);
+      }
+
+      console.log("pickedMesh" + pickResult.pickedMesh);
+
       let worldCoord = pickResult.pickedPoint;
       this.currentPos = worldCoord;
       this.onDrag = true;
+
+      
+      Utils.fireEvent("ondragscreen", []);
     }
 
     scene.onPointerUp = (event, pickResult) => {
       this.onDrag = false;
       if (pickResult == undefined) {
+        return;
+      }
+
+      if (pickResult.pickedMesh.pickedMeshName == "plane") {
         return;
       }
 
@@ -133,6 +153,23 @@ class CameraManager {
     });
 
     
+  }
+
+  createInputText(mesh) {
+    // let at = mesh.advanceDynamicTexture;
+    var at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    var input = new BABYLON.GUI.InputText();
+    input.width = 1;
+    // input.maxWidth = 0.2;
+    input.zIndex = 1;
+    input.height = "40px";
+    input.text = "This is a very long text used to test how the cursor works within the InputText control.";
+    input.color = "white";
+    input.background = "green";
+
+    input.autoStretchWidth = true;
+    at.addControl(input);
   }
 
   update(scene, delta) {
