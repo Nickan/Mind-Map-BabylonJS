@@ -5,7 +5,7 @@
 class Utils {
   static createGroundFor3D2DConversion(scene) {
     // let ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1000, scene, false);
-    let ground = BABYLON.MeshBuilder.CreatePlane("plane", 
+    let ground = BABYLON.MeshBuilder.CreatePlane("ground", 
       {width: 100, height: 100});
     ground.position.z = 10;
 
@@ -54,6 +54,40 @@ class Utils {
       }
     });
     return max;
+  }
+
+  static events = {};
+  static ON_DRAG_SCREEN = 'ondragscreen';
+
+  static addEventListener(name, handler) {
+    if (Utils.events.hasOwnProperty(name))
+      Utils.events[name].push(handler);
+    else
+      Utils.events[name] = [handler];
+  }
+
+  static removeEventListener(name, handler) {
+    /* This is a bit tricky, because how would you identify functions?
+      This simple solution should work if you pass THE SAME handler. */
+    if (!Utils.events.hasOwnProperty(name))
+      return;
+
+    var index = Utils.events[name].indexOf(handler);
+    if (index != -1)
+      Utils.events[name].splice(index, 1);
+  }
+
+  static fireEvent(name, args) {
+    if (!Utils.events.hasOwnProperty(name))
+      return;
+
+    if (!args || !args.length)
+      args = [];
+
+    var evs = Utils.events[name], l = evs.length;
+    for (var i = 0; i < l; i++) {
+      evs[i].apply(null, args);
+    }
   }
 }
 
