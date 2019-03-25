@@ -93,4 +93,6 @@ Unit test
 
     Simpler, better
 
-  
+Event Handler
+  Every events should be controlled in controls, so that there is a high level event manager
+  Thoroough management will be done on the fly  
