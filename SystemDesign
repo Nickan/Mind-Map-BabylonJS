@@ -1,0 +1,37 @@
+System implementation
+  System flow
+    Always start by looking the start state
+  Data Management
+    Creation of data
+      Anything related to data should happen in DataManager
+    Load
+      Will add fields along the way to make it easier the system to read
+    Save
+      Follow the format of File
+    File
+      [name]Data.json
+        key
+          id
+          name
+      [name]Meta.json
+        key
+          parentId
+          childrenIds
+Current
+  Create new data
+Todo
+  Urgent -> When working as expected in current state
+    Rename allData to nodes
+    Rename allMetaData to Meta
+    Rename node.name to node.text
+  Low
+    Remove node.id and just use the key as the id
+      Affected changes
+        Reingold-Tilford
+        Unit test
+        Overall system
+      *Need to prove that this is necessary
+
+
+
+  

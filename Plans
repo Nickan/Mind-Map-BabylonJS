@@ -95,4 +95,47 @@ Unit test
 
 Event Handler
   Every events should be controlled in controls, so that there is a high level event manager
-  Thoroough management will be done on the fly  
+  Thoroough management will be done on the fly 
+
+  Review Implementation
+    Check the latest changes
+
+  When woke up
+    Be grateful that I woke up
+    As it is not in my control how I exist in the first place
+    I will die soon, make every moment counts
+    I am just delaying my tasks
+    Doing it now will save me a lot of trouble and pain
+    If I just stick to what I have to do, everything I love to do will follow
+  
+  When working
+    Always jot down everything I have to do when stuck for 3 seconds
+    Saving me seconds now will save me several of hours later
+    
+  Status
+    Error getting children
+      It is from getting the childrenIds from the allMetaData
+      In my current system, I just put a blank view.
+      When creating a node, it should have a basic meta fields
+      Go back from the state
+    Fix DataManager
+      Get the highest assigned id by getting through all the existing data
+        Can be optimized later on
+      How?
+        Can analyze from the AllData
+        We can create a meta tester later?
+          Yes, depending on the state
+          Deal with it later
+    How to add new data?
+      allData 
+        id
+          id  -> Is this necessary? I think we could get away with that, deal with it later for optimization
+          name
+      allMetaData
+        id
+          parentId
+          childrenIds
+
+
+
+
