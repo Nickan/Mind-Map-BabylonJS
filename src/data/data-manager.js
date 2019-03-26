@@ -2,17 +2,17 @@
   Task: To load and save to json file
   Will be converted to visualizer later on
   How it works?
-    Will have a separate json, allData.json and allData-main.json
-    allData.json will have id and name(text) of the data
-    allDataView(allData-<view name>) will have the view state of data
-      Handles metadata of allData
+    Will have a separate json, nodes.json and nodes-main.json
+    nodes.json will have id and name(text) of the data
+    nodesView(nodes-<view name>) will have the view state of data
+      Handles metadata of nodes
       We can have as many view as possible
 
   How to save state?
     Things to consider:
       Undo, redo
     Current implementation
-      Merge the allData and allDataView to feed to the reingold-tilford
+      Merge the nodes and nodesView to feed to the reingold-tilford
       Potential solutions:
         Have a new merged file
         Do not use it for editing
@@ -35,7 +35,7 @@ class DataManager {
 
     function loadData(container) {
       let rein = new ReingoldTilford();
-      let a = container.allData;
+      let a = container.nodes;
       let dCont = rein.getCoordinates(a.get(1), container);
       cbFunc(dCont);
     }
@@ -44,38 +44,38 @@ class DataManager {
   embedCoordinates() {
     let dc = this.dataContainer;
     let rein = new ReingoldTilford();
-    let coords = rein.getCoordinates(dc.allData.get(1), dc);
+    let coords = rein.getCoordinates(dc.nodes.get(1), dc);
     return coords;
   }
 
   
 
   addNewData(text, parentId) {
-    let allData = this.dataContainer.allData;
-    let allMetaData = this.dataContainer.allMetaData;
+    let nodes = this.dataContainer.nodes;
+    let metas = this.dataContainer.metas;
 
-    let id = this.getHighestId(allData) + 1;
+    let id = this.getHighestId(nodes) + 1;
     let node = {"name": "text", "id": id};
 
-    let meta = allMetaData.get(id);
+    let meta = metas.get(id);
     if (meta == undefined) {
       meta = new Meta(id, parentId);
-      allMetaData.set(id, meta);
+      metas.set(id, meta);
     }
 
     if (parentId != undefined) {
-      let parentMeta = allMetaData.get(parentId);
+      let parentMeta = metas.get(parentId);
       if (parentMeta != undefined) {
         parentMeta.childrenIds.push(id);
       }
     }
     
-    allData.set(id, node);
+    nodes.set(id, node);
   }
 
-  getHighestId(allData) {
+  getHighestId(nodes) {
     let highestValue = 0;
-    allData.forEach((value, index) => {
+    nodes.forEach((value, index) => {
       if (highestValue < index) {
         highestValue = index;
       }

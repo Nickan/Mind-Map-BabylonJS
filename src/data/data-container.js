@@ -1,22 +1,22 @@
 class DataContainer {
-  constructor(allData = new Map(), allMetaData = new Map()) {
-    this.allData = allData;
-    this.allMetaData = allMetaData;
+  constructor(nodes = new Map(), metas = new Map()) {
+    this.nodes = nodes;
+    this.metas = metas;
   }
 
   getChildren(nodeId) {
-    let mData = this.allMetaData.get(nodeId);
+    let mData = this.metas.get(nodeId);
     let childrenIds = mData.childrenIds;
     let children = new Array();
     childrenIds.forEach((childId) => {
-      let child = this.allData.get(childId);
+      let child = this.nodes.get(childId);
       children.push(child);
     });
     return children;
   }
 
   getSiblings(nodeId) {
-    let mData = this.allMetaData.get(nodeId);
+    let mData = this.metas.get(nodeId);
     return this.getChildren(mData.parentId);
   }
 
@@ -33,12 +33,12 @@ class DataContainer {
   }
 
   isMainNode(nodeId) {
-    let meta = this.allMetaData.get(nodeId);
+    let meta = this.metas.get(nodeId);
     return meta.parentId == undefined;
   }
 
   hasChildren(nodeId) {
-    return (this.allMetaData.get(nodeId).childrenIds.length > 1);
+    return (this.metas.get(nodeId).childrenIds.length > 1);
   }
 
   isLeafNode(nodeId) {
@@ -46,7 +46,7 @@ class DataContainer {
   }
 
   hasChild(nodeId) {
-    return (this.allMetaData.get(nodeId).childrenIds.length == 1);
+    return (this.metas.get(nodeId).childrenIds.length == 1);
   }
 
   getLeftSibling(nodeId) {
@@ -59,7 +59,7 @@ class DataContainer {
   }
 
   getLeftMostSibling(nodeId) {
-    let pId = this.allMetaData.get(nodeId).parentId;
+    let pId = this.metas.get(nodeId).parentId;
     if (pId == undefined) {
       throw("Can't get parent id of node id " + nodeId);
       return undefined;
@@ -73,10 +73,10 @@ class DataContainer {
   }
 
   getRightSibling(nodeId) {
-    let pId = this.allMetaData.get(nodeId).parentId;
+    let pId = this.metas.get(nodeId).parentId;
     let children = this.getChildren(pId);
 
-    let data = this.allData.get(nodeId);
+    let data = this.nodes.get(nodeId);
     let rightSiblingIndex = children.indexOf(data) + 1;
     if (rightSiblingIndex < children.length) {
       return children[rightSiblingIndex];
@@ -85,8 +85,8 @@ class DataContainer {
   }
 
   getParent(nodeId) {
-    let pId = this.allMetaData.get(nodeId).parentId;
-    return this.allData.get(pId);
+    let pId = this.metas.get(nodeId).parentId;
+    return this.nodes.get(pId);
   }
 
 }

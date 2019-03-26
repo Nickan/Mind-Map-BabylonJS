@@ -7,7 +7,7 @@ class NodeManager {
   }
 
   loadNodes(dataContainer, scene) {
-    let ad = dataContainer.allData;
+    let ad = dataContainer.nodes;
     let xUnit = 1.5;
     let yUnit = 1.5;
 
