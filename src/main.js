@@ -1,48 +1,65 @@
 
 
 
+class Main {
+  constructor() {
+    this.init();
+    this.initScene();
+    this.initCamera();
+    this.initStateManager();
+    this.renderLoop();
+  }
 
-var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
-var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
-engine.renderEvenInBackground =  false
+  init() {
+    this.canvas = document.getElementById("renderCanvas");
+    this.engine = new BABYLON.Engine(this.canvas, true);
+    this.engine.renderEvenInBackground =  false
+  }
 
-/******* Add the create scene function ******/
-var createScene = function () {
-  // Create the scene space
-  var scene = new BABYLON.Scene(engine);
-  // scene.debugLayer.show();
+  renderLoop() {
+    let engine = this.engine;
+    let scene = this.scene;
+    let camManager = this.camManager;
 
-  Utils.createGroundFor3D2DConversion(scene);
-  
-  // camSlider = CameraSlider(canvas, scene);
-  
-  // Add lights to the scene
-  var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-  light1.intensity = 1;
-  // var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+    engine.runRenderLoop(function () {
+      scene.render();
+      camManager.update(scene, engine.getDeltaTime());
+    });
 
-  // Temporary position to load source codes
-  let dm = new DataManager();
-  dm.onLoadData((dataContainer) => {
-    let nm = new NodeManager(dataContainer, scene);
-    let ctrl = new Controls(dataContainer, scene);
-  });
-  return scene;
-};
-/******* End of the create scene function ******/    
+    // Watch for browser/canvas resize events
+    window.addEventListener("resize", function () { 
+      engine.resize();
+    });
+  }
 
-var scene = createScene(); //Call the createScene function
+  initScene() {
+    let scene = new BABYLON.Scene(this.engine);
+    this.scene = scene;
+    Utils.createGroundFor3D2DConversion(scene);
+    
+    // camSlider = CameraSlider(canvas, scene);
+    
+    // Add lights to the scene
+    this.light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+    this.light.intensity = 1;
 
-camManager = new CameraManager();
-camManager.init(canvas, scene);
+    // Temporary position to load source codes
+    // let dm = new DataManager();
+    // dm.onLoadData((dataContainer) => {
+    //   let nm = new NodeManager(dataContainer, scene);
+    //   let ctrl = new Controls(dataContainer, scene);
+      
+    // });
+  }
 
-// Register a render loop to repeatedly render the scene
-engine.runRenderLoop(function () {
-  scene.render();
-  camManager.update(scene, engine.getDeltaTime());
-});
+  initCamera() {
+    this.camManager = new CameraManager();
+    this.camManager.init(this.canvas, this.scene);
+  }
 
-// Watch for browser/canvas resize events
-window.addEventListener("resize", function () { 
-  engine.resize();
-});
+  initStateManager() {
+    this.stateManager = new StateManager(this);
+  }
+}
+
+let m = new Main();

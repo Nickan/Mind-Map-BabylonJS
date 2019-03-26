@@ -12,6 +12,11 @@ class Controls {
   }
 
   init(dataContainer, scene) {
+    this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    this.initEvents(scene);
+  }
+
+  initEvents(scene) {
     scene.onPointerDown = (event, pickResult) => {
       Utils.fireEvent(Controls.ON_POINTER_DOWN, [event, pickResult]);
       this.onPointerDown(event, pickResult);
@@ -30,6 +35,10 @@ class Controls {
         break;
       }
     });
+
+    Utils.addEventListener(CameraManager.ON_SCREEN_DRAG, (params) => {
+      this.disposeInput();
+    });
   }
 
   onPointerDown(event, pickResult) {
@@ -44,10 +53,16 @@ class Controls {
   }
 
   createInputText(mesh) {
-    // let at = mesh.advanceDynamicTexture;
-    var at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    if (this.inputMesh == mesh) {
+      return
+    }
 
-    var input = new BABYLON.GUI.InputText();
+    this.disposeInput();
+
+    this.inputMesh = mesh;
+
+    let input = new BABYLON.GUI.InputText();
+    this.input = input;
     input.width = 1;
     // input.maxWidth = 0.2;
     input.zIndex = 1;
@@ -57,7 +72,15 @@ class Controls {
     input.background = "green";
 
     input.autoStretchWidth = true;
-    at.addControl(input);
+    this.at.addControl(input);
+  }
+
+  disposeInput() {
+    if (this.input != undefined) {
+      this.input.dispose();
+    }
+    this.input = undefined;
+    this.inputMesh = undefined;
   }
 
   

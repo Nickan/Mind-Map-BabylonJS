@@ -22,6 +22,11 @@
 
 class DataManager {
   constructor() {
+    this.clear();
+  }
+
+  clear() {
+    this.dataContainer = new DataContainer();
   }
 
   onLoadData(cbFunc) {
@@ -36,19 +41,40 @@ class DataManager {
     }
   }
 
-  addNewData(text, parentId, allData) {
-    let id = this.getHighestId(allData) + 1;
-    let nData = new Data(id, text, parentId);
+  embedCoordinates() {
+    let dc = this.dataContainer;
+    let rein = new ReingoldTilford();
+    let coords = rein.getCoordinates(dc.allData.get(1), dc);
+    return coords;
+  }
 
-    if (allData.has(parentId)) {
-      let parent = allData.get(parentId);
-      parent.childrenId.push(nData.id);
+  
+
+  addNewData(text, parentId) {
+    let allData = this.dataContainer.allData;
+    let allMetaData = this.dataContainer.allMetaData;
+
+    let id = this.getHighestId(allData) + 1;
+    let node = {"name": "text", "id": id};
+
+    let meta = allMetaData.get(id);
+    if (meta == undefined) {
+      meta = new Meta(id, parentId);
+      allMetaData.set(id, meta);
     }
-    allData.set(nData.id, nData);
+
+    if (parentId != undefined) {
+      let parentMeta = allMetaData.get(parentId);
+      if (parentMeta != undefined) {
+        parentMeta.childrenIds.push(id);
+      }
+    }
+    
+    allData.set(id, node);
   }
 
   getHighestId(allData) {
-    let highestValue = -1;
+    let highestValue = 0;
     allData.forEach((value, index) => {
       if (highestValue < index) {
         highestValue = index;

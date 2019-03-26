@@ -3,9 +3,8 @@
 
 class CameraManager {
   // const ORTHOVALUE = 5; Have to make class variable to work
-  static get ORTHOVALUE()  {
-    return 5;
-  }
+  static ORTHOVALUE = 5;
+  static ON_SCREEN_DRAG = "onScreenDrag";
 
   constructor() {
     this.onDrag = false;
@@ -119,7 +118,7 @@ class CameraManager {
     });
 
     Utils.addEventListener(Controls.ON_MOUSE_SCROLL,
-      (event, pickResult) => {
+      (pointerInfo) => {
       if (pointerInfo.type == BABYLON.PointerEventTypes.POINTERWHEEL) {
         let dY = pointerInfo.event.deltaY;
         let zoomScale = 0.5;
@@ -169,6 +168,8 @@ class CameraManager {
 
       pos.y += yDiff;
       this.currentPos.y += yDiff;
+
+      Utils.fireEvent(CameraManager.ON_SCREEN_DRAG, []);
     }
   }
 }

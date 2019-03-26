@@ -1,5 +1,5 @@
 class DataContainer {
-  constructor(allData, allMetaData) {
+  constructor(allData = new Map(), allMetaData = new Map()) {
     this.allData = allData;
     this.allMetaData = allMetaData;
   }
