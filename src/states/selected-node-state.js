@@ -66,4 +66,8 @@ class SelectedNodeState {
       }
     });
   }
+
+  exit() {
+    
+  }
 }

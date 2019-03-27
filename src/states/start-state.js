@@ -13,5 +13,11 @@ class StartState {
     sm.setState(new CreateState());
   }
 
+  update(delta) {
+    
+  }
 
+  exit() {
+
+  }
 }
