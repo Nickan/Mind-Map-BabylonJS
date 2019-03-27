@@ -138,6 +138,54 @@ class Controls {
       if (pickResult == undefined)
         return;
     }
+
+    
+  }
+
+  static EDIT = "edit";
+  static NEW_CHILD = "newChild";
+  static NEW_SIBLING = "newSibling";
+  initSelectedState(data, changeStateFn) {
+    let scene = data.scene;
+    scene.onKeyboardObservable.add((keyInfo) => {
+      let command = getCommand(keyInfo, data);
+
+      switch (command) {
+        case Controls.EDIT:
+          changeStateFn(new EditNodeState(data));
+        break;
+        case Controls.NEW_CHILD:
+          changeStateFn(new CreateChildState(data));
+        break;
+        case Controls.NEW_SIBLING:
+          changeStateFn(new CreateSiblingState(data));
+        break; 
+      }
+
+      scene.onKeyboardObservable.clear();
+
+      function getCommand(keyInfo, data) {
+        if (keyInfo.type == 2)
+          return;
+      
+        let code = keyInfo.event.code;
+        switch (code) {
+          case "F2":
+          if (data.selectedMesh != undefined)
+            return Controls.EDIT;
+          case "Enter": 
+            return Controls.NEW_SIBLING;
+          case "Tab":
+            return Controls.NEW_CHILD;
+        }
+      }
+    });
+
+    // Will change when node can be dragged
+    scene.onPointerUp = (event, pickResult) => {
+      scene.onPointerUp = undefined;
+      changeStateFn(new IdleState());
+    }
   }
 
   initDragNodeState(scene, changeStateFn) {
@@ -146,6 +194,8 @@ class Controls {
       changeStateFn(new IdleState());
     }
   }
+
+
 
 
 
