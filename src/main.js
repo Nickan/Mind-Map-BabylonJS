@@ -41,8 +41,8 @@ class Main {
   }
   
   initCamera() {
-    this.camManager = new CameraManager();
-    this.camManager.init(this.canvas, this.scene);
+    this.cameraManager = new CameraManager();
+    this.cameraManager.init(this.canvas, this.scene);
   }
 
   initStateManager() {
@@ -54,11 +54,13 @@ class Main {
   renderLoop() {
     let engine = this.engine;
     let scene = this.scene;
-    let camManager = this.camManager;
+    let sm = this.stateManager;
 
     engine.runRenderLoop(function () {
+      if (sm.state != undefined) {
+        sm.state.update(engine.getDeltaTime());
+      }
       scene.render();
-      camManager.update(scene, engine.getDeltaTime());
     });
 
     // Watch for browser/canvas resize events

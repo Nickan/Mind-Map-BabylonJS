@@ -96,6 +96,65 @@ class Controls {
     this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     this.at.addControl(input);
   }
+  
+  /*
+    Per state in-depth controls
+  */
+  initIdleState(scene, changeStateFn) {
+    scene.onPointerDown = (event, pickResult) => {
+      if (pickResult == undefined)
+        return;
+
+      changeToSelectedNode(pickResult, changeStateFn);
+      changeToDragNode(pickResult, changeStateFn);
+
+      function changeToSelectedNode(pickResult, changeStateFn) {
+        if (pickResult.pickedMesh.id == "textplane") {
+          let m = pickResult.pickedMesh;
+          let data = {
+            selectedMesh: m,
+            textBlock: m.textBlock,
+            node: m.textBlock.node
+          };
+          scene.onPointerDown = undefined;
+          changeStateFn(new SelectedNodeState(data));
+        }
+      }
+
+      function changeToDragNode(pickResult, changeStateFn) {
+        let id = pickResult.pickedMesh.id;
+        if (id == "textplane") return;
+        if (id == "ground") {
+          let data = {
+            pickedPoint: pickResult.pickedPoint,
+          };
+          scene.onPointerDown = undefined;
+          changeStateFn(new DragScreenState(data));
+        }
+      }
+    }
+
+    scene.onPointerUp = (event, pickResult) => {
+      if (pickResult == undefined)
+        return;
+    }
+  }
+
+  initDragNodeState(scene, changeStateFn) {
+    scene.onPointerUp = (event, pickResult) => {
+      scene.onPointerUp = undefined;
+      changeStateFn(new IdleState());
+    }
+  }
+
+
+
+
+
+
+  onScreenScroll(onDragStartCb, onDragEndCb) {
+
+  }
 
   disposeInput() {
     if (this.input != undefined)

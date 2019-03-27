@@ -6,30 +6,35 @@ class IdleState {
     let sm = this.stateManager;
     let main = sm.main;
 
-    this.handleSelectedNodeState(sm, main);
-    this.handleDragNodeState(sm, main);
+    main.controls.initIdleState(main.scene, (newState) => {
+      sm.setState(newState);
+    });
   }
 
-  handleSelectedNodeState(sm, main) {
-    main.scene.onPointerDown = (event, pickResult) => {
-      if (pickResult == undefined)
-        return;
+  dragNodeStateDown(pickResult) {
+    let id = pickResult.pickedMesh.id;
+    /*
+      When there is no selected mesh, go to DragNodeState
+    */
+    if (id == "textplane")
+      return;
 
-      if (pickResult.pickedMesh.id == "textplane") {
-        let m = pickResult.pickedMesh;
-        let data = {
-          selectedMesh: m,
-          textBlock: m.textBlock,
-          node: m.textBlock.node
-        };
-        main.scene.onPointerDown = undefined;
-        sm.setState(new SelectedNodeState(data));
-      }
-        
-    };
+    if (id == "ground") {
+      let worldCoord = pickResult.pickedPoint;
+      this.currentPos = worldCoord;
+      this.onDrag = true;
+    }
   }
 
-  handleDragNodeState(sm, main) {
+  dragNodeStateUp(pickResult) {
+    let worldCoord = pickResult.pickedPoint;
+    this.currentPos = worldCoord;
+  }
 
+  update(delta) {
+    
+  }
+
+  exit() {
   }
 }
