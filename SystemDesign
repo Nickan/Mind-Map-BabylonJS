@@ -17,13 +17,27 @@ System implementation
         key
           parentId
           childrenIds
-Current
-  Create new data
-Todo
-  Urgent -> When working as expected in current state
+  Controls
+    F2: Edit node
+    Enter: Create Sibling / Enter edited text
+    Tab: Create child
+    Mouse Drag:
+      Screen scroll
+    Mouse Scroll:
+      Zoom
+    Delete:
+          
+Done
+  Refactor
     Rename allData to nodes
     Rename allMetaData to Meta
     Rename node.name to node.text
+Current
+  Create new data
+Todo
+  High
+    Implement getting the text from the node
+  Medium
   Low
     Remove node.id and just use the key as the id
       Affected changes

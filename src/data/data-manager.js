@@ -55,7 +55,7 @@ class DataManager {
     let metas = this.dataContainer.metas;
 
     let id = this.getHighestId(nodes) + 1;
-    let node = {"name": "text", "id": id};
+    let node = {"text": "text", "id": id};
 
     let meta = metas.get(id);
     if (meta == undefined) {
@@ -82,6 +82,10 @@ class DataManager {
     });
 
     return  highestValue;
+  }
+
+  editText(node, text) {
+    node.text = text;
   }
 
   

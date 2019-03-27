@@ -1,18 +1,15 @@
 
 
-// Handles the flow of the system
+// Container of states
 class StateManager {
 
   constructor(main) {
     this.main = main;
-    this.init();  
-  }
-
-  init() {
-    this.currentState = new StartState(this);
   }
 
   setState(state) {
+    state.stateManager = this;
+    state.init();
     this.state = state;
   }
   

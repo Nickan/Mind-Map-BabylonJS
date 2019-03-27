@@ -135,8 +135,18 @@ Event Handler
         id
           parentId
           childrenIds
-
-
+Implement
+  Edit text
+    When enter is pressed:
+      Dispose text input
+      Set the text in the node and textblock
+  Create new node
+  Select Node
+    Double click goes editing
+    Enter will make new child node
+Need scale of how much I have done so far
+  Progress bar
+  How to measure uncertainty?
 
 
 

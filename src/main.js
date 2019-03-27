@@ -5,8 +5,12 @@ class Main {
   constructor() {
     this.init();
     this.initScene();
-    this.initCamera();
     this.initStateManager();
+    this.initCamera();
+    this.dataManager = new DataManager();
+    this.nodeManager = new NodeManager();
+    this.controls = new Controls();
+    this.stateManager.setState(new StartState());
     this.renderLoop();
   }
 
@@ -14,22 +18,6 @@ class Main {
     this.canvas = document.getElementById("renderCanvas");
     this.engine = new BABYLON.Engine(this.canvas, true);
     this.engine.renderEvenInBackground =  false
-  }
-
-  renderLoop() {
-    let engine = this.engine;
-    let scene = this.scene;
-    let camManager = this.camManager;
-
-    engine.runRenderLoop(function () {
-      scene.render();
-      camManager.update(scene, engine.getDeltaTime());
-    });
-
-    // Watch for browser/canvas resize events
-    window.addEventListener("resize", function () { 
-      engine.resize();
-    });
   }
 
   initScene() {
@@ -51,7 +39,7 @@ class Main {
       
     // });
   }
-
+  
   initCamera() {
     this.camManager = new CameraManager();
     this.camManager.init(this.canvas, this.scene);
@@ -59,6 +47,24 @@ class Main {
 
   initStateManager() {
     this.stateManager = new StateManager(this);
+  }
+
+  
+
+  renderLoop() {
+    let engine = this.engine;
+    let scene = this.scene;
+    let camManager = this.camManager;
+
+    engine.runRenderLoop(function () {
+      scene.render();
+      camManager.update(scene, engine.getDeltaTime());
+    });
+
+    // Watch for browser/canvas resize events
+    window.addEventListener("resize", function () { 
+      engine.resize();
+    });
   }
 }
 
