@@ -6,14 +6,11 @@ class Controls {
   static ON_POINTER_UP = "onPointerUp";
   static ON_POINTER_OBSERVABLE = "onPointerObservable";
   static ON_MOUSE_SCROLL = "onMouseScroll";
+  static ON_TEXT_ENTERED = "textEntered";
+  static ON_DOUBLE_CLICKED = "onDoubleClicked";
+  static ON_CREATE_NODE = "onCreateNode";
 
-  constructor(dataContainer, scene) {
-    this.init(dataContainer, scene);
-  }
-
-  init(dataContainer, scene) {
-    this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-    this.initEvents(scene);
+  constructor() {
   }
 
   initEvents(scene) {
@@ -39,6 +36,25 @@ class Controls {
     Utils.addEventListener(CameraManager.ON_SCREEN_DRAG, (params) => {
       this.disposeInput();
     });
+
+    window.addEventListener("dblclick", (e) => {
+      Utils.fireEvent(Controls.ON_DOUBLE_CLICKED, [e]);
+    });
+
+    Utils.addEventListener(Controls.ON_DOUBLE_CLICKED, (e) => {
+      // console.log(this.selectedNodeMesh);
+      this.createInputText(this.selectedNodeMesh);
+    });
+
+    scene.onKeyboardObservable.add((KeyboardInfo) => {
+      switch (KeyboardInfo.event.code) {
+        case "Enter":
+        if (this.selectedNodeMesh != undefined) {
+          Utils.fireEvent(Controls.ON_CREATE_NODE, []);
+        }
+        break;
+      }
+    });
   }
 
   onPointerDown(event, pickResult) {
@@ -47,38 +63,48 @@ class Controls {
     }
 
     if (pickResult.pickedMesh.id == "textplane") {
-      pickResult.pickedMesh.textBlock.text = "Edit";
-      this.createInputText(pickResult.pickedMesh);
+      this.selectedNodeMesh = pickResult.pickedMesh;
     }
   }
 
-  createInputText(mesh) {
-    if (this.inputMesh == mesh) {
+  createInputText(data, cbEnteredText) {
+    if (this.inputMesh == data.selectedMesh) {
       return
     }
 
     this.disposeInput();
-
-    this.inputMesh = mesh;
+    this.inputMesh = data.selectedMesh;
 
     let input = new BABYLON.GUI.InputText();
     this.input = input;
-    input.width = 1;
-    // input.maxWidth = 0.2;
+    input.width = 0.3;
     input.zIndex = 1;
     input.height = "40px";
-    input.text = "This is a very long text used to test how the cursor works within the InputText control.";
+    input.text = data.textBlock.text;
     input.color = "white";
     input.background = "green";
+    input.onKeyboardEventProcessedObservable.add((keyEvent) => {
+      switch (keyEvent.code) {
+        case "Enter":
+          cbEnteredText(input.text);
+          input.onKeyboardEventProcessedObservable.clear();
+          this.disposeInput();
+        break;
+      }
+    });
 
-    input.autoStretchWidth = true;
+    this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     this.at.addControl(input);
   }
 
   disposeInput() {
-    if (this.input != undefined) {
+    if (this.input != undefined)
       this.input.dispose();
-    }
+
+    if (this.at != undefined)
+      this.at.dispose();
+    this.at = undefined;
+
     this.input = undefined;
     this.inputMesh = undefined;
   }

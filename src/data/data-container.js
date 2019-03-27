@@ -2,6 +2,15 @@ class DataContainer {
   constructor(nodes = new Map(), metas = new Map()) {
     this.nodes = nodes;
     this.metas = metas;
+    this.initListeners();
+  }
+
+  initListeners() {
+    Utils.addEventListener(Controls.ON_TEXT_ENTERED, (inputText) => {
+      let nodeId = inputText.textBlock.node.id;
+      let node = this.nodes.get(nodeId);
+      node.text = inputText.text;
+    });
   }
 
   getChildren(nodeId) {

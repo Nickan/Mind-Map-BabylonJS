@@ -2,17 +2,15 @@
 
 
 class StartState {
-  constructor(stateManager) {
-    this.stateManager = stateManager;
-    this.init();
-  }
 
   init() {
-    let st = this.stateManager;
-    let dm = new DataManager();
+    let sm = this.stateManager;
+    let main = sm.main;
+    let dm = main.dataManager;
+    dm.clear();
+
     dm.addNewData("Main", undefined);
-    st.main.dataManager = dm;
-    st.setState(new CreateState(st));
+    sm.setState(new CreateState());
   }
 
 

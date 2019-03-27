@@ -89,6 +89,10 @@ class Utils {
       evs[i].apply(null, args);
     }
   }
+
+  static clearListeners() {
+    Utils.events = {};
+  }
 }
 
 function makeElementDraggable(elmnt) {
