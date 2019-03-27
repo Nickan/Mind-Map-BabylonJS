@@ -10,7 +10,7 @@ class StartState {
     dm.clear();
 
     dm.addNewData("Main", undefined);
-    sm.setState(new CreateState());
+    sm.setState(new LoadNodesState());
   }
 
   update(delta) {

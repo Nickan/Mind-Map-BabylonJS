@@ -11,12 +11,6 @@ class EditNodeState {
   }
 
   handleEdit(sm, main) {
-    /* Show the InputText
-      When text is entered:
-        Dispose the InputText -> Handled by controls
-        Edit the node.text
-        Go back to idle state
-    */
     let data = this.data;
     main.controls.createInputText(data, 
       function enteredText(text) {
@@ -25,6 +19,10 @@ class EditNodeState {
         sm.setState(new IdleState());
       }
     );
+  }
+
+  update(delta) {
+    
   }
 
   exit() {

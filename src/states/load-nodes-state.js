@@ -1,7 +1,7 @@
 
 
 
-class CreateState {
+class LoadNodesState {
   
   init() {
     let sm = this.stateManager;
@@ -11,6 +11,14 @@ class CreateState {
     main.nodeManager.loadNodes(dc, main.scene);
     // main.controls.init(dc, main.scene);
     sm.setState(new IdleState());
+  }
+
+  update(delta) {
+    
+  }
+
+  exit() {
+    
   }
 
 
