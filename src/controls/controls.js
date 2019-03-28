@@ -195,6 +195,13 @@ class Controls {
     }
   }
 
+  initCreateChildState(scene, changeStateFn) {
+    scene.onPointerUp = (event, pickResult) => {
+      scene.onPointerUp = undefined;
+      changeStateFn(new IdleState());
+    }
+  }
+
 
 
 

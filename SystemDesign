@@ -1,3 +1,11 @@
+System structures
+  There should be one layer below Main to manage low level ideas
+  Return the variables via function if:
+    Changing often
+    Needed the previous instance
+    
+
+
 System implementation
   System flow
     Always start by looking the start state
@@ -26,7 +34,7 @@ System implementation
     Mouse Scroll:
       Zoom
     Delete:
-          
+
 Done
   Refactor
     Rename allData to nodes
@@ -34,6 +42,8 @@ Done
     Rename node.name to node.text
 Current
   Create new data
+  Just make it more usable
+    As it will automatically lead to a point where it is really usable
 Todo
   High
     Implement getting the text from the node

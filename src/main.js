@@ -17,7 +17,7 @@ class Main {
   init() {
     this.canvas = document.getElementById("renderCanvas");
     this.engine = new BABYLON.Engine(this.canvas, true);
-    this.engine.renderEvenInBackground =  false
+    this.engine.renderEvenInBackground = false;
   }
 
   initScene() {
