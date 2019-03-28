@@ -27,6 +27,9 @@ class DataManager {
 
   clear() {
     this.dataContainer = new DataContainer();
+
+    this.prevDataCont;
+    this.curDataCont;
   }
 
   onLoadData(cbFunc) {
@@ -42,6 +45,7 @@ class DataManager {
   }
 
   embedCoordinates() {
+    this.prevDataCont = this.dataContainer;
     let dc = this.dataContainer;
     let rein = new ReingoldTilford();
     let coords = rein.getCoordinates(dc.nodes.get(1), dc);
@@ -71,6 +75,7 @@ class DataManager {
     }
     
     nodes.set(id, node);
+    return node;
   }
 
   getHighestId(nodes) {
@@ -88,5 +93,9 @@ class DataManager {
     node.text = text;
   }
 
+
+  getParentId(nodeId) {
+    return this.dataContainer.getParent(nodeId).id;
+  }
   
 }

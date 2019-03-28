@@ -30,8 +30,9 @@ class NodeManager {
     plane.position.x = node.y * xUnit;
     plane.position.y = node.x * yUnit;
 
-    let at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
+    this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
       plane, 1024, 1024);
+    let at = this.at;
 
     var rectangle = new BABYLON.GUI.Rectangle("rect");
     rectangle.width  ="1024px";
@@ -58,6 +59,13 @@ class NodeManager {
 
   editText(textBlock, text) {
     textBlock.text = text;
+  }
+
+  disposeTextBlock() {
+    if (this.at != undefined) {
+      this.at.dispose();
+      this.at = undefined;
+    }
   }
 
 }
