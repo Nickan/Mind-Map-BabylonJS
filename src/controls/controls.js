@@ -50,6 +50,7 @@ class Controls {
     let input = new BABYLON.GUI.InputText();
     this.input = input;
     input.width = 0.3;
+    input.top = "45%";
     input.zIndex = 1;
     input.height = "40px";
     input.text = node.text;
@@ -58,7 +59,7 @@ class Controls {
     input.onKeyboardEventProcessedObservable.add((keyEvent) => {
       switch (keyEvent.code) {
         case "Enter":
-          cbEnteredText(input.text);
+            cbEnteredText(input.text);
           input.onKeyboardEventProcessedObservable.clear();
           this.disposeInput();
         break;

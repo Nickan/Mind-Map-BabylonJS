@@ -12,10 +12,11 @@ class EditNodeState {
 
   handleEdit(sm, main) {
     let data = this.data;
-    main.controls.createInputText(data, 
+    let node = main.dataManager.dataContainer.nodes.get(data.nodeId);
+    main.controls.createInputText(node, 
       function enteredText(text) {
-        main.dataManager.editText(data.node, text);
-        main.nodeManager.editText(data.textBlock, text);
+        node.text = text;
+        main.nodeManager.editText(node, text);
         sm.setState(new IdleState());
       }
     );

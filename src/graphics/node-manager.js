@@ -47,7 +47,7 @@ class NodeManager {
     tb.text = node.text;
     tb.node = node;
     tb.color = "white";
-    tb.fontSize = "140px";
+    tb.fontSize = "200px";
     tb.textWrapping = true;
     tb.width = 1.7;
     tb.scaleX = 0.6;
