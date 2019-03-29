@@ -2,7 +2,7 @@
 
 
 class SelectedControls {
-  constructor(scene) {
+  constructor(scene, data) {
     this.scene = scene;
 
     scene.onKeyboardObservable.add((keyInfo) => {
@@ -13,7 +13,8 @@ class SelectedControls {
       let code = keyInfo.event.code;
       switch (code) {
         case "F2":
-          edit(scene, ctrl);
+        if (data.nodeId != undefined)
+          this.edit(scene);
         case "Enter": 
           this.createSibling();
           break;
@@ -22,11 +23,6 @@ class SelectedControls {
           break;
       }
 
-      function edit(scene, ctrl) {
-        if (data.selectedMesh == undefined)
-          return;
-        ctrl.edit();
-      }
 
     });
 

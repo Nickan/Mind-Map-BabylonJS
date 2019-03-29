@@ -9,7 +9,7 @@ class SelectedNodeState {
   init() {
     let sm = this.stateManager;
     let main = sm.main;
-    let sc = new SelectedControls(main.scene);
+    let sc = new SelectedControls(main.scene, this.data);
     this.sc = sc;
     sc.onEdit(() => {
         sm.setState(new EditNodeState(this.data));
