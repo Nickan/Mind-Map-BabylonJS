@@ -27,13 +27,14 @@ class NodeManager {
     let yUnit = 1.5;
 
     let plane = BABYLON.MeshBuilder.CreatePlane("textplane", 
-      {width: 1, height: 1}, scene);
+      {width: 1.3, height: 1}, scene);
 
     plane.position.x = node.y * xUnit;
     plane.position.y = node.x * yUnit;
 
+
     this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
-      plane, 1024, 1024);
+      plane, 512, 512);
     let at = this.at;
 
     var rectangle = new BABYLON.GUI.Rectangle("rect");
@@ -47,10 +48,10 @@ class NodeManager {
     tb.text = node.text;
     tb.node = node;
     tb.color = "white";
-    tb.fontSize = "200px";
+    tb.fontSize = "120px";
     tb.textWrapping = true;
-    tb.width = 1.7;
-    tb.scaleX = 0.6;
+    tb.width = 2.5;
+    tb.scaleX = 0.4;
     // text.scaleY = 1.5;
     this.nodeGraphics.set(node.id, tb);
 

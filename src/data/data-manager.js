@@ -28,6 +28,7 @@ class DataManager {
 
   clear() {
     this.dataContainer = new DataContainer();
+    this.dataLoader = new DataLoader();
 
     this.prevDataCont;
   }
@@ -99,6 +100,10 @@ class DataManager {
 
   getParentId(nodeId) {
     return this.dataContainer.getParent(nodeId).id;
+  }
+
+  save() {
+    this.dataLoader.save(this.dataContainer);
   }
   
 }
