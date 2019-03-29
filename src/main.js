@@ -30,14 +30,6 @@ class Main {
     // Add lights to the scene
     this.light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     this.light.intensity = 1;
-
-    // Temporary position to load source codes
-    // let dm = new DataManager();
-    // dm.onLoadData((dataContainer) => {
-    //   let nm = new NodeManager(dataContainer, scene);
-    //   let ctrl = new Controls(dataContainer, scene);
-      
-    // });
   }
   
   initCamera() {

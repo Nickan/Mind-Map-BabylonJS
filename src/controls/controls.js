@@ -10,51 +10,11 @@ class Controls {
   static ON_DOUBLE_CLICKED = "onDoubleClicked";
   static ON_CREATE_NODE = "onCreateNode";
 
+  static EDIT = "edit";
+  static NEW_CHILD = "newChild";
+  static NEW_SIBLING = "newSibling";
+
   constructor() {
-  }
-
-  initEvents(scene) {
-    scene.onPointerDown = (event, pickResult) => {
-      Utils.fireEvent(Controls.ON_POINTER_DOWN, [event, pickResult]);
-      this.onPointerDown(event, pickResult);
-    }
-
-    scene.onPointerUp = (event, pickResult) => {
-      Utils.fireEvent(Controls.ON_POINTER_UP, [event, pickResult]);
-    }
-
-    scene.onPointerObservable.add((pointerInfo) => {
-      Utils.fireEvent(Controls.ON_POINTER_OBSERVABLE, [pointerInfo]);
-
-      switch(pointerInfo.type) {
-        case BABYLON.PointerEventTypes.POINTERWHEEL:
-        Utils.fireEvent(Controls.ON_MOUSE_SCROLL, [pointerInfo]);
-        break;
-      }
-    });
-
-    Utils.addEventListener(CameraManager.ON_SCREEN_DRAG, (params) => {
-      this.disposeInput();
-    });
-
-    window.addEventListener("dblclick", (e) => {
-      Utils.fireEvent(Controls.ON_DOUBLE_CLICKED, [e]);
-    });
-
-    Utils.addEventListener(Controls.ON_DOUBLE_CLICKED, (e) => {
-      // console.log(this.selectedNodeMesh);
-      this.createInputText(this.selectedNodeMesh);
-    });
-
-    scene.onKeyboardObservable.add((KeyboardInfo) => {
-      switch (KeyboardInfo.event.code) {
-        case "Enter":
-        if (this.selectedNodeMesh != undefined) {
-          Utils.fireEvent(Controls.ON_CREATE_NODE, []);
-        }
-        break;
-      }
-    });
   }
 
   onPointerDown(event, pickResult) {
@@ -67,20 +27,17 @@ class Controls {
     }
   }
 
-  createInputText(data, cbEnteredText) {
-    if (this.inputMesh == data.selectedMesh) {
-      return
+  createInputText(node, cbEnteredText) {
+    if (this.input != undefined) {
+      return;
     }
-
-    this.disposeInput();
-    this.inputMesh = data.selectedMesh;
 
     let input = new BABYLON.GUI.InputText();
     this.input = input;
     input.width = 0.3;
     input.zIndex = 1;
     input.height = "40px";
-    input.text = data.textBlock.text;
+    input.text = node.text;
     input.color = "white";
     input.background = "green";
     input.onKeyboardEventProcessedObservable.add((keyEvent) => {
@@ -112,9 +69,7 @@ class Controls {
         if (pickResult.pickedMesh.id == "textplane") {
           let m = pickResult.pickedMesh;
           let data = {
-            selectedMesh: m,
-            textBlock: m.textBlock,
-            node: m.textBlock.node
+            nodeId: m.nodeId
           };
           scene.onPointerDown = undefined;
           changeStateFn(new SelectedNodeState(data));
@@ -142,9 +97,7 @@ class Controls {
     
   }
 
-  static EDIT = "edit";
-  static NEW_CHILD = "newChild";
-  static NEW_SIBLING = "newSibling";
+  
   initSelectedState(data, changeStateFn) {
     let scene = data.scene;
     scene.onKeyboardObservable.add((keyInfo) => {
@@ -203,16 +156,6 @@ class Controls {
   }
 
 
-
-
-
-
-
-
-  onScreenScroll(onDragStartCb, onDragEndCb) {
-
-  }
-
   disposeInput() {
     if (this.input != undefined)
       this.input.dispose();
@@ -222,7 +165,6 @@ class Controls {
     this.at = undefined;
 
     this.input = undefined;
-    this.inputMesh = undefined;
   }
 
   

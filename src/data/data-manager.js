@@ -89,11 +89,6 @@ class DataManager {
     return  highestValue;
   }
 
-  editText(node, text) {
-    node.text = text;
-  }
-
-
   getParentId(nodeId) {
     return this.dataContainer.getParent(nodeId).id;
   }
