@@ -93,6 +93,38 @@ class Utils {
   static clearListeners() {
     Utils.events = {};
   }
+
+
+  static onSelectedNode(scene, pickResult, selectedNodeFn) {
+    if (Utils.selectedNode(pickResult)) {
+      let m = pickResult.pickedMesh;
+      let result = {
+        nodeId: m.nodeId
+      };
+      scene.onPointerDown = undefined;
+      selectedNodeFn(result);
+    }
+  }
+
+  static onDragScreen(scene, pickResult, onDragScreenFn) {
+    if (Utils.dragNode(pickResult)) {
+      let result = {
+        pickedPoint: pickResult.pickedPoint,
+      };
+      scene.onPointerDown = undefined;
+      onDragScreenFn(result);
+    }
+  }
+
+  static selectedNode(pickResult) {
+    return (pickResult.pickedMesh.id == "textplane");
+  }
+
+  static dragNode(pickResult) {
+    let id = pickResult.pickedMesh.id;
+    return (id != "textplane" && id == "ground");
+  }
+
 }
 
 function makeElementDraggable(elmnt) {

@@ -9,10 +9,23 @@ class SelectedNodeState {
   init() {
     let sm = this.stateManager;
     let main = sm.main;
-    this.data.scene = main.scene;
-    main.controls.initSelectedState(this.data, (newState) => {
-      sm.setState(newState);
-    });
+    let sc = new SelectedControls(main.scene);
+    this.sc = sc;
+    sc.onEdit(() => {
+        sm.setState(new EditNodeState(this.data));
+      })
+      .onCreateChild(() => {
+        sm.setState(new CreateChildState(this.data));
+      })
+      .onCreateSibling(() => {
+        sm.setState(new CreateSiblingState(this.data));
+      })
+      .onSelectedNode((result) => {
+        sm.setState(new SelectedNodeState(result));
+      })
+      .onDragScreen((result) => {
+        sm.setState(new DragScreenState(result));
+      });
   }
 
   update(delta) {
@@ -20,6 +33,6 @@ class SelectedNodeState {
   }
 
   exit() {
-    
+    this.sc.dispose();
   }
 }

@@ -9,10 +9,14 @@ class IdleState {
   init() {
     let sm = this.stateManager;
     let main = sm.main;
-    
-    main.controls.initIdleState(main.scene, (newState) => {
-      sm.setState(newState);
-    });
+
+    let ic = new IdleControls(main.scene);
+    ic.onSelectedNode((result) => {
+        sm.setState(new SelectedNodeState(result));
+      })
+      .onDragScreen((result) => {
+        sm.setState(new DragScreenState(result));
+      });
   }
 
   update(delta) {
