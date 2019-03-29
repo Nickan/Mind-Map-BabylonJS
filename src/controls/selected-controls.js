@@ -90,6 +90,8 @@ class SelectedControls {
 
   dispose() {
     this.scene.onKeyboardObservable.clear();
+    this.scene.onPointerDown = undefined;
+    this.scene.onPointerUp = undefined;
   }
   
 }

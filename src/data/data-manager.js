@@ -20,6 +20,7 @@
     
 */
 
+// Will implement undo and redo later
 class DataManager {
   constructor() {
     this.clear();
@@ -29,7 +30,6 @@ class DataManager {
     this.dataContainer = new DataContainer();
 
     this.prevDataCont;
-    this.curDataCont;
   }
 
   onLoadData(cbFunc) {
@@ -44,17 +44,25 @@ class DataManager {
     }
   }
 
+  revertBack() {
+    if (this.prevDataCont == undefined)
+      return false;
+    this.dataContainer = this.prevDataCont;
+    this.prevDataCont = undefined;
+    return true;
+  }
+
   embedCoordinates() {
-    this.prevDataCont = this.dataContainer;
     let dc = this.dataContainer;
     let rein = new ReingoldTilford();
     let coords = rein.getCoordinates(dc.nodes.get(1), dc);
     return coords;
   }
 
-  
+  addNewData(text, parentId, savePrevious = true) {
+    if (savePrevious)
+      this.prevDataCont = _.cloneDeep(this.dataContainer, true);
 
-  addNewData(text, parentId) {
     let nodes = this.dataContainer.nodes;
     let metas = this.dataContainer.metas;
 
