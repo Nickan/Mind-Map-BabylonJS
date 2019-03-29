@@ -16,7 +16,10 @@ class IdleState {
       })
       .onDragScreen((result) => {
         sm.setState(new DragScreenState(result));
-      });
+      })
+      .onMouseScroll((deltaY) => {
+        main.cameraManager.zoom(deltaY);
+      })
   }
 
   update(delta) {

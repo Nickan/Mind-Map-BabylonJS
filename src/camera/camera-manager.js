@@ -24,9 +24,6 @@ class CameraManager {
 
     scene.activeCameras.push(cam2);
     scene.activeCameras.push(cam1);
-    
-    this.implementScreenScroll(scene);
-    
 
     // this.createTmpSlider(cam1, cam2);
     // makeElementDraggable(document.getElementsByClassName("slider")[0]);
@@ -142,7 +139,23 @@ class CameraManager {
     });
   }
 
-  
+  zoom(deltaY) {
+    let zoomScale = 0.5;
+    if (deltaY > 0) {
+      this.zoomValue += zoomScale;
+    } else {
+      this.zoomValue -= zoomScale;
+    }
+
+    this.setCamOrthoValue(this.cam1, this.zoomValue);
+  }
+
+  setCamOrthoValue(cam, zoomValue) {
+    cam.orthoTop = zoomValue;
+    cam.orthoBottom = -zoomValue;
+    cam.orthoLeft = -zoomValue;
+    cam.orthoRight = zoomValue;
+  }
 
   update(scene, delta) {
     let ms = delta / 1000.0;
