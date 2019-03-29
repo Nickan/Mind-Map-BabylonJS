@@ -17,7 +17,7 @@ class Main {
   init() {
     this.canvas = document.getElementById("renderCanvas");
     this.engine = new BABYLON.Engine(this.canvas, true);
-    this.engine.renderEvenInBackground = false;
+    // this.engine.renderEvenInBackground = false;
   }
 
   initScene() {
@@ -63,3 +63,10 @@ class Main {
 }
 
 let m = new Main();
+document.onkeydown = function(evt) {
+  evt = evt || window.event;
+  if (evt.keyCode == 9) {
+      evt.preventDefault();
+      // alert("Tab");
+  }
+};
