@@ -27,6 +27,21 @@ class Controls {
     }
   }
 
+  initDragNodeState(scene, changeStateFn) {
+    scene.onPointerUp = (event, pickResult) => {
+      scene.onPointerUp = undefined;
+      changeStateFn(new IdleState());
+    }
+  }
+
+  initCreateChildState(scene, changeStateFn) {
+    scene.onPointerUp = (event, pickResult) => {
+      scene.onPointerUp = undefined;
+      changeStateFn(new IdleState());
+    }
+  }
+
+
   createInputText(node, cbEnteredText) {
     if (this.input != undefined) {
       return;
@@ -52,23 +67,8 @@ class Controls {
 
     this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     this.at.addControl(input);
+    this.at.moveFocusToControl(input);
   }
-
-
-  initDragNodeState(scene, changeStateFn) {
-    scene.onPointerUp = (event, pickResult) => {
-      scene.onPointerUp = undefined;
-      changeStateFn(new IdleState());
-    }
-  }
-
-  initCreateChildState(scene, changeStateFn) {
-    scene.onPointerUp = (event, pickResult) => {
-      scene.onPointerUp = undefined;
-      changeStateFn(new IdleState());
-    }
-  }
-
 
   disposeInput() {
     if (this.input != undefined)

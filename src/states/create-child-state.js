@@ -15,8 +15,6 @@ class CreateChildState {
         // Select the node
       })
       .onDragScreen((result) => {
-        // Cancel creation
-        // Delete the temp node
         this.cancelCreation(sm, main);
       });
   }
@@ -47,16 +45,18 @@ class CreateChildState {
     let dc = dm.embedCoordinates();
     main.nodeManager.loadNodes(dc, main.scene);
 
-    this.handleEdit(sm, main, childNode);
+    this.handleEdit(sm, main, childNode, this.data);
     main.scene.render(); // Have to remove later
   }
 
-  handleEdit(sm, main, node) {
-    main.controls.createInputText(node, 
+  handleEdit(sm, main, node, data) {
+    let ctrl = main.controls;
+    ctrl.createInputText(node, 
       function enteredText(text) {
         node.text = text;
         main.nodeManager.editText(node);
-        sm.setState(new IdleState());
+        // sm.setState(new IdleState());
+        sm.setState(new SelectedNodeState(data));
       }
     );
   }
