@@ -27,14 +27,32 @@ class CreateChildState {
       Have to add it first to the list
       Then remove it later on if the creation is cancelled
     */
-    let id = this.data.node.id;
-    let childNode = main.dataManager.addNewData("", id);
+    let id = this.data.nodeId;
+    let dm = main.dataManager;
 
-    let data = {
-      parentNode: this.data.node,
-      childNode: childNode
-    };
-    sm.setState(new LoadNodesState(data));
+    let childNode = dm.addNewData("", id);
+    let dc = dm.embedCoordinates();
+    main.nodeManager.loadNodes(dc, main.scene);
+
+    this.handleEdit(sm, main, childNode);
+    main.scene.render(); // Have to remove later
+
+    // let data = {
+    //   parentNode: this.data.node,
+    //   childNode: childNode,
+    //   selectedNode: this.data.node
+    // };
+    // sm.setState(new LoadNodesState(data));
+  }
+
+  handleEdit(sm, main, node) {
+    main.controls.createInputText(node, 
+      function enteredText(text) {
+        node.text = text;
+        main.nodeManager.editText(node);
+        sm.setState(new IdleState());
+      }
+    );
   }
 
 

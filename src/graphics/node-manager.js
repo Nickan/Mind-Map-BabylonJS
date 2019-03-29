@@ -3,21 +3,23 @@ class NodeManager {
   // Based on data
   // Might be managed later on
   constructor() {
+    this.nodeGraphics = new Map();
   }
 
-  // initListeners() {
-  //   Utils.addEventListener(Controls.ON_TEXT_ENTERED, (inputText) => {
-  //     let tb = inputText.textBlock;
-  //     tb.text = inputText.text;
-  //   });
-  // }
-
   loadNodes(dataContainer, scene) {
+    this.clear();
     let ad = dataContainer.nodes;
     
     ad.forEach((node, index) => {
       this.addTextBlock(node, scene);
     });
+  }
+
+  clear() {
+    this.nodeGraphics.forEach((tb) => {
+      tb.parent.dispose();
+    });
+    this.nodeGraphics = new Map();
   }
 
   addTextBlock(node, scene) {
@@ -50,22 +52,22 @@ class NodeManager {
     tb.width = 1.7;
     tb.scaleX = 0.6;
     // text.scaleY = 1.5;
-    
+    this.nodeGraphics.set(node.id, tb);
+
     at.addControl(tb);
-
-    plane.node = node;
-    plane.textBlock = tb;
+    plane.nodeId = node.id;
   }
 
-  editText(textBlock, text) {
-    textBlock.text = text;
+  editText(node) {
+    let tb = this.nodeGraphics.get(node.id);
+    tb.text = node.text;
   }
 
-  disposeTextBlock() {
-    if (this.at != undefined) {
-      this.at.dispose();
-      this.at = undefined;
-    }
-  }
+  // disposeTextBlock() {
+  //   if (this.at != undefined) {
+  //     this.at.dispose();
+  //     this.at = undefined;
+  //   }
+  // }
 
 }

@@ -12,7 +12,7 @@ class LoadNodesState {
 
     let dc = main.dataManager.embedCoordinates();
     main.nodeManager.loadNodes(dc, main.scene);
-    sm.setState(new IdleState());
+    sm.setState(new IdleState(this.data));
   }
 
   update(delta) {
