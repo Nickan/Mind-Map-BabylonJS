@@ -4,21 +4,34 @@ class CreateChildState {
   }
 
   init() {
-    /*
-      Initialize controls
-        In progress...
-      Spawn a potential child node
-      Set it as editable
-      When enter is pressed
-        Create the node
-      Else
-        Delete the potential node
-      Pts: 10
-      Target: 10
-    */
     let sm = this.stateManager;
     let main = sm.main;
     this.spawnChildNode(sm, main);
+
+    new CreateChildControls(main.scene)
+      .onSelectedNode((result) => {
+        // Cancel the creation
+        // Delete the temp node
+        // Select the node
+      })
+      .onDragScreen((result) => {
+        // Cancel creation
+        // Delete the temp node
+        this.cancelCreation(sm, main);
+      });
+  }
+
+  cancelCreation(sm, main) {
+    // Revert back
+    main.controls.disposeInput();
+    let dm = main.dataManager;
+    if (dm.revertBack()) {
+      let dc = dm.embedCoordinates();
+      main.nodeManager.loadNodes(dc, main.scene);
+      main.scene.render();
+    }
+    
+    sm.setState(new IdleState());
   }
 
   spawnChildNode(sm, main) {
@@ -36,13 +49,6 @@ class CreateChildState {
 
     this.handleEdit(sm, main, childNode);
     main.scene.render(); // Have to remove later
-
-    // let data = {
-    //   parentNode: this.data.node,
-    //   childNode: childNode,
-    //   selectedNode: this.data.node
-    // };
-    // sm.setState(new LoadNodesState(data));
   }
 
   handleEdit(sm, main, node) {
