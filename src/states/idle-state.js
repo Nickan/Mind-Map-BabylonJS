@@ -20,6 +20,9 @@ class IdleState {
       .onMouseScroll((deltaY) => {
         main.cameraManager.zoom(deltaY);
       })
+      .onSave(() => {
+        main.dataManager.save();
+      });
   }
 
   update(delta) {

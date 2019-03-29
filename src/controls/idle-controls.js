@@ -19,6 +19,19 @@ class IdleControls {
       }
     });
 
+    scene.onKeyboardObservable.add((keyInfo) => {
+      const KEY_UP = 2;
+      if (keyInfo.type == KEY_UP)
+          return;
+      
+      let code = keyInfo.event.code;
+      if (code == "F5") {
+        scene.onKeyboardObservable.clear();
+        this.save();
+      }
+        
+    });
+
     // To prevent always checking if method is undefined
     this.onMouseScroll((y) => {});
     this.onSelectedNode((y) => {});
@@ -37,6 +50,11 @@ class IdleControls {
 
   onDragScreen(fn) {
     this.dragScreenFn = fn;
+    return this;
+  }
+
+  onSave(fn) {
+    this.save = fn;
     return this;
   }
 

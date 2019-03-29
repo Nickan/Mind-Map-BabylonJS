@@ -65,7 +65,9 @@ class Main {
 let m = new Main();
 document.onkeydown = function(evt) {
   evt = evt || window.event;
-  if (evt.keyCode == 9) {
+
+  // console.log(evt);
+  if (evt.keyCode == 9 || evt.key == "F5") {
       evt.preventDefault();
       // alert("Tab");
   }
