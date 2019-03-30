@@ -19,8 +19,9 @@ class NodeManager {
   }
 
   clear() {
-    this.nodeGraphics.forEach((tb) => {
-      tb.parent.dispose();
+    this.nodeGraphics.forEach((g) => {
+      g.at.dispose();
+      g.plane.dispose();
     });
     this.nodeGraphics = new Map();
   }
@@ -34,9 +35,8 @@ class NodeManager {
     plane.position.z = 0;
 
 
-    this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
+    let at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
       plane, 512, 512);
-    let at = this.at;
 
     var rectangle = new BABYLON.GUI.Rectangle("rect");
     rectangle.width  ="1024px";
@@ -54,7 +54,11 @@ class NodeManager {
     tb.width = 2.5;
     tb.scaleX = 0.4;
     // text.scaleY = 1.5;
-    this.nodeGraphics.set(node.id, tb);
+    let g = {
+      plane: plane,
+      at: at
+    }
+    this.nodeGraphics.set(node.id, g);
 
     at.addControl(tb);
     plane.nodeId = node.id;
@@ -64,6 +68,8 @@ class NodeManager {
     let tb = this.nodeGraphics.get(node.id);
     tb.text = node.text;
   }
+
+
 
   // disposeTextBlock() {
   //   if (this.at != undefined) {

@@ -8,6 +8,7 @@ class IdleControls {
 
     scene.onPointerDown = (event, pickResult) => {
       if (pickResult == undefined) return;
+      console.log(pickResult.pickedMesh.id)
 
       Utils.onSelectedNode(scene, pickResult, this.selectedNodeFn);
       Utils.onDragScreen(scene, pickResult, this.dragScreenFn);
