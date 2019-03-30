@@ -10,8 +10,8 @@ class IdleState {
     let sm = this.stateManager;
     let main = sm.main;
 
-    let ic = new IdleControls(main.scene);
-    ic.onSelectedNode((result) => {
+    this.controls = new IdleControls(main.scene);
+    this.controls.onSelectedNode((result) => {
         sm.setState(new SelectedNodeState(result));
       })
       .onDragScreen((result) => {
@@ -22,6 +22,14 @@ class IdleState {
       })
       .onSave(() => {
         main.dataManager.save();
+      })
+      .onOpen(() => {
+        // Open file browser
+        // Load json file
+        // Convert to Map > Will deal with this later
+        main.dataManager.open(() => {
+          sm.setState(new LoadNodesState());
+        })
       });
   }
 
@@ -30,5 +38,6 @@ class IdleState {
   }
 
   exit() {
+    this.controls.dispose();
   }
 }

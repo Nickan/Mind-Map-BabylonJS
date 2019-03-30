@@ -29,6 +29,12 @@ class IdleControls {
         scene.onKeyboardObservable.clear();
         this.save();
       }
+
+
+      if (code == "F6") {
+        scene.onKeyboardObservable.clear();
+        this.open();
+      }
         
     });
 
@@ -58,10 +64,18 @@ class IdleControls {
     return this;
   }
 
+  onOpen(fn) {
+    this.open = fn;
+    return this;
+  }
+
   dispose() {
     let scene = this.scene;
     scene.onPointerDown = undefined;
     scene.onPointerObservable.clear();
+    scene.onKeyboardObservable.clear();
+    this.open = undefined;
+    this.save = undefined;
   }
   
 }

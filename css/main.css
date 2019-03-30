@@ -19,3 +19,9 @@
   overflow-y: auto;
   height: 100%;
 }
+
+#openFile,
+#inputFile {
+  /* display: none; */
+  visibility: hidden;
+}

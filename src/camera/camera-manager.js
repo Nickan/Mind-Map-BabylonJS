@@ -5,7 +5,7 @@ class CameraManager {
   // const ORTHOVALUE = 5; Have to make class variable to work
   static ORTHOVALUE = 5;
   static ON_SCREEN_DRAG = "onScreenDrag";
-  static ZOOM_SCALE = 0.07;
+  static ZOOM_SCALE = 0.2;
 
   constructor() {
     this.onDrag = false;

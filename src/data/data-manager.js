@@ -105,5 +105,12 @@ class DataManager {
   save() {
     this.dataLoader.save(this.dataContainer);
   }
+
+  open(fn) {
+    this.dataLoader.loadDataContainer((dc) => {
+      this.dataContainer = dc;
+      fn();
+    });
+  }
   
 }

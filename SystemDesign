@@ -4,8 +4,6 @@ System structures
     Changing often
     Needed the previous instance
     
-
-
 System implementation
   System flow
     Always start by looking the start state
@@ -34,6 +32,13 @@ System implementation
     Mouse Scroll:
       Zoom
     Delete:
+
+Managing Json File
+  Saved and loaded as one File
+  Even if we optimize it, this can still be encapsulated in the future
+  Meta System:
+    activeMeta: string
+    meta-[name]: Map
 
 Done
   Refactor

@@ -11,7 +11,10 @@ class NodeManager {
     let ad = dataContainer.nodes;
     
     ad.forEach((node, index) => {
-      this.addTextBlock(node, scene);
+      if (typeof index != "string") {
+        this.addTextBlock(node, scene);
+      }
+      
     });
   }
 

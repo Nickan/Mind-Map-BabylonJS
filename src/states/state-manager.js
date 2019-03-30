@@ -12,8 +12,8 @@ class StateManager {
       this.state.exit();
     }
     state.stateManager = this;
-    state.init();
     this.state = state;
+    state.init();
   }
   
 }
