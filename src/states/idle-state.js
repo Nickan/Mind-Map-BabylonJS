@@ -24,13 +24,13 @@ class IdleState {
         main.dataManager.save();
       })
       .onOpen(() => {
-        // Open file browser
-        // Load json file
-        // Convert to Map > Will deal with this later
         main.dataManager.open(() => {
           sm.setState(new LoadNodesState());
         })
       });
+    
+    let dc = main.dataManager.dataContainer;
+    main.lines.drawLines(main.scene, dc);
   }
 
   update(delta) {
@@ -39,5 +39,6 @@ class IdleState {
 
   exit() {
     this.controls.dispose();
+    
   }
 }

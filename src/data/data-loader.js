@@ -2,7 +2,6 @@ class DataLoader {
   static ACTIVE_META = "activeMeta";
   static META = "meta-";
   constructor() {
-
   }
 
   loadDataContainer(cbFunc) {
@@ -10,13 +9,12 @@ class DataLoader {
       let allData = getMap(resultStr);
       let result = separateNodesAndMetaMap(allData);
 
-      let activeMeta = result[0].get(DataLoader.ACTIVE_META);
+      this.activeMeta = result[0].get(DataLoader.ACTIVE_META);
       result[0].delete(DataLoader.ACTIVE_META);
       let nodes = convertKeyToInt(result[0]);
 
-      nodes.set(DataLoader.ACTIVE_META, activeMeta);
       let metaMap = result[1];
-      let metas = metaMap.get(activeMeta);
+      let metas = metaMap.get(this.activeMeta);
 
       let c = new DataContainer(nodes, metas);
       cbFunc(c);
@@ -79,6 +77,7 @@ class DataLoader {
   save(dataContainer) {
     let metaMap = dataContainer.metaMap;
     let nodes = _.cloneDeep(dataContainer.nodes);
+    nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
     metaMap.forEach((value, index) => {
       nodes.set(index, value);
     });

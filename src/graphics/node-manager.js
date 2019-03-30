@@ -1,7 +1,7 @@
 class NodeManager {
+  static X_UNIT = 1.5;
+  static Y_UNIT = 1.5;
 
-  // Based on data
-  // Might be managed later on
   constructor() {
     this.nodeGraphics = new Map();
   }
@@ -26,14 +26,12 @@ class NodeManager {
   }
 
   addTextBlock(node, scene) {
-    let xUnit = 1.5;
-    let yUnit = 1.5;
-
     let plane = BABYLON.MeshBuilder.CreatePlane("textplane", 
       {width: 1.3, height: 1}, scene);
 
-    plane.position.x = node.y * xUnit;
-    plane.position.y = node.x * yUnit;
+    plane.position.x = node.y * NodeManager.X_UNIT;
+    plane.position.y = node.x * NodeManager.Y_UNIT;
+    plane.position.z = 0;
 
 
     this.at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
