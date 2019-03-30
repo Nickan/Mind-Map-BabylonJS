@@ -73,9 +73,7 @@ class ReingoldTilford {
       this.solveConflictingX(child, dataContainer, options);
     });
 
-    if (!dataContainer.isLeftMost(node.id) && 
-      (dataContainer.hasChild(node.id) ||
-      dataContainer.hasChildren(node.id))  ) {
+    if (!dataContainer.isLeftMost(node.id)) {
       this.fixConflictingX(node, dataContainer);
 
       if (options.recenterParentOfSolvedConflictNodes) {
