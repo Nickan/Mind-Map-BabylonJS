@@ -3,7 +3,7 @@ class NodeManager {
   static Y_UNIT = 1.5;
 
   constructor() {
-    this.nodeGraphics = new Map();
+    this.graphics = new Map();
   }
 
   loadNodes(dataContainer, scene) {
@@ -19,11 +19,11 @@ class NodeManager {
   }
 
   clear() {
-    this.nodeGraphics.forEach((g) => {
+    this.graphics.forEach((g) => {
       g.at.dispose();
       g.plane.dispose();
     });
-    this.nodeGraphics = new Map();
+    this.graphics = new Map();
   }
 
   addTextBlock(node, scene) {
@@ -56,16 +56,17 @@ class NodeManager {
     // text.scaleY = 1.5;
     let g = {
       plane: plane,
-      at: at
+      at: at,
+      textBlock: tb
     }
-    this.nodeGraphics.set(node.id, g);
+    this.graphics.set(node.id, g);
 
     at.addControl(tb);
     plane.nodeId = node.id;
   }
 
   editText(node) {
-    let tb = this.nodeGraphics.get(node.id);
+    let tb = this.graphics.get(node.id).textBlock;
     tb.text = node.text;
   }
 

@@ -8,6 +8,7 @@ class Lines {
   }
 
   drawLines(scene, dataContainer) {
+    this.dispose();
     let n = dataContainer.nodes;
     let m = dataContainer.metas;
 
