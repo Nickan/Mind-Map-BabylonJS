@@ -1,103 +1,119 @@
 class DataLoader {
+  static ACTIVE_META = "activeMeta";
+  static META = "meta-";
   constructor() {
 
   }
 
   loadDataContainer(cbFunc) {
-    // Have to make the -main.json to be flexible later
-    // For multiview implementation later
-    const jData = './assets/allData.json';
-    const mData = './assets/allData-main.json';
+    getAsText((resultStr) => {
+      let allData = getMap(resultStr);
+      let result = separateNodesAndMetaMap(allData);
 
-    getMapFromJsonFile(jData, (allData) => {
-      getMapFromJsonFile(mData, (allDataMeta) => {
-        let nD = this.convertKeyToInt(allData);
-        let nM = this.convertKeyToInt(allDataMeta)
-        let container = new DataContainer(nD, nM);
-        cbFunc(container);
-      });
+      let activeMeta = result[0].get(DataLoader.ACTIVE_META);
+      result[0].delete(DataLoader.ACTIVE_META);
+      let nodes = convertKeyToInt(result[0]);
+
+      nodes.set(DataLoader.ACTIVE_META, activeMeta);
+      let metaMap = result[1];
+      let metas = metaMap.get(activeMeta);
+
+      let c = new DataContainer(nodes, metas);
+      cbFunc(c);
     });
 
-    function getMapFromJsonFile(metaName, cbFunc) {
-    
-      loadJSON(metaName, function(responseText) {
-        let map = getMap(responseText);
-        cbFunc(map);
-  
-        function getMap(str) {
-          let map = undefined;
-          try {
-            let obj = JSON.parse(str);
-            map = new Map(Object.entries(obj));
-          } catch (e) {
-            console.log(e);
-          }
-          return map;
+    function getAsText(fn) {
+      let input = document.querySelector('input');
+      input.click();
+      input.onchange = function(event) {
+        let file = input.files[0];
+        let fr = new FileReader();
+        fr.onload = function(event) {
+          fn(fr.result);
         }
-      });
-  
-      function loadJSON(metaName, callback) {
-  
-        var xobj = new XMLHttpRequest();
-            xobj.overrideMimeType("application/json");
-        // xobj.open('GET', './assets/allData.json', true); // Replace 'my_data' with the path to your file
-        xobj.open('GET', metaName, true);
-        xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
-            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
-          }
-        };
-        xobj.send(null);  
+        fr.readAsText(file);
       }
     }
 
-    
+    function getMap(str) {
+      let map = undefined;
+      try {
+        let obj = JSON.parse(str);
+        map = new Map(Object.entries(obj));
+      } catch (e) {
+        console.log(e);
+      }
+      return map;
+    }
+
+    function separateNodesAndMetaMap(map) {
+      // How to remove the list in the map at the same time?
+      let nMap = _.cloneDeep(map);
+      let metaMap = new Map();
+      nMap.forEach((value, index) => {
+        if (typeof index == "string") {
+          if (index.includes(DataLoader.META)) {
+            let mMap = new Map(Object.entries(value));
+            metaMap.set(index, convertKeyToInt(mMap));
+            nMap.delete(index);
+          }
+        }
+        
+      });
+      return [nMap, metaMap];
+    }
+
+    function convertKeyToInt(map) {
+      let m = new Map();
+      map.forEach((value, index) => {
+        m.set(parseInt(index), value);
+      });
+      return m;
+    }
+
   }
 
-  convertKeyToInt(map) {
-    let m = new Map();
-    map.forEach((value, index) => {
-      m.set(parseInt(index), value);
-    });
-    return m;
-  }
+  
 
 
   save(dataContainer) {
-    // Need to know the structure of the file
-    // Extract only the necessary details
-    // Minimalist, just like the loader
+    let metaMap = dataContainer.metaMap;
+    let nodes = _.cloneDeep(dataContainer.nodes);
+    metaMap.forEach((value, index) => {
+      nodes.set(index, value);
+    });
+    let merged = convertMapToStr(nodes);
 
-    let metaName = "meta1";
-    let nStr = convertNodesToStr(dataContainer.nodes);
-    let mStr = convertMetasToStr(dataContainer.metas);
+    let mapName = "Plans";
+    download(merged, mapName + ".json", "text.json");
 
-    let end = '}}';
-    let replaceWith = '},"' + metaName + '":' + mStr + '}';
-    let merged = nStr.replace(end, replaceWith);
-    download(merged, ".json", "text.json");
-
-    function convertNodesToStr(map) {
+    function convertMapToStr(map) {
       let obj = {};
       map.forEach((value, index) => {
         if (value.x != undefined)
           value.x = undefined;
         if (value.y != undefined)
           value.y = undefined;
-        obj[index] = value;
+        if (value.mod != undefined)
+          value.mod = undefined;
+
+        if (value instanceof Map) {
+          let str = convertMapToObj(value);
+          obj[index] = str;
+        } else {
+          obj[index] = value;
+        }
       });
 
       return JSON.stringify(obj);
     }
 
-    function convertMetasToStr(map) {
+    function convertMapToObj(map) {
       let obj = {};
       map.forEach((value, index) => {
         obj[index] = value;
       });
-
-      return JSON.stringify(obj);
+      return obj;
     }
 
     function download(content, fileName, contentType) {

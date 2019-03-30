@@ -3,7 +3,9 @@
 
 class LoadNodesState {
   constructor(data = {}) {
-    this.data = data;
+    this.data = data; //* Seems not being used here, can be used later
+    // For choosing the focused node
+    // 
   }
 
   init() {

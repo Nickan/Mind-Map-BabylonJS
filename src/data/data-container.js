@@ -2,6 +2,8 @@ class DataContainer {
   constructor(nodes = new Map(), metas = new Map()) {
     this.nodes = nodes;
     this.metas = metas;
+    this.metaMap = new Map();
+    this.metaMap.set(DataLoader.META + "View1", metas);
     this.initListeners();
   }
 
