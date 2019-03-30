@@ -15,9 +15,9 @@ class SelectedControls {
         case "F2":
         if (data.nodeId != undefined)
           this.edit(scene);
-        case "Enter": 
-          this.createSibling();
-          break;
+        // case "Enter": 
+        //   this.createSibling();
+        //   break;
         case "Tab":
           this.createChild();
           break;

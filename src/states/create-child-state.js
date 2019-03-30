@@ -7,6 +7,7 @@ class CreateChildState {
     let sm = this.stateManager;
     let main = sm.main;
     this.spawnChildNode(sm, main);
+    this.drawLines(main);
 
     new CreateChildControls(main.scene)
       .onSelectedNode((result) => {
@@ -26,6 +27,7 @@ class CreateChildState {
     if (dm.revertBack()) {
       let dc = dm.embedCoordinates();
       main.nodeManager.loadNodes(dc, main.scene);
+      this.drawLines(main);
       main.scene.render();
     }
     
@@ -47,6 +49,11 @@ class CreateChildState {
 
     this.handleEdit(sm, main, childNode, this.data);
     main.scene.render(); // Have to remove later
+  }
+
+  drawLines(main, dataContainer) {
+    let dc = main.dataManager.dataContainer;
+    main.lines.drawLines(main.scene, dc);
   }
 
   handleEdit(sm, main, node, data) {
