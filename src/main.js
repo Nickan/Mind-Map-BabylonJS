@@ -10,6 +10,7 @@ class Main {
     this.dataManager = new DataManager();
     this.nodeManager = new NodeManager();
     this.controls = new Controls();
+    this.lines = new Lines();
     this.stateManager.setState(new StartState());
     this.renderLoop();
   }

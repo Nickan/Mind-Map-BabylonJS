@@ -22,7 +22,8 @@ class LoadNodesState {
   }
 
   exit() {
-    
+    let main = this.stateManager.main;
+    main.lines.dispose();
   }
 
 
