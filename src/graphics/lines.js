@@ -15,12 +15,14 @@ class Lines {
     this.meshLines = [];
 
     let z = 1;
-    n.forEach((value) => {
-      let x = value.y * NodeManager.X_UNIT;
-      let y = value.x * NodeManager.Y_UNIT;
+    m.forEach((meta, nodeId) => {
+      let node = n.get(nodeId);
+
+      let x = node.y * NodeManager.X_UNIT;
+      let y = node.x * NodeManager.Y_UNIT;
       let p = new BABYLON.Vector3(x, y, z);
 
-      let children = dataContainer.getChildren(value.id);
+      let children = dataContainer.getChildren(node.id);
 
       children.forEach((child) => {
         let cx = child.y * NodeManager.X_UNIT;

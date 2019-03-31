@@ -87,6 +87,29 @@ class DataManager {
     return node;
   }
 
+  // !NOTE: Will have a profound effect when referencing is implemented
+  deleteNode(nodeId) {
+    let metas = _.cloneDeep(this.dataContainer.metas);
+    metas = this.dataContainer.removeFromParentList(nodeId, metas);
+    metas = deleteMeta(nodeId, metas);
+    this.dataContainer.metas = metas;
+    console.log(this.dataContainer.metas);
+
+    function deleteMeta(nodeId, metas) {
+      let meta = metas.get(nodeId);
+      metas.delete(nodeId);
+      return deleteChildren(metas, meta.childrenIds, 0);
+    }
+
+    function deleteChildren(metas, children, index) {
+      if (children != undefined && index < children.length) {
+        let nMeta = deleteMeta(children[index], metas);
+        return deleteChildren(nMeta, children, index + 1);
+      }
+      return metas;
+    }
+  }
+
   getHighestId(nodes) {
     let highestValue = 0;
     nodes.forEach((value, index) => {

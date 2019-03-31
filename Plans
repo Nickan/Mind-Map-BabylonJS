@@ -153,12 +153,18 @@ Target
   Fix zoom
 
 Implement
-  Load
-    Partially implemented
-  Save
-    Have to start
-    Read code
-    This is required to fully integrate the system
+  Delete node
+  Drag node
+  Bug fixing
+  Animation
+  Done
+    Load
+      Partially implemented
+    Save
+      Have to start
+      Read code
+      This is required to fully integrate the system
+
 
 
 

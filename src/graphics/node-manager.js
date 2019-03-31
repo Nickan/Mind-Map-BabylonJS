@@ -8,13 +8,11 @@ class NodeManager {
 
   loadNodes(dataContainer, scene) {
     this.clear();
-    let ad = dataContainer.nodes;
-    
-    ad.forEach((node, index) => {
-      if (typeof index != "string") {
-        this.addTextBlock(node, scene);
-      }
-      
+    let n = dataContainer.nodes;
+    let m = dataContainer.metas;
+    m.forEach((meta, id) => {
+      let node = n.get(id);
+      this.addTextBlock(node, scene);
     });
   }
 

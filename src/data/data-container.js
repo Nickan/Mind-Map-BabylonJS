@@ -4,15 +4,6 @@ class DataContainer {
     this.metas = metas;
     this.metaMap = new Map();
     this.metaMap.set(DataLoader.META + "View1", metas);
-    this.initListeners();
-  }
-
-  initListeners() {
-    Utils.addEventListener(Controls.ON_TEXT_ENTERED, (inputText) => {
-      let nodeId = inputText.textBlock.node.id;
-      let node = this.nodes.get(nodeId);
-      node.text = inputText.text;
-    });
   }
 
   getChildren(nodeId) {
@@ -98,6 +89,20 @@ class DataContainer {
   getParent(nodeId) {
     let pId = this.metas.get(nodeId).parentId;
     return this.nodes.get(pId);
+  }
+
+  removeFromParentList(nodeId, metas) {
+    let pId = metas.get(nodeId).parentId;
+    if (pId != undefined) {
+      let cIds = metas.get(pId).childrenIds;
+      let index = cIds.indexOf(nodeId);
+      if (index !== -1) {
+        cIds.splice(index, 1);
+        // this.metas.get(pId).childrenIds = cIds;
+        metas.get(pId).childrenIds = cIds;
+      }
+    }
+    return metas;
   }
 
 }
