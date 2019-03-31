@@ -13,13 +13,16 @@ class SelectedControls {
       let code = keyInfo.event.code;
       switch (code) {
         case "F2":
-        if (data.nodeId != undefined)
-          this.edit(scene);
+          if (data.nodeId != undefined)
+            this.edit(scene);
         // case "Enter": 
         //   this.createSibling();
         //   break;
         case "Tab":
           this.createChild();
+          break;
+        case "Delete":
+          this.deleteNode();
           break;
       }
 
@@ -52,6 +55,7 @@ class SelectedControls {
     this.onIdle(() => {});
     this.onSelectedNode((result) => {});
     this.onDragScreen((result) => {});
+    this.onDeleteNode(() => {});
   }
 
   onEdit(fn) {
@@ -81,6 +85,11 @@ class SelectedControls {
 
   onDragScreen(fn) {
     this.dragScreenFn = fn;
+    return this;
+  }
+
+  onDeleteNode(fn) {
+    this.deleteNode = fn;
     return this;
   }
 

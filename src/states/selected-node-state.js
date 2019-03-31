@@ -25,6 +25,13 @@ class SelectedNodeState {
       })
       .onDragScreen((result) => {
         sm.setState(new DragScreenState(result));
+      })
+      .onDeleteNode(() => {
+        // Delete the node
+        // Rerender
+        // Go on idle state
+        main.dataManager.deleteNode(this.data.nodeId);
+        sm.setState(new LoadNodesState());
       });
   }
 
