@@ -21,15 +21,22 @@ class DataLoader {
     });
 
     function getAsText(fn) {
-      let input = document.querySelector('input');
+      // let input = document.querySelector('input');
+      var input = document.createElement('input');
+      input.setAttribute("id", "inputFile");
+      input.setAttribute("type", "file");
+      var b = document.querySelector('body');
+      b.append(input); 
       input.click();
-      input.onchange = function(event) {
+      input.onchange = function (event) {
         let file = input.files[0];
         let fr = new FileReader();
-        fr.onload = function(event) {
+        fr.onload = function (event) {
           fn(fr.result);
         }
         fr.readAsText(file);
+        event.preventDefault();
+        input.remove();
       }
     }
 
@@ -56,7 +63,7 @@ class DataLoader {
             nMap.delete(index);
           }
         }
-        
+
       });
       return [nMap, metaMap];
     }
@@ -71,7 +78,7 @@ class DataLoader {
 
   }
 
-  
+
 
 
   save(dataContainer) {
@@ -117,12 +124,12 @@ class DataLoader {
 
     function download(content, fileName, contentType) {
       let a = document.createElement("a");
-      let file = new Blob([content], {type: contentType});
+      let file = new Blob([content], { type: contentType });
       a.href = URL.createObjectURL(file);
       a.download = fileName;
       a.click();
     }
   }
 
-  
+
 }
