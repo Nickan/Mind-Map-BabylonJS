@@ -9,9 +9,9 @@ class SelectedNodeState {
   init() {
     let sm = this.stateManager;
     let main = sm.main;
-    let sc = new SelectedControls(main.scene, this.data);
-    this.sc = sc;
-    sc.onEdit(() => {
+
+    this.controls = new SelectedControls(main.scene, this.data);
+    this.controls.onEdit(() => {
         sm.setState(new EditNodeState(this.data));
       })
       .onCreateChild(() => {
@@ -27,19 +27,19 @@ class SelectedNodeState {
         sm.setState(new DragScreenState(result));
       })
       .onDeleteNode(() => {
-        // Delete the node
-        // Rerender
-        // Go on idle state
         main.dataManager.deleteNode(this.data.nodeId);
         sm.setState(new LoadNodesState());
       });
+    this.controls.nodeDragCb = () => {
+      sm.setState(new DragNodeState(this.data));
+    }
   }
 
   update(delta) {
-    
+    this.controls.update(delta);
   }
 
   exit() {
-    this.sc.dispose();
+    this.controls.dispose();
   }
 }

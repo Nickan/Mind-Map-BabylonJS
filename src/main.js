@@ -52,6 +52,7 @@ class Main {
     engine.runRenderLoop(function () {
       if (sm.state != undefined) {
         sm.state.update(engine.getDeltaTime());
+        Utils.update(engine.getDeltaTime());
       }
       scene.render();
     });

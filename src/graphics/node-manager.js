@@ -52,12 +52,12 @@ class NodeManager {
     tb.width = 2.5;
     tb.scaleX = 0.4;
     // text.scaleY = 1.5;
-    let g = {
+    
+    this.graphics.set(node.id, {
       plane: plane,
       at: at,
       textBlock: tb
-    }
-    this.graphics.set(node.id, g);
+    });
 
     at.addControl(tb);
     plane.nodeId = node.id;

@@ -155,6 +155,21 @@ Target
 Implement
   Delete node
   Drag node
+    How to implement
+    Simulate how will it be added
+      Select the position of the breadth it will be added
+        Calculating the position of the
+    Append then redraw
+    Controls
+      Selected
+        If mouse up
+          Go to IdleState
+        Else
+          Detect when move at certain distance from the selection state
+            Send the point location
+            If moved more than the set distance
+              Go to DragNodeState
+            Else
   Bug fixing
   Animation
   Done
