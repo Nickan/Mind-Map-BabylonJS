@@ -22,7 +22,7 @@ class IdleControls {
     scene.onKeyboardObservable.add((keyInfo) => {
       const KEY_UP = 2;
       if (keyInfo.type == KEY_UP)
-          return;
+        return;
       
       let code = keyInfo.event.code;
       if (code == "F5") {

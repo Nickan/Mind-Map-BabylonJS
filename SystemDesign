@@ -32,6 +32,21 @@ System implementation
     Mouse Scroll:
       Zoom
     Delete:
+  Design:
+    State
+      State of the system
+      Pass the needed data as data to the next state
+    Controls
+      Every state will have this
+      To be able to manage the growing code
+      Other options:
+        Putting the event listener in the Utils will make it hard to maintain
+        As all the controls will be put in the Utils
+      Option 2
+        What if we put codes in their respective controls?
+        Almost the same
+    Utils
+      Contains all the common code from states
 
 Managing Json File
   Saved and loaded as one File

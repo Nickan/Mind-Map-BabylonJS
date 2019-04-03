@@ -31,7 +31,7 @@ class Utils {
     scene.onPointerDown = function(event, pickResult) {
       console.log("pickResult " + pickResult.pickedPoint);
       console.log("worldVectorToScreen " + 
-        Utils.worldVectorToScreen(pickResult.pickedPoint, cam, scene));
+      Utils.worldVectorToScreen(pickResult.pickedPoint, cam, scene));
     }
 
   }
@@ -94,7 +94,7 @@ class Utils {
     Utils.events = {};
   }
 
-
+  // Controls
   static onSelectedNode(scene, pickResult, selectedNodeFn) {
     if (Utils.selectedNode(pickResult)) {
       let m = pickResult.pickedMesh;
@@ -107,25 +107,84 @@ class Utils {
   }
 
   static onDragScreen(scene, pickResult, onDragScreenFn) {
-    if (Utils.dragNode(pickResult)) {
+    if (dragGround(pickResult)) {
       let result = {
         pickedPoint: pickResult.pickedPoint,
       };
       scene.onPointerDown = undefined;
       onDragScreenFn(result);
     }
+
+    function dragGround(pickResult) {
+      let id = pickResult.pickedMesh.id;
+      return (id != "textplane" && id == "ground");
+    }
   }
+
+  static TEXT_PLAIN = "textplane";
+  static NO_TEXT_ID = -1;
+  static onDragNode(scene, pickResult, fn) {
+    let id = getSelectedNodeTextId(pickResult);
+    if (id != Utils.NO_TEXT_ID) {
+      fn();
+    }
+
+    function getSelectedNodeTextId(pickResult) {
+      if (pickResult.pickedMesh.id == Utils.TEXT_PLAIN)
+        return pickResult.pickedMesh.id;
+      return Utils.NO_TEXT_ID;
+    }
+  }
+
+
+  static getPickedMousePos(scene) {
+    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+    return pickResult.pickedPoint;
+  }
+
+
 
   static selectedNode(pickResult) {
     return (pickResult.pickedMesh.id == "textplane");
   }
 
-  static dragNode(pickResult) {
-    let id = pickResult.pickedMesh.id;
-    return (id != "textplane" && id == "ground");
+  static update(delta) {
+
+  }
+
+
+  // Math
+  static insideDist(x1, y1, x2, y2, dist) {
+    let d = Utils.getDistSqr(x1, y1, x2, y2);
+    return (d < (dist * dist));
+  }
+
+  static insideDist2(p1, p2, dist) {
+    let d = Utils.getDistSqr(p1.x, p1.y, p2.x, p2.y);
+    return d < (dist * dist);
+  }
+
+  static getDistSqr(x1, y1, x2, y2) {
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+    return (dx * dx) + (dy * dy);
+  }
+
+  static getDistSqr2(p1, p2) {
+    return Utils.getDistSqr(p1.x, p1.y, p2.x, p2.y);
   }
 
 }
+
+
+
+
+
+
+
+
+
+
 
 function makeElementDraggable(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
