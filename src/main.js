@@ -19,6 +19,7 @@ class Main {
     this.canvas = document.getElementById("renderCanvas");
     this.engine = new BABYLON.Engine(this.canvas, true);
     // this.engine.renderEvenInBackground = false;
+    // Have to disable because loading json is not rerendering, have to fix later
   }
 
   initScene() {

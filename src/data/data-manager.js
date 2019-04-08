@@ -55,6 +55,7 @@ class DataManager {
 
   embedCoordinates() {
     let dc = this.dataContainer;
+    dc.resetCoordinates(dc.nodes.get(1));
     let rein = new ReingoldTilford();
     let coords = rein.getCoordinates(dc.nodes.get(1), dc);
     return coords;
@@ -134,6 +135,27 @@ class DataManager {
       this.dataContainer = dc;
       fn();
     });
+  }
+
+  getDescendants(nodeId) {
+    let metas = this.dataContainer.metas;
+    let d = getDescendantsRecursive(metas, nodeId, []);
+    return d;
+
+    function getDescendantsRecursive(metas, nodeId, currentList) {
+      let childrenIds = metas.get(nodeId).childrenIds;
+      if (childrenIds.length > 0) {
+        currentList = currentList.concat(childrenIds);
+        childrenIds.forEach((id) => {
+          currentList = getDescendantsRecursive(metas, id, currentList);
+        });
+      }
+      return currentList;
+    }
+  }
+
+  changeParent(nodeId, parentId) {
+    this.dataContainer.changeParent(nodeId, parentId);
   }
   
 }

@@ -105,4 +105,22 @@ class DataContainer {
     return metas;
   }
 
+  changeParent(nodeId, parentId) {
+    this.removeFromParentList(nodeId, this.metas);
+    let meta = this.metas.get(nodeId);
+    meta.parentId = parentId;
+    let pm = this.metas.get(parentId);
+    pm.childrenIds.push(nodeId); // Have to be changed later
+  }
+
+  resetCoordinates(node) {
+    node.x = undefined;
+    node.y = undefined;
+    node.mod = undefined;
+    let children = this.getChildren(node.id);
+    children.forEach((child) => {
+      this.resetCoordinates(child);
+    });
+  }
+
 }
