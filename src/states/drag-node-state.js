@@ -21,48 +21,62 @@ class DragNodeState {
 
     this.controls = new DragNodeControls(main.scene, this.data);
     this.controls.dragStopCb = () => {
-
+      sm.setState(new IdleState(this.data));
     };
+
+    this.potentialParent = undefined;
+    this.potentialNodeId = -1;
+
+    this.exceptions = main.dataManager.getDescendants(this.data.nodeId);
+    this.exceptions.push(this.data.nodeId);
   }
 
   update(delta) {
-    // Should handle the ff states
-    // Redraw while being dragged
-    //   Only for local position
-    //   Or when there is a detected change
-    //   So that we remove the issue of overlapping nodes
-    // Show the future position
-    // 
-    // Difficulty: Hard
-    // Expectation: 
-    //   Moving requirements, trial and error
-
-    let scene = this.stateManager.main.scene;
-    let mPos = Utils.getPickedMousePos(scene);
+    let main = this.stateManager.main;
+    let mPos = Utils.getPickedMousePos(main.scene);
 
     let nPos = this.nodeG.plane.position;
 
     nPos.x = mPos.x - this.nodePosRelativeToMouse.x;
     nPos.y = mPos.y - this.nodePosRelativeToMouse.y;
 
-    // nPos.x = mPos.x - 0;
-    // nPos.y = mPos.y - 0;
+    let nodesG = this.stateManager.main.nodeManager.graphics;
 
-    // let nodesG = this.stateManager.main.nodeManager.graphics;
-    // let p = getPotentialParent(this.nodeG, nodesG);
-    // if (p != undefined) {
-    //   console.log(p);
-    // }
+    let metas = main.dataManager.dataContainer.metas;
+    let p = getPotentialParent(this.nodeG, nodesG, metas, 
+      this.exceptions);
+    if (p != undefined && this.potentialNodeId != p.nodeId) {
+      // this.potentialParent = p;
+      this.potentialNodeId = p.nodeId;
+      console.log(p.textBlock.text);
+      main.dataManager.changeParent(this.data.nodeId, p.nodeId);
 
-    function getPotentialParent(draggedG, nodesG) {
-      // Node pos.x < than the draggedNode
-      // Node closer than the distance detector
-      // Closest node detected inside the distance detector
+      redraw(main);
 
+      function redraw(main) {
+        // let mainId = 1; // This might change later
+        // let mainNode = main.dataManager.dataContainer.nodes.get(mainId);
+        let dm = main.dataManager;
+        let dc = dm.embedCoordinates();
+        dc = dm.embedCoordinates();
+        main.nodeManager.loadNodes(dc, main.scene);
+        main.lines.drawLines(main.scene, dc);
+        main.scene.render();
+      }
+    }
+
+    function getPotentialParent(draggedG, nodesG, metas, exceptions) {
       let potentialParent;
-      let distDetector = 1;
+      let distDetector = 1.75;
       let minDist = 9999;
-      nodesG.forEach((nodeG) => {
+
+      let cloneM = _.cloneDeep(metas);
+      exceptions.forEach((nodeId) => {
+        cloneM.delete(nodeId);
+      });
+
+      cloneM.forEach((meta, nodeId) => {
+        let nodeG = nodesG.get(nodeId);
         let d = draggedG.plane.position;
         let n = nodeG.plane.position;
 
@@ -70,14 +84,41 @@ class DragNodeState {
           
           // Using their center
           let dSqr = Utils.getDistSqr2(d, n);
-          if (dSqr < (distDetector * distDetector)) {
+
+          // console.log(dSqr);
+          let distDSqr = distDetector * distDetector;
+          if (dSqr < distDSqr) {
             if (minDist > dSqr) {
               potentialParent = nodeG;
+              potentialParent.nodeId = nodeId;
+              minDist = dSqr;
             }
           }
         }
       });
 
+      // nodesG.forEach((nodeG, nodeId) => {
+      //   let d = draggedG.plane.position;
+      //   let n = nodeG.plane.position;
+
+      //   if (isPotentialParent(d, n)) {
+          
+      //     // Using their center
+      //     let dSqr = Utils.getDistSqr2(d, n);
+
+      //     // console.log(dSqr);
+      //     let distDSqr = distDetector * distDetector;
+      //     if (dSqr < distDSqr) {
+      //       if (minDist > dSqr) {
+      //         potentialParent = nodeG;
+      //         potentialParent.nodeId = nodeId;
+      //         minDist = dSqr;
+      //       }
+      //     }
+      //   }
+      // });
+      // console.log(minDist);
+      return potentialParent;
 
       function isPotentialParent(d, n) {
         return (d.x > n.x);
