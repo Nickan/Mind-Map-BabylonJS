@@ -92,6 +92,11 @@ class DataContainer {
     return undefined;
   }
 
+  getLeftCousin(nodeId) {
+    let p = this.getParent(nodeId);
+    return this.getLeftMostSibling(p.id);
+  }
+
   getParent(nodeId) {
     let pId = this.metas.get(nodeId).parentId;
     return this.nodes.get(pId);
