@@ -10,10 +10,16 @@ class SelectedControls {
     // Has to be improved in the future
     if (data.nodeId == 1)
       this.detectIfNodeOnDrag = false;
-    else
-      this.detectIfNodeOnDrag = true;
+    else {
+      if (data.detectIfNodeOnDrag != undefined) {
+        this.detectIfNodeOnDrag = data.detectIfNodeOnDrag;
+      } else {
+        this.detectIfNodeOnDrag = true;
+      }
+    }
+      
 
-    this.initKeyboard(scene);
+    this.initKeyboard(scene, data);
     this.initPointerDown(scene);
 
     // Will change when node can be dragged
@@ -31,7 +37,7 @@ class SelectedControls {
     this.initDefaultFunctionCallbacks();
   }
 
-  initKeyboard(scene) {
+  initKeyboard(scene, data) {
     scene.onKeyboardObservable.add((keyInfo) => {
       const KEY_UP = 2;
       if (keyInfo.type == KEY_UP)
@@ -45,6 +51,7 @@ class SelectedControls {
         // case "Enter": 
         //   this.createSibling();
         //   break;
+          break;
         case "Tab":
           this.createChild();
           break;

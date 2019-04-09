@@ -47,6 +47,7 @@ class CreateChildState {
     let dc = dm.embedCoordinates();
     main.nodeManager.loadNodes(dc, main.scene);
 
+    this.data.detectIfNodeOnDrag = false;
     this.handleEdit(sm, main, childNode, this.data);
     main.scene.render(); // Have to remove later
   }

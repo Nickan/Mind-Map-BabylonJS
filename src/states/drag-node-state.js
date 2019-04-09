@@ -46,7 +46,6 @@ class DragNodeState {
     let p = getPotentialParent(this.nodeG, nodesG, metas, 
       this.exceptions);
     if (p != undefined && this.potentialNodeId != p.nodeId) {
-      // this.potentialParent = p;
       this.potentialNodeId = p.nodeId;
       console.log(p.textBlock.text);
       main.dataManager.changeParent(this.data.nodeId, p.nodeId);
@@ -54,8 +53,6 @@ class DragNodeState {
       redraw(main);
 
       function redraw(main) {
-        // let mainId = 1; // This might change later
-        // let mainNode = main.dataManager.dataContainer.nodes.get(mainId);
         let dm = main.dataManager;
         let dc = dm.embedCoordinates();
         dc = dm.embedCoordinates();

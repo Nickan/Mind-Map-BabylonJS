@@ -1,26 +1,7 @@
-/* 
-  Task: To load and save to json file
-  Will be converted to visualizer later on
-  How it works?
-    Will have a separate json, nodes.json and nodes-main.json
-    nodes.json will have id and name(text) of the data
-    nodesView(nodes-<view name>) will have the view state of data
-      Handles metadata of nodes
-      We can have as many view as possible
 
-  How to save state?
-    Things to consider:
-      Undo, redo
-    Current implementation
-      Merge the nodes and nodesView to feed to the reingold-tilford
-      Potential solutions:
-        Have a new merged file
-        Do not use it for editing
-        Just for presentation purposes
-    
-*/
 
-// Will implement undo and redo later
+
+
 class DataManager {
   constructor() {
     this.clear();
@@ -29,6 +10,10 @@ class DataManager {
   clear() {
     this.dataContainer = new DataContainer();
     this.dataLoader = new DataLoader();
+
+    // Temporary
+    let dc = this.dataContainer;
+    this.dataLoader.activeMeta = dc.activeMeta;
 
     this.prevDataCont;
   }
