@@ -1,6 +1,6 @@
 class NodeManager {
   static X_UNIT = 1.5;
-  static Y_UNIT = 1.5;
+  static Y_UNIT = -1.5;
 
   constructor() {
     this.graphics = new Map();

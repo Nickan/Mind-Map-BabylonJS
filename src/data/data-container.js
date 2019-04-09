@@ -3,7 +3,13 @@ class DataContainer {
     this.nodes = nodes;
     this.metas = metas;
     this.metaMap = new Map();
-    this.metaMap.set(DataLoader.META + "View1", metas);
+
+    // Temporary
+    let tmpName = "View1";
+    // this.metaMap.set(DataLoader.META + tmpName, metas);
+    this.activeMeta = DataLoader.META + tmpName;
+    this.metaMap.set(this.activeMeta, metas);
+    this.nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
   }
 
   getChildren(nodeId) {

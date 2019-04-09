@@ -1,7 +1,11 @@
+
+
+
 class DataLoader {
   static ACTIVE_META = "activeMeta";
-  static META = "meta-";
+  static META = "meta-";  // Used for indicating the meta view name
   constructor() {
+
   }
 
   loadDataContainer(cbFunc) {
@@ -81,7 +85,7 @@ class DataLoader {
 
 
 
-  save(dataContainer) {
+  save(dataContainer, mapName = "Plans") {
     let metaMap = dataContainer.metaMap;
     let nodes = _.cloneDeep(dataContainer.nodes);
     nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
@@ -89,8 +93,6 @@ class DataLoader {
       nodes.set(index, value);
     });
     let merged = convertMapToStr(nodes);
-
-    let mapName = "Plans";
     download(merged, mapName + ".json", "text.json");
 
     function convertMapToStr(map) {

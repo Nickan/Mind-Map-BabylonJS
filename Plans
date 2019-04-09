@@ -152,24 +152,105 @@ Target
   5 commits
   Fix zoom
 
-Implement
+Implementation
+  Purpose:
+    Long form:
+      To do more using a limited resources
+      To fail fastest way possible to have a feedback
+      Solicitation of feedback to get to the goal faster
+    Summary:
+      Resource utilization
+      Fail fast
+      Adjust based on feedback
+      Overall, make things easiest way possible
+      While balancing the attributes
+    Micro form:
+      Make things actionable
+      Rack up successes doing tasks under 30 seconds
+      Adjustments/Refinement/Any sort of data manipulation are tasks
+      Stupid idea might be the solution to the problem
+      Always find a way to automate things
+    Digestible form:
+      Always do new and unfamiliar tasks
+      Divide tasks by 30 seconds timeframe
+      Every tasks done are resonating
+        To the infinite amount of tasks in the future
+      Target to do as many 30 seconds tasks as possible
+      Doing so will ensure success
+      That's it.
+    Cool form
+      Description: Adventure guide
+        (How to cover as many data as possible)
+      Get Data steps:
+        1. Find new tasks
+        2. Divide into 30 seconds tasks
+        3. Finish task
+        4. If task takes more than 30 seconds, go back to step 2
+        5. Else: Get Data
+        6. Repeat
+      Note:
+        To more data, exponentially better
+        As all data are infinitely connected to each other
+        Every task done here are success
+        There is no such thing as lost effort
+        Mistake is just a misplaced attribute
+          Could be useful in other places
+          So explore!
+
+  Overall target Implementation
+    Have a basic usable visualizer
+    To use to further develop the software
+    Defer the eye candy, make it work first
+    Features:
+      
   Delete node
   Drag node
+    Low Priority
+      Visual cues:
+        Parent node it will be attached
+        Node currently being dragged
+        Interpolated changed of position
+    High Priority
+      Basic usability to have a proof of concept
+        This is very important, as resources is scarce
+      Test the basic usability
+      Then decide from there
+        Todo
+          Create the implementation plan
+      Draft tasks
+        Multiple view of the same set of data
+          Through the implementation of metas
+        Copy/clone nodes and descendants
+          For fast prototyping
+          Disposable data
+        Reference node and descendants
+          For optimization, removing redundant data
+          A more proven data
+
+
     How to implement
-    Simulate how will it be added
-      Select the position of the breadth it will be added
-        Calculating the position of the
-    Append then redraw
-    Controls
-      Selected
-        If mouse up
-          Go to IdleState
-        Else
-          Detect when move at certain distance from the selection state
-            Send the point location
-            If moved more than the set distance
-              Go to DragNodeState
+      04-08-09
+        Simulate how will it be added
+          Select the position of the breadth it will be added
+            Calculating the position of the
+        Append then redraw
+        Controls
+          Selected
+            If mouse up
+              Go to IdleState
             Else
+              Detect when move at certain distance from the selection state
+                Send the point location
+                If moved more than the set distance
+                  Go to DragNodeState
+                Else
+      04-08-09
+        Conditions
+          Make it intuitive
+          Under 2hrs
+        Todo
+          Check the Status
+          Decide from there
   Bug fixing
   Animation
   Done
