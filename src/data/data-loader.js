@@ -87,11 +87,14 @@ class DataLoader {
 
   save(dataContainer, mapName = "Plans") {
     let metaMap = dataContainer.metaMap;
+    metaMap.set(this.activeMeta, dataContainer.metas);
     let nodes = _.cloneDeep(dataContainer.nodes);
     nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
+
     metaMap.forEach((value, index) => {
       nodes.set(index, value);
     });
+
     let merged = convertMapToStr(nodes);
     download(merged, mapName + ".json", "text.json");
 

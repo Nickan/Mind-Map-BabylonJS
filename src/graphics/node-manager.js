@@ -44,7 +44,8 @@ class NodeManager {
     at.addControl(rectangle);
 
     var tb = new BABYLON.GUI.TextBlock();
-    tb.text = node.text;
+    tb.text = node.id + ": " + node.text; // For debugging
+    // tb.text = node.text;
     tb.node = node;
     tb.color = "white";
     tb.fontSize = "120px";
