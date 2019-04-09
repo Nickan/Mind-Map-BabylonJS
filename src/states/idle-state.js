@@ -9,6 +9,7 @@ class IdleState {
   init() {
     let sm = this.stateManager;
     let main = sm.main;
+    main.scene.m = main;  // For debugging
 
     this.controls = new IdleControls(main.scene);
     this.controls.onSelectedNode((result) => {

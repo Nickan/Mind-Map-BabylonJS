@@ -153,6 +153,14 @@ class Utils {
   }
 
 
+  static removeElement(array, element) {
+    var index = array.indexOf(element);
+    if (index !== -1) 
+      array.splice(index, 1);
+    return array;
+  }
+
+
   // Math
   static insideDist(x1, y1, x2, y2, dist) {
     let d = Utils.getDistSqr(x1, y1, x2, y2);

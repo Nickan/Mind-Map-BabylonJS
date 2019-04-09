@@ -4,10 +4,11 @@ class NodeManager {
 
   constructor() {
     this.graphics = new Map();
+    this.pool = new Pool();
   }
 
   loadNodes(dataContainer, scene) {
-    this.clear();
+    this.clear(scene);
     let n = dataContainer.nodes;
     let m = dataContainer.metas;
     m.forEach((meta, id) => {
@@ -16,49 +17,44 @@ class NodeManager {
     });
   }
 
-  clear() {
-    this.graphics.forEach((g) => {
-      g.at.dispose();
-      g.plane.dispose();
+  clear(scene) {
+    this.graphics.forEach((ng, nodeId) => {
+      scene.removeMesh(ng.plane); // Bugged, might be fixed in the future
+      scene.meshes = Utils.removeElement(scene.meshes, ng.plane);
+      this.pool.add(ng);
+      reset(ng);
     });
     this.graphics = new Map();
+
+    function reset(nodeGraphics) {
+      nodeGraphics.plane.nodeId = -1;
+      nodeGraphics.textBlock.node = undefined;
+      nodeGraphics.textBlock.text = "";
+    }
+  }
+
+  disposeGraphics() {
+    this.pool.dispose();
   }
 
   addTextBlock(node, scene) {
-    let plane = BABYLON.MeshBuilder.CreatePlane("textplane", 
-      {width: 1.3, height: 1}, scene);
+    let nodeGraphics = this.pool.get(scene);
+    
+    let plane = nodeGraphics.plane;
+    scene.addMesh(plane);
+    // scene.meshes.push(plane);
 
     plane.position.x = node.y * NodeManager.X_UNIT;
     plane.position.y = node.x * NodeManager.Y_UNIT;
     plane.position.z = 0;
 
-
-    let at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
-      plane, 512, 512);
-
-    var rectangle = new BABYLON.GUI.Rectangle("rect");
-    rectangle.width  ="1024px";
-    rectangle.height = "1024px";
-    // rectangle.color = "Orange";
-    rectangle.background = "green";
-    at.addControl(rectangle);
-
-    var tb = new BABYLON.GUI.TextBlock();
-    tb.text = node.id + ": " + node.text; // For debugging
-    // tb.text = node.text;
+    let at = nodeGraphics.advancedTexture;
+    let tb = nodeGraphics.textBlock;
+    // tb.text = node.id + ": " + node.text; // For debugging
+    tb.text = node.text;
     tb.node = node;
-    tb.color = "white";
-    tb.fontSize = "120px";
-    tb.textWrapping = true;
-    tb.width = 2.5;
-    tb.scaleX = 0.4;
-    // text.scaleY = 1.5;
     
-    this.graphics.set(node.id, {
-      plane: plane,
-      at: at,
-      textBlock: tb
-    });
+    this.graphics.set(node.id, nodeGraphics);
 
     at.addControl(tb);
     plane.nodeId = node.id;
@@ -68,14 +64,5 @@ class NodeManager {
     let tb = this.graphics.get(node.id).textBlock;
     tb.text = node.text;
   }
-
-
-
-  // disposeTextBlock() {
-  //   if (this.at != undefined) {
-  //     this.at.dispose();
-  //     this.at = undefined;
-  //   }
-  // }
 
 }
