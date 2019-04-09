@@ -104,7 +104,9 @@ class ReingoldTilford {
         let rV = rightContour.get(depth);
         let lV = leftContour.get(depth);
 
-        if (lV <= (rV + 1)) {
+        // (Is leftData/leftNode right contour >=
+        // Current node left contour) ?
+        if ((rV + 1) >= lV) {
           let tmpShiftValue = (rV - lV) + ReingoldTilford.BREADTH_DIST;
           if (tmpShiftValue > shiftValue) {
             shiftValue = tmpShiftValue;
@@ -125,6 +127,7 @@ class ReingoldTilford {
       let maxKey2 = Utils.getMaxKey(c2);
       return Math.min(maxKey1, maxKey2);
     }
+
   }
 
   // For now, recenter all the nodes with children
