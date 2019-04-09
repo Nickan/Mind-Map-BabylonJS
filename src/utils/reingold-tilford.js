@@ -1,8 +1,9 @@
+
+
+
 class ReingoldTilford {
 
-  static get BREADTH_DIST() {
-    return 1;
-  }
+  static BREADTH_DIST = 1;
 
   constructor() {
 

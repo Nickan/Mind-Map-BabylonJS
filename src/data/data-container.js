@@ -8,7 +8,7 @@ class DataContainer {
     let tmpName = "View1";
     // this.metaMap.set(DataLoader.META + tmpName, metas);
     this.activeMeta = DataLoader.META + tmpName;
-    this.metaMap.set(this.activeMeta, metas);
+    this.metaMap.set(this.activeMeta, this.metas);
     this.nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
   }
 
