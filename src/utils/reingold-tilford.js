@@ -84,10 +84,11 @@ class ReingoldTilford {
   }
 
   fixConflictingX(node, dataContainer) {
+    let dc = dataContainer;
     let leftContour = new Map();
-    leftContour = this.getLeftContour(node, dataContainer, 0, leftContour);
+    leftContour = this.getLeftContour(node, dc, 0, leftContour);
 
-    let leftData = dataContainer.getLeftMostSibling(node.id);
+    let leftData = dc.getLeftMostSibling(node.id);
 
     while (leftData != undefined && leftData != node) {
       let rightContour = new Map();
@@ -103,7 +104,7 @@ class ReingoldTilford {
         let rV = rightContour.get(depth);
         let lV = leftContour.get(depth);
 
-        if (lV <= rV) {
+        if (lV <= (rV + 1)) {
           let tmpShiftValue = (rV - lV) + ReingoldTilford.BREADTH_DIST;
           if (tmpShiftValue > shiftValue) {
             shiftValue = tmpShiftValue;
