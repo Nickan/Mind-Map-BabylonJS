@@ -35,6 +35,10 @@ class IdleControls {
         scene.onKeyboardObservable.clear();
         this.open();
       }
+
+      if (code == "F10") {
+        scene.m.nodeManager.clear(scene);
+      }
         
     });
 
