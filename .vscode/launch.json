@@ -6,8 +6,9 @@
       "name": "Launch localhost",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:8000",
-      "webRoot": "${workspaceFolder}/"
+      "url": "http://localhost:8008",
+      "webRoot": "${workspaceFolder}/",
+      "runtimeArgs": ["taskset --cpu-list 1 google-chrome"]
     },
     {
       "name": "Launch index.html",
