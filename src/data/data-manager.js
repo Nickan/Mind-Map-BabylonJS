@@ -58,7 +58,11 @@ class DataManager {
 
     let meta = metas.get(id);
     if (meta == undefined) {
-      meta = new Meta(id, parentId);
+      meta = {
+        id: id,
+        parentId: parentId,
+        childrenIds: [],
+      }
       metas.set(id, meta);
     }
 

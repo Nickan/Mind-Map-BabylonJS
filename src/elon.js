@@ -1,7 +1,7 @@
 
 
 
-class Main {
+class Elon {
   constructor() {
     this.init();
     this.initScene();
@@ -11,7 +11,7 @@ class Main {
     this.nodeManager = new NodeManager();
     this.controls = new Controls();
     this.lines = new Lines();
-    this.stateManager.setState(new StartState());
+    new StartState(this);
     this.renderLoop();
   }
 
@@ -48,11 +48,10 @@ class Main {
   renderLoop() {
     let engine = this.engine;
     let scene = this.scene;
-    let sm = this.stateManager;
 
     engine.runRenderLoop(function () {
-      if (sm.state != undefined) {
-        sm.state.update(engine.getDeltaTime());
+      if (elon.state != undefined) {
+        elon.state.update(engine.getDeltaTime());
         Utils.update(engine.getDeltaTime());
       }
       scene.render();
@@ -65,7 +64,7 @@ class Main {
   }
 }
 
-let m = new Main();
+let elon = new Elon();
 document.onkeydown = function(evt) {
   evt = evt || window.event;
 

@@ -27,10 +27,10 @@ class Controls {
     }
   }
 
-  initDragNodeState(scene, changeStateFn) {
+  onPointerUp(scene, onPointerUpFn) {
     scene.onPointerUp = (event, pickResult) => {
       scene.onPointerUp = undefined;
-      changeStateFn(new IdleState());
+      onPointerUpFn();
     }
   }
 

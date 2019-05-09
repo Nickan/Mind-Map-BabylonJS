@@ -33,24 +33,22 @@ class NodeManager {
     }
   }
 
-  disposeGraphics() {
-    this.pool.dispose();
-  }
-
   addTextBlock(node, scene) {
     let nodeGraphics = this.pool.get(scene);
     
     let plane = nodeGraphics.plane;
     scene.addMesh(plane);
     // scene.meshes.push(plane);
-
-    plane.position.x = node.y * NodeManager.X_UNIT;
-    plane.position.y = node.x * NodeManager.Y_UNIT;
-    plane.position.z = 0;
+    let p = plane.position
+    p.x = node.y * NodeManager.X_UNIT;
+    p.y = node.x * NodeManager.Y_UNIT;
+    p.z = 0;
 
     let at = nodeGraphics.advancedTexture;
     let tb = nodeGraphics.textBlock;
     // tb.text = node.id + ": " + node.text; // For debugging
+    // tb.text = node.id + " : " + node.y + ": " + node.x 
+      // + " : " + node.text; // For debugging
     tb.text = node.text;
     tb.node = node;
     
@@ -63,6 +61,10 @@ class NodeManager {
   editText(node) {
     let tb = this.graphics.get(node.id).textBlock;
     tb.text = node.text;
+  }
+
+  disposeGraphics() {
+    this.pool.dispose();
   }
 
 }

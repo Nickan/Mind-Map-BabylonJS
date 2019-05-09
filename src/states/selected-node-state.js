@@ -2,36 +2,42 @@
 
 
 class SelectedNodeState {
-  constructor(data) {
+  constructor(elon, data) {
+    this.elon = elon;
     this.data = data;
-  }
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-
-    this.controls = new SelectedControls(main.scene, this.data);
+    this.controls = new SelectedControls(elon.scene, this.data);
     this.controls.onEdit(() => {
-        sm.setState(new EditNodeState(this.data));
+        this.exit();
+        new EditNodeState(elon, this.data);
       })
       .onCreateChild(() => {
-        sm.setState(new CreateChildState(this.data));
+        this.exit();
+        new CreateChildState(elon, this.data);
       })
       .onCreateSibling(() => {
-        sm.setState(new CreateSiblingState(this.data));
+        this.exit();
+        new CreateSiblingState(elon, this.data);
       })
       .onSelectedNode((result) => {
-        sm.setState(new SelectedNodeState(result));
+        this.exit();
+        new SelectedNodeState(elon, result);
       })
       .onDragScreen((result) => {
-        sm.setState(new DragScreenState(result));
+        this.exit();
+        new DragScreenState(elon, result);
       })
       .onDeleteNode(() => {
-        main.dataManager.deleteNode(this.data.nodeId);
-        sm.setState(new LoadNodesState());
+        this.exit();
+        elon.dataManager.deleteNode(this.data.nodeId);
+        new LoadNodesState(elon);
       });
     this.controls.nodeDragCb = () => {
-      sm.setState(new DragNodeState(this.data));
+      new DragNodeState(elon, this.data);
+    }
+
+    this.controls.onFold = () => {
+      
     }
   }
 
@@ -41,5 +47,7 @@ class SelectedNodeState {
 
   exit() {
     this.controls.dispose();
+    this.controls = undefined;
+    this.elon.state = undefined;
   }
 }

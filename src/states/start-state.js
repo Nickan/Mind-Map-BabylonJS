@@ -3,14 +3,14 @@
 
 class StartState {
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-    let dm = main.dataManager;
-    dm.clear();
+  constructor(elon) {
+    this.elon = elon;
+    elon.state = this;
 
+    let dm = elon.dataManager;
+    dm.clear();
     dm.addNewData("Main", undefined);
-    sm.setState(new LoadNodesState());
+    new LoadNodesState(elon);
   }
 
   update(delta) {
