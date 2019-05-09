@@ -2,44 +2,35 @@
 
 
 class IdleState {
-  constructor(data = {}) {
-    this.data = data;
-  }
+  constructor(elon) {
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-    main.scene.m = main;  // For debugging
-
-    this.controls = new IdleControls(main.scene);
+    this.controls = new IdleControls(elon.scene);
     this.controls.onSelectedNode((result) => {
-        sm.setState(new SelectedNodeState(result));
+        this.controls.dispose();
+        new SelectedNodeState(elon, result);
       })
       .onDragScreen((result) => {
-        sm.setState(new DragScreenState(result));
+        this.controls.dispose();
+        new DragScreenState(elon, result);
       })
       .onMouseScroll((deltaY) => {
-        main.cameraManager.zoom(deltaY);
+        elon.cameraManager.zoom(deltaY);
       })
       .onSave(() => {
-        main.dataManager.save();
+        elon.dataManager.save();
       })
       .onOpen(() => {
-        main.dataManager.open(() => {
-          sm.setState(new LoadNodesState());
+        elon.dataManager.open(() => {
+          this.controls.dispose();
+          new LoadNodesState(elon);
         })
       });
     
-    let dc = main.dataManager.dataContainer;
-    main.lines.drawLines(main.scene, dc);
+    let dc = elon.dataManager.dataContainer;
+    elon.lines.drawLines(elon.scene, dc);
   }
 
   update(delta) {
 
-  }
-
-  exit() {
-    this.controls.dispose();
-    
   }
 }

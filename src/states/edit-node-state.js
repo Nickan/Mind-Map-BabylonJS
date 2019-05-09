@@ -1,32 +1,20 @@
 class EditNodeState {
-  constructor(data) {
-    this.data = data;
+  constructor(elon, data) {
+    this.handleEdit(elon, data);
   }
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-
-    this.handleEdit(sm, main);
-  }
-
-  handleEdit(sm, main) {
-    let data = this.data;
-    let node = main.dataManager.dataContainer.nodes.get(data.nodeId);
-    main.controls.createInputText(node, 
+  handleEdit(elon, data) {
+    let node = elon.dataManager.dataContainer.nodes.get(data.nodeId);
+    elon.controls.createInputText(node, 
       function enteredText(text) {
         node.text = text;
-        main.nodeManager.editText(node, text);
-        sm.setState(new IdleState());
+        elon.nodeManager.editText(node, text);
+        new IdleState(elon);
       }
     );
   }
 
   update(delta) {
-    
-  }
-
-  exit() {
     
   }
 }

@@ -38,6 +38,9 @@ class SelectedControls {
   }
 
   initKeyboard(scene, data) {
+    this.onFold = () => {};
+    this.onUnfold = () => {};
+
     scene.onKeyboardObservable.add((keyInfo) => {
       const KEY_UP = 2;
       if (keyInfo.type == KEY_UP)
@@ -57,6 +60,12 @@ class SelectedControls {
           break;
         case "Delete":
           this.deleteNode();
+          break;
+        case "F9":
+          this.onFold();
+          break;
+        case "F10":
+          this.onUnfold();
           break;
       }
 

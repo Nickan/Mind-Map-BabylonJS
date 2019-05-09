@@ -2,29 +2,17 @@
 
 
 class LoadNodesState {
-  constructor(data = {}) {
-    this.data = data; //* Seems not being used here, can be used later
-    // For choosing the focused node
-    // 
-  }
+  constructor(elon) {
+    this.elon = elon;
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
+    let dataCont = elon.dataManager.embedCoordinates();
+    elon.nodeManager.loadNodes(dataCont, elon.scene);
 
-    let dc = main.dataManager.embedCoordinates();
-    main.nodeManager.loadNodes(dc, main.scene);
-    sm.setState(new IdleState(this.data));
+    new IdleState(elon);
   }
 
   update(delta) {
     
   }
-
-  exit() {
-    let main = this.stateManager.main;
-    main.lines.dispose();
-  }
-
 
 }
