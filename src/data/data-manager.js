@@ -146,5 +146,10 @@ class DataManager {
   changeParent(nodeId, parentId) {
     this.dataContainer.changeParent(nodeId, parentId);
   }
+
+  toggleFoldDescendants(nodeId) {
+    let m = this.dataContainer.metas.get(nodeId);
+    m.foldDescendants = true;
+  }
   
 }

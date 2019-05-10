@@ -82,5 +82,23 @@ class Controls {
     this.input = undefined;
   }
 
+  onFoldDescendants(cbFn, scene) {
+    scene.onKeyboardObservable.add((keyInfo) => {
+      const KEY_UP = 2;
+      if (keyInfo.type == KEY_UP)
+          return;
+      
+      let code = keyInfo.event.code;
+      switch (code) {
+        case "F3":
+          cbFn();
+          scene.onKeyboardObservable.clear();
+          break;
+      }
+    });  
+  }
+
+
+
   
 }

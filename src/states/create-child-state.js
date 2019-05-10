@@ -1,70 +1,66 @@
 class CreateChildState {
-  constructor(data) {
+  constructor(elon, data) {
+    this.elon = elon;
     this.data = data;
-  }
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-    this.spawnChildNode(sm, main);
-    this.drawLines(main);
+    this.spawnChildNode(elon);
+    this.drawLines(elon);
 
-    new CreateChildControls(main.scene)
+    new CreateChildControls(elon.scene)
       .onSelectedNode((result) => {
         // Cancel the creation
         // Delete the temp node
         // Select the node
       })
       .onDragScreen((result) => {
-        this.cancelCreation(sm, main);
+        this.cancelCreation(elon);
       });
   }
 
-  cancelCreation(sm, main) {
+  cancelCreation(elon) {
     // Revert back
-    main.controls.disposeInput();
-    let dm = main.dataManager;
+    elon.controls.disposeInput();
+    let dm = elon.dataManager;
     if (dm.revertBack()) {
       let dc = dm.embedCoordinates();
-      main.nodeManager.loadNodes(dc, main.scene);
-      this.drawLines(main);
-      main.scene.render();
+      elon.nodeManager.loadNodes(dc, elon.scene);
+      this.drawLines(elon);
+      elon.scene.render();
     }
     
-    sm.setState(new IdleState());
+    new IdleState(elon);
   }
 
-  spawnChildNode(sm, main) {
+  spawnChildNode(elon) {
     /*
       Need to get the coordinates
       Have to add it first to the list
       Then remove it later on if the creation is cancelled
     */
     let id = this.data.nodeId;
-    let dm = main.dataManager;
+    let dm = elon.dataManager;
 
     let childNode = dm.addNewData("", id);
     let dc = dm.embedCoordinates();
-    main.nodeManager.loadNodes(dc, main.scene);
+    elon.nodeManager.loadNodes(dc, elon.scene);
 
     this.data.detectIfNodeOnDrag = false;
-    this.handleEdit(sm, main, childNode, this.data);
-    main.scene.render(); // Have to remove later
+    this.handleEdit(elon, childNode, this.data);
+    elon.scene.render(); // Have to remove later
   }
 
-  drawLines(main, dataContainer) {
-    let dc = main.dataManager.dataContainer;
-    main.lines.drawLines(main.scene, dc);
+  drawLines(elon, dataContainer) {
+    let dc = elon.dataManager.dataContainer;
+    elon.lines.drawLines(elon.scene, dc);
   }
 
-  handleEdit(sm, main, node, data) {
-    let ctrl = main.controls;
+  handleEdit(elon, node, data) {
+    let ctrl = elon.controls;
     ctrl.createInputText(node, 
       function enteredText(text) {
         node.text = text;
-        main.nodeManager.editText(node);
-        // sm.setState(new IdleState());
-        sm.setState(new SelectedNodeState(data));
+        elon.nodeManager.editText(node);
+        new SelectedNodeState(elon, data);
       }
     );
   }

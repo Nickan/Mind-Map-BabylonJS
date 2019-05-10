@@ -38,9 +38,6 @@ class SelectedControls {
   }
 
   initKeyboard(scene, data) {
-    this.onFold = () => {};
-    this.onUnfold = () => {};
-
     scene.onKeyboardObservable.add((keyInfo) => {
       const KEY_UP = 2;
       if (keyInfo.type == KEY_UP)
@@ -51,9 +48,6 @@ class SelectedControls {
         case "F2":
           if (data.nodeId != undefined)
             this.edit(scene);
-        // case "Enter": 
-        //   this.createSibling();
-        //   break;
           break;
         case "Tab":
           this.createChild();
@@ -68,8 +62,6 @@ class SelectedControls {
           this.onUnfold();
           break;
       }
-
-
     });  
   }
 
