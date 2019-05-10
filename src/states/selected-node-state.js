@@ -36,9 +36,13 @@ class SelectedNodeState {
       new DragNodeState(elon, this.data);
     }
 
-    this.controls.onFold = () => {
-      
-    }
+    elon.controls.onFoldDescendants(() => {
+      // Main node should not be able to be folded
+      // Node without a parent
+      elon.dataManager.toggleFoldDescendants(this.data.nodeId);
+      let dataCont = elon.dataManager.embedCoordinates();
+      elon.nodeManager.loadNodes(dataCont, elon.scene);
+    }, elon.scene);
   }
 
   update(delta) {

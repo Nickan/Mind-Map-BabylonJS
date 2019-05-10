@@ -1,4 +1,5 @@
 class DataContainer {
+
   constructor(nodes = new Map(), metas = new Map()) {
     this.nodes = nodes;
     this.metas = metas;
@@ -12,8 +13,16 @@ class DataContainer {
     this.nodes.set(DataLoader.ACTIVE_META, this.activeMeta);
   }
 
-  getChildren(nodeId) {
+  getChildren(nodeId, nodeStateCheck = true) {
     let mData = this.metas.get(nodeId);
+
+    if (nodeStateCheck) {
+      if (mData.foldDescendants != undefined) {
+        return [];
+      }
+    }
+    
+
     let childrenIds = mData.childrenIds;
     let children = new Array();
     childrenIds.forEach((childId) => {
@@ -45,8 +54,9 @@ class DataContainer {
     return meta.parentId == undefined;
   }
 
-  hasChildren(nodeId) {
-    return (this.metas.get(nodeId).childrenIds.length > 1);
+  hasChildren(nodeId, nodeStateCheck = true) {
+    // return (this.metas.get(nodeId).childrenIds.length > 1);
+    return (this.getChildren(nodeId, nodeStateCheck).length > 1);
   }
 
   isLeafNode(nodeId) {
