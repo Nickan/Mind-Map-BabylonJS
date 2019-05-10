@@ -25,9 +25,6 @@ class IdleState {
           new LoadNodesState(elon);
         })
       });
-    
-    let dc = elon.dataManager.dataContainer;
-    elon.lines.drawLines(elon.scene, dc);
   }
 
   update(delta) {

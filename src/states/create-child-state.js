@@ -4,7 +4,7 @@ class CreateChildState {
     this.data = data;
 
     this.spawnChildNode(elon);
-    this.drawLines(elon);
+    // this.drawLines(elon);
 
     new CreateChildControls(elon.scene)
       .onSelectedNode((result) => {
@@ -23,8 +23,8 @@ class CreateChildState {
     let dm = elon.dataManager;
     if (dm.revertBack()) {
       let dc = dm.embedCoordinates();
-      elon.nodeManager.loadNodes(dc, elon.scene);
-      this.drawLines(elon);
+      let visibleMetas = elon.nodeManager.loadNodes(dc, elon.scene);
+      elon.lines.drawLines(elon.scene, dc, visibleMetas);
       elon.scene.render();
     }
     
@@ -42,7 +42,8 @@ class CreateChildState {
 
     let childNode = dm.addNewData("", id);
     let dc = dm.embedCoordinates();
-    elon.nodeManager.loadNodes(dc, elon.scene);
+    let visibleMetas = elon.nodeManager.loadNodes(dc, elon.scene);
+    elon.lines.drawLines(elon.scene, dc, visibleMetas);
 
     this.data.detectIfNodeOnDrag = false;
     this.handleEdit(elon, childNode, this.data);

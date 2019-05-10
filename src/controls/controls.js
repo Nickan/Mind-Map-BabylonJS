@@ -92,7 +92,7 @@ class Controls {
       switch (code) {
         case "F3":
           cbFn();
-          scene.onKeyboardObservable.clear();
+          // scene.onKeyboardObservable.clear();
           break;
       }
     });  

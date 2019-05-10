@@ -63,8 +63,8 @@ class DataContainer {
     return !this.hasChildren(nodeId);
   }
 
-  hasChild(nodeId) {
-    return (this.metas.get(nodeId).childrenIds.length == 1);
+  hasChild(nodeId, nodeStateCheck = true) {
+    return (this.getChildren(nodeId, nodeStateCheck).length == 1);
   }
 
   getLeftSibling(nodeId) {

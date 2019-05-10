@@ -6,7 +6,8 @@ class LoadNodesState {
     this.elon = elon;
 
     let dataCont = elon.dataManager.embedCoordinates();
-    elon.nodeManager.loadNodes(dataCont, elon.scene);
+    let visibleMetas = elon.nodeManager.loadNodes(dataCont, elon.scene);
+    elon.lines.drawLines(elon.scene, dataCont, visibleMetas);
 
     new IdleState(elon);
   }

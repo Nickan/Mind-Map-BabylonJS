@@ -20,6 +20,9 @@ class SelectedNodeState {
         new CreateSiblingState(elon, this.data);
       })
       .onSelectedNode((result) => {
+        if (result.nodeId == this.data.nodeId)
+          return;
+
         this.exit();
         new SelectedNodeState(elon, result);
       })
@@ -41,7 +44,8 @@ class SelectedNodeState {
       // Node without a parent
       elon.dataManager.toggleFoldDescendants(this.data.nodeId);
       let dataCont = elon.dataManager.embedCoordinates();
-      elon.nodeManager.loadNodes(dataCont, elon.scene);
+      let visibleMetas = elon.nodeManager.loadNodes(dataCont, elon.scene);
+      elon.lines.drawLines(elon.scene, dataCont, visibleMetas);
     }, elon.scene);
   }
 
