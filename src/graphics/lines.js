@@ -7,15 +7,18 @@ class Lines {
 
   }
 
-  drawLines(scene, dataContainer) {
+  drawLines(scene, dataContainer, visibleMetas) {
     this.dispose();
     let n = dataContainer.nodes;
-    let m = dataContainer.metas;
+    // let m = dataContainer.metas;
 
     this.meshLines = [];
 
     let z = 1;
-    m.forEach((meta, nodeId) => {
+    if (visibleMetas == undefined)
+      return;
+
+    visibleMetas.forEach((meta, nodeId) => {
       let node = n.get(nodeId);
 
       let x = node.y * NodeManager.X_UNIT;

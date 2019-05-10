@@ -83,7 +83,6 @@ class DataManager {
     metas = this.dataContainer.removeFromParentList(nodeId, metas);
     metas = deleteMeta(nodeId, metas);
     this.dataContainer.metas = metas;
-    console.log(this.dataContainer.metas);
 
     function deleteMeta(nodeId, metas) {
       let meta = metas.get(nodeId);
@@ -149,7 +148,13 @@ class DataManager {
 
   toggleFoldDescendants(nodeId) {
     let m = this.dataContainer.metas.get(nodeId);
-    m.foldDescendants = true;
+
+    if (m.foldDescendants == undefined) {
+      m.foldDescendants = true;
+    } else {
+      m.foldDescendants = undefined;
+    }
+    
   }
   
 }

@@ -11,10 +11,39 @@ class NodeManager {
     this.clear(scene);
     let n = dataContainer.nodes;
     let m = dataContainer.metas;
-    m.forEach((meta, id) => {
+
+    let vm = getVisibleMetas(m);
+
+    vm.forEach((meta, id) => {
       let node = n.get(id);
       this.addTextBlock(node, scene);
     });
+    return vm;
+
+    function getVisibleMetas(metas) {
+      let visibleMetas = new Map();
+      let startingMeta = undefined;
+      metas.forEach((meta) => {
+        if (meta.parentId == undefined) {
+          startingMeta = meta;
+        }
+      });
+
+      visibleMetas.set(startingMeta.id, startingMeta);
+      addChildren(startingMeta, visibleMetas, metas);
+      return visibleMetas;
+      function addChildren(meta, visibleMetas, metas) {
+        if (meta.foldDescendants != undefined && meta.foldDescendants) {
+          return visibleMetas;
+        } else {
+          meta.childrenIds.forEach((cId) => {
+            visibleMetas.set(cId, metas.get(cId));
+            addChildren(metas.get(cId), visibleMetas, metas);
+          });
+          
+        }
+      }
+    }
   }
 
   clear(scene) {
