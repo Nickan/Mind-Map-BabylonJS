@@ -46,6 +46,45 @@ class DataManager {
     return coords;
   }
 
+  getVisibleMetas() {
+    let dc = this.dataContainer;
+    let m = dc.metas;
+    let mMeta = getMainMeta(m);
+    let result = {
+      deepestLevel: 0
+    }
+
+    let dMeta = getDeepestMetaFoldAncestors(dc.metas, mMeta, 1, result);
+
+    console.log(result);
+
+    function getMainMeta(metas) {
+      let main = undefined;
+      metas.forEach((meta) => {
+        if (meta.parentId == undefined) {
+          main = meta;
+        }
+      });
+      return main;
+    }
+
+    function getDeepestMetaFoldAncestors(metas, currentMeta, depth, result) {
+      let cIds = currentMeta.childrenIds;
+
+      cIds.forEach((cmId) => {
+        let cm = metas.get(cmId);
+        if (cm.foldAncestors != undefined) {
+          if (result.deepestLevel < depth) {
+            result.deepestLevel = depth;
+            result.metaId = cmId;
+          }
+        }
+        getDeepestMetaFoldAncestors(metas, cm, depth + 1, result);
+      });
+      return result;
+    }
+  }
+
   addNewData(text, parentId, savePrevious = true) {
     if (savePrevious)
       this.prevDataCont = _.cloneDeep(this.dataContainer, true);
@@ -155,6 +194,24 @@ class DataManager {
       m.foldDescendants = undefined;
     }
     
+  }
+
+  toggleFoldUnfoldAncestors(nodeId) {
+    let ms = this.dataContainer.metas;
+
+    ms.forEach((meta) => {
+
+      if (meta.id != nodeId)
+        meta.foldAncestors = undefined;
+    });
+
+    let m = ms.get(nodeId);
+
+    if (m.foldAncestors == undefined) {
+      m.foldAncestors = true;
+    } else {
+      m.foldAncestors = undefined;
+    }
   }
   
 }

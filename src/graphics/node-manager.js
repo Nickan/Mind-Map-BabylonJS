@@ -22,16 +22,13 @@ class NodeManager {
 
     function getVisibleMetas(metas) {
       let visibleMetas = new Map();
-      let startingMeta = undefined;
-      metas.forEach((meta) => {
-        if (meta.parentId == undefined) {
-          startingMeta = meta;
-        }
-      });
+      let startingMeta = getMainMeta(metas);
 
       visibleMetas.set(startingMeta.id, startingMeta);
       addChildren(startingMeta, visibleMetas, metas);
       return visibleMetas;
+
+
       function addChildren(meta, visibleMetas, metas) {
         if (meta.foldDescendants != undefined && meta.foldDescendants) {
           return visibleMetas;
@@ -42,6 +39,16 @@ class NodeManager {
           });
           
         }
+      }
+
+      function getMainMeta(metas) {
+        let main = undefined;
+        metas.forEach((meta) => {
+          if (meta.parentId == undefined) {
+            main = meta;
+          }
+        });
+        return main;
       }
     }
   }
