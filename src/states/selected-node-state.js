@@ -53,9 +53,7 @@ class SelectedNodeState {
       // Main node should not be able to be folded
       // Node without a parent
       elon.dataManager.toggleFoldDescendants(data.nodeId);
-      let dataCont = elon.dataManager.embedCoordinates();
-      let visibleMetas = elon.nodeManager.loadNodes(dataCont, elon.scene);
-      elon.lines.drawLines(elon.scene, dataCont, visibleMetas);
+      new LoadNodesState(elon);
     }, elon.scene);
   }
 
@@ -63,10 +61,7 @@ class SelectedNodeState {
     elon.controls.onFoldAncestors(() => {
       elon.dataManager.toggleFoldUnfoldAncestors(data.nodeId);
 
-      let vm = elon.dataManager.getVisibleMetas();
-      let dc = elon.dataManager.dataContainer;
-      elon.nodeManager.loadNodes(dc, vm, elon.scene);
-      elon.lines.drawLines(elon.scene, dc, vm);
+      new LoadNodesState(elon);
     }, elon.scene);
   }
 
