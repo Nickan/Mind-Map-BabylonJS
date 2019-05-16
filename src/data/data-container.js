@@ -4,6 +4,8 @@ class DataContainer {
     this.nodes = nodes;
     this.metas = metas;
     this.metaMap = new Map();
+    this.defaultNodes = _.cloneDeep(nodes);
+    this.defaultMetas = _.cloneDeep(metas);
 
     // Temporary
     let tmpName = "View1";

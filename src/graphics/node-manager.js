@@ -7,50 +7,14 @@ class NodeManager {
     this.pool = new Pool();
   }
 
-  loadNodes(dataContainer, scene) {
+  loadNodes(dataContainer, visibleMetas, scene) {
     this.clear(scene);
     let n = dataContainer.nodes;
-    let m = dataContainer.metas;
 
-    let vm = getVisibleMetas(m);
-
-    vm.forEach((meta, id) => {
+    visibleMetas.forEach((meta, id) => {
       let node = n.get(id);
       this.addTextBlock(node, scene);
     });
-    return vm;
-
-    function getVisibleMetas(metas) {
-      let visibleMetas = new Map();
-      let startingMeta = getMainMeta(metas);
-
-      visibleMetas.set(startingMeta.id, startingMeta);
-      addChildren(startingMeta, visibleMetas, metas);
-      return visibleMetas;
-
-
-      function addChildren(meta, visibleMetas, metas) {
-        if (meta.foldDescendants != undefined && meta.foldDescendants) {
-          return visibleMetas;
-        } else {
-          meta.childrenIds.forEach((cId) => {
-            visibleMetas.set(cId, metas.get(cId));
-            addChildren(metas.get(cId), visibleMetas, metas);
-          });
-          
-        }
-      }
-
-      function getMainMeta(metas) {
-        let main = undefined;
-        metas.forEach((meta) => {
-          if (meta.parentId == undefined) {
-            main = meta;
-          }
-        });
-        return main;
-      }
-    }
   }
 
   clear(scene) {
@@ -82,10 +46,10 @@ class NodeManager {
 
     let at = nodeGraphics.advancedTexture;
     let tb = nodeGraphics.textBlock;
-    // tb.text = node.id + ": " + node.text; // For debugging
+    tb.text = node.id + ": " + node.text; // For debugging
     // tb.text = node.id + " : " + node.y + ": " + node.x 
       // + " : " + node.text; // For debugging
-    tb.text = node.text;
+    // tb.text = node.text;
     tb.node = node;
     
     this.graphics.set(node.id, nodeGraphics);

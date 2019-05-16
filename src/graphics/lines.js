@@ -25,7 +25,7 @@ class Lines {
       let y = node.x * NodeManager.Y_UNIT;
       let p = new BABYLON.Vector3(x, y, z);
 
-      let children = dataContainer.getChildren(node.id);
+      let children = dataContainer.getChildren(node.id, visibleMetas);
 
       children.forEach((child) => {
         let cx = child.y * NodeManager.X_UNIT;

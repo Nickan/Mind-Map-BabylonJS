@@ -63,11 +63,10 @@ class SelectedNodeState {
     elon.controls.onFoldAncestors(() => {
       elon.dataManager.toggleFoldUnfoldAncestors(data.nodeId);
 
-      elon.dataManager.getVisibleMetas();
-
-      // let dataCont = elon.dataManager.embedCoordinates();
-      // let visibleMetas = elon.nodeManager.loadNodes(dataCont, elon.scene);
-      // elon.lines.drawLines(elon.scene, dataCont, visibleMetas);
+      let vm = elon.dataManager.getVisibleMetas();
+      let dc = elon.dataManager.dataContainer;
+      elon.nodeManager.loadNodes(dc, vm, elon.scene);
+      elon.lines.drawLines(elon.scene, dc, vm);
     }, elon.scene);
   }
 

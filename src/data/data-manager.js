@@ -38,26 +38,41 @@ class DataManager {
     return true;
   }
 
-  embedCoordinates() {
+  embedCoordinates(startingId) {
     let dc = this.dataContainer;
-    dc.resetCoordinates(dc.nodes.get(1));
+    let startingNode = dc.nodes.get(startingId);
+    dc.resetCoordinates(startingNode);
     let rein = new ReingoldTilford();
-    let coords = rein.getCoordinates(dc.nodes.get(1), dc);
+    let coords = rein.getCoordinates(startingNode, dc);
     return coords;
   }
 
   getVisibleMetas() {
+    // Get the starting node
+    // Determine the deeps node possible
+    // If there is none, the main node will be the starting node
+    // Get all the nodes except:
+    //   When the meta has foldDescendants
+    //     Do not include its children
+
+
+
     let dc = this.dataContainer;
-    let m = dc.metas;
+    let m = dc.defaultMetas;
     let mMeta = getMainMeta(m);
     let result = {
       deepestLevel: 0
     }
 
-    let dMeta = getDeepestMetaFoldAncestors(dc.metas, mMeta, 1, result);
+    result = getDeepestMetaFoldAncestors(dc.metas, mMeta, 1, result);
+    
+    if (result.metaId !== undefined) {
+      mMeta = m.get(result.metaId);
+    }
 
-    console.log(result);
-
+    return getVisibleMetas(mMeta, m);
+    
+    //#region helpers
     function getMainMeta(metas) {
       let main = undefined;
       metas.forEach((meta) => {
@@ -83,14 +98,45 @@ class DataManager {
       });
       return result;
     }
+
+    function getVisibleMetas(startingMeta, metas) {
+      let visibleMetas = new Map();
+
+      visibleMetas.set(startingMeta.id, startingMeta);
+      addChildren(startingMeta, visibleMetas, metas);
+      return visibleMetas;
+
+
+      function addChildren(meta, visibleMetas, metas) {
+        if (meta.foldDescendants != undefined && meta.foldDescendants) {
+          return visibleMetas;
+        } else {
+          meta.childrenIds.forEach((cId) => {
+            visibleMetas.set(cId, metas.get(cId));
+            addChildren(metas.get(cId), visibleMetas, metas);
+          });
+          
+        }
+      }
+    }
+    //#endregion
+  }
+
+  getVisibleNodes(visibleMetas) {
+    let vn = new Map();
+    let nodes = this.dataContainer.defaultNodes;
+    visibleMetas.forEach((value, key) => {
+      vn.set(key, nodes.get(key));
+    });
+    return vn;
   }
 
   addNewData(text, parentId, savePrevious = true) {
     if (savePrevious)
       this.prevDataCont = _.cloneDeep(this.dataContainer, true);
 
-    let nodes = this.dataContainer.nodes;
-    let metas = this.dataContainer.metas;
+    let nodes = this.dataContainer.defaultNodes;
+    let metas = this.dataContainer.defaultMetas;
 
     let id = this.getHighestId(nodes) + 1;
     let node = {"text": text, "id": id};
@@ -198,13 +244,6 @@ class DataManager {
 
   toggleFoldUnfoldAncestors(nodeId) {
     let ms = this.dataContainer.metas;
-
-    ms.forEach((meta) => {
-
-      if (meta.id != nodeId)
-        meta.foldAncestors = undefined;
-    });
-
     let m = ms.get(nodeId);
 
     if (m.foldAncestors == undefined) {
