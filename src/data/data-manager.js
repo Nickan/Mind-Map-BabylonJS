@@ -58,19 +58,22 @@ class DataManager {
 
 
     let dc = this.dataContainer;
-    let m = dc.defaultMetas;
+    let m = _.cloneDeep(dc.defaultMetas);
     let mMeta = getMainMeta(m);
     let result = {
       deepestLevel: 0
     }
 
-    result = getDeepestMetaFoldAncestors(dc.metas, mMeta, 1, result);
+    result = getDeepestMetaFoldAncestors(m, mMeta, 1, result);
     
     if (result.metaId !== undefined) {
       mMeta = m.get(result.metaId);
     }
 
-    return getVisibleMetas(mMeta, m);
+    let vm = getVisibleMetas(mMeta, m);
+    let startingMeta = vm.get(mMeta.id);
+    startingMeta.parentId = undefined;
+    return [startingMeta.id, vm];
     
     //#region helpers
     function getMainMeta(metas) {
@@ -124,7 +127,7 @@ class DataManager {
 
   getVisibleNodes(visibleMetas) {
     let vn = new Map();
-    let nodes = this.dataContainer.defaultNodes;
+    let nodes = _.cloneDeep(this.dataContainer.defaultNodes);
     visibleMetas.forEach((value, key) => {
       vn.set(key, nodes.get(key));
     });
@@ -232,7 +235,7 @@ class DataManager {
   }
 
   toggleFoldDescendants(nodeId) {
-    let m = this.dataContainer.metas.get(nodeId);
+    let m = this.dataContainer.defaultMetas.get(nodeId);
 
     if (m.foldDescendants == undefined) {
       m.foldDescendants = true;
@@ -243,7 +246,7 @@ class DataManager {
   }
 
   toggleFoldUnfoldAncestors(nodeId) {
-    let ms = this.dataContainer.metas;
+    let ms = this.dataContainer.defaultMetas;
     let m = ms.get(nodeId);
 
     if (m.foldAncestors == undefined) {

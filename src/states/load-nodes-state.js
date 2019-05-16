@@ -6,12 +6,14 @@ class LoadNodesState {
     this.elon = elon;
 
     let dm = elon.dataManager;
-    let vm = dm.getVisibleMetas();
+    let result = dm.getVisibleMetas();
+    let startingId = result[0];
+    let vm = result[1];
     let vn = dm.getVisibleNodes(vm);
     dm.dataContainer.nodes = vn;
     dm.dataContainer.metas = vm;
     
-    let dc = dm.embedCoordinates(1);
+    let dc = dm.embedCoordinates(startingId);
     
     elon.nodeManager.loadNodes(dc, vm, elon.scene);
     elon.lines.drawLines(elon.scene, dc, vm);
