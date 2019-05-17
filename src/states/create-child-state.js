@@ -41,9 +41,7 @@ class CreateChildState {
     let dm = elon.dataManager;
 
     let childNode = dm.addNewData("", id);
-    let dc = dm.embedCoordinates();
-    let visibleMetas = elon.nodeManager.loadNodes(dc, elon.scene);
-    elon.lines.drawLines(elon.scene, dc, visibleMetas);
+    Utils.redraw(elon);
 
     this.data.detectIfNodeOnDrag = false;
     this.handleEdit(elon, childNode, this.data);

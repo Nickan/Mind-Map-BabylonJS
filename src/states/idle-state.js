@@ -2,7 +2,7 @@
 
 
 class IdleState {
-  constructor(elon) {
+  constructor(elon, data) {
 
     this.controls = new IdleControls(elon.scene);
     this.controls.onSelectedNode((result) => {

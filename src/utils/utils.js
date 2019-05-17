@@ -182,6 +182,21 @@ class Utils {
     return Utils.getDistSqr(p1.x, p1.y, p2.x, p2.y);
   }
 
+  static redraw(elon) {
+    let dm = elon.dataManager;
+    let result = dm.getVisibleMetas();
+    let startingId = result[0];
+    let vm = result[1];
+    let vn = dm.getVisibleNodes(vm);
+    dm.dataContainer.nodes = vn;
+    dm.dataContainer.metas = vm;
+    
+    let dc = dm.embedCoordinates(startingId);
+    
+    elon.nodeManager.loadNodes(dc, vm, elon.scene);
+    elon.lines.drawLines(elon.scene, dc, vm);
+  }
+
 }
 
 

@@ -2,17 +2,18 @@
 
 
 class DragNodeState {
-  constructor(data) {
+  constructor(elon, data) {
+    this.elon = elon;
     this.data = data;
+
+    elon.state = this;
+    this.init(elon);
   }
 
-  init() {
-    let sm = this.stateManager;
-    let main = sm.main;
-
-    let ng = main.nodeManager.graphics.get(this.data.nodeId);
+  init(elon) {
+    let ng = elon.nodeManager.graphics.get(this.data.nodeId);
     let nPos = ng.plane.position;
-    let mPos = Utils.getPickedMousePos(main.scene);
+    let mPos = Utils.getPickedMousePos(elon.scene);
 
     this.nodePosRelativeToMouse = {
       x: mPos.x - nPos.x,
@@ -22,37 +23,36 @@ class DragNodeState {
     this.potentialParent = undefined;
     this.potentialNodeId = -1;
 
-    this.exceptions = main.dataManager.getDescendants(this.data.nodeId);
+    this.exceptions = elon.dataManager.getDescendants(this.data.nodeId);
     this.exceptions.push(this.data.nodeId);
 
 
-    this.controls = new DragNodeControls(main.scene, this.data);
+    this.controls = new DragNodeControls(elon.scene, this.data);
     this.controls.dragStopCb = () => {
-      this.redraw(main);
-      sm.setState(new IdleState(this.data));
+      console.log("Stop");
+      new IdleState(elon, this.data);
     };
   }
 
   update(delta) {
-    let main = this.stateManager.main;
-    let mPos = Utils.getPickedMousePos(main.scene);
+    let elon = this.elon;
+    let mPos = Utils.getPickedMousePos(elon.scene);
 
-    let ng = main.nodeManager.graphics.get(this.data.nodeId);
+    let ng = elon.nodeManager.graphics.get(this.data.nodeId);
     let nPos = ng.plane.position;
 
     nPos.x = mPos.x - this.nodePosRelativeToMouse.x;
     nPos.y = mPos.y - this.nodePosRelativeToMouse.y;
 
-    let nodesG = this.stateManager.main.nodeManager.graphics;
+    let nodesG = elon.nodeManager.graphics;
 
-    let metas = main.dataManager.dataContainer.metas;
+    let metas = elon.dataManager.dataContainer.metas;
     let p = getPotentialParent(ng, nodesG, metas, 
       this.exceptions);
     if (p != undefined && this.potentialNodeId != p.nodeId) {
       this.potentialNodeId = p.nodeId;
-      main.dataManager.changeParent(this.data.nodeId, p.nodeId);
-
-      this.redraw(main);
+      elon.dataManager.changeParent(this.data.nodeId, p.nodeId);
+      Utils.redraw(elon);
     }
 
     function getPotentialParent(draggedG, nodesG, metas, exceptions) {
@@ -92,16 +92,6 @@ class DragNodeState {
         return (d.x > n.x);
       }
     }
-  }
-
-
-  redraw(main) {
-    let dm = main.dataManager;
-    let dc = dm.embedCoordinates();
-    dc = dm.embedCoordinates();
-    main.nodeManager.loadNodes(dc, main.scene);
-    main.lines.drawLines(main.scene, dc);
-    main.scene.render();
   }
 
   exit() {
