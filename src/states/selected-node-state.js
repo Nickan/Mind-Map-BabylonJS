@@ -68,7 +68,6 @@ class SelectedNodeState {
 
   update(delta) {
     this.controls.update(delta);
-    console.log(delta);
   }
 
   exit() {

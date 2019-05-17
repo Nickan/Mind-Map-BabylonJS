@@ -129,10 +129,12 @@ class DataContainer {
   }
 
   changeParent(nodeId, parentId) {
-    this.removeFromParentList(nodeId, this.metas);
-    let meta = this.metas.get(nodeId);
+    let metas = this.defaultMetas;
+
+    this.removeFromParentList(nodeId, metas);
+    let meta = metas.get(nodeId);
     meta.parentId = parentId;
-    let pm = this.metas.get(parentId);
+    let pm = metas.get(parentId);
     pm.childrenIds.push(nodeId); // Have to be changed later
   }
 

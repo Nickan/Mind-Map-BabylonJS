@@ -3,6 +3,7 @@
 
 class IdleState {
   constructor(elon, data) {
+    elon.state = this;
 
     this.controls = new IdleControls(elon.scene);
     this.controls.onSelectedNode((result) => {

@@ -21,14 +21,13 @@ class CreateChildState {
     // Revert back
     elon.controls.disposeInput();
     let dm = elon.dataManager;
+
+    new IdleState(elon);
     if (dm.revertBack()) {
-      let dc = dm.embedCoordinates();
-      let visibleMetas = elon.nodeManager.loadNodes(dc, elon.scene);
-      elon.lines.drawLines(elon.scene, dc, visibleMetas);
-      elon.scene.render();
+      Utils.redraw(elon);
     }
     
-    new IdleState(elon);
+    
   }
 
   spawnChildNode(elon) {
