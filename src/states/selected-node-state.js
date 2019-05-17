@@ -5,6 +5,7 @@ class SelectedNodeState {
   constructor(elon, data) {
     this.elon = elon;
     this.data = data;
+    elon.state = this;
 
     this.controls = new SelectedControls(elon.scene, this.data);
     this.controls.onEdit(() => {
@@ -67,6 +68,7 @@ class SelectedNodeState {
 
   update(delta) {
     this.controls.update(delta);
+    console.log(delta);
   }
 
   exit() {

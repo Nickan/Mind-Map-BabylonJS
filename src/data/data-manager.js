@@ -48,15 +48,6 @@ class DataManager {
   }
 
   getVisibleMetas() {
-    // Get the starting node
-    // Determine the deeps node possible
-    // If there is none, the main node will be the starting node
-    // Get all the nodes except:
-    //   When the meta has foldDescendants
-    //     Do not include its children
-
-
-
     let dc = this.dataContainer;
     let m = _.cloneDeep(dc.defaultMetas);
     let mMeta = getMainMeta(m);
