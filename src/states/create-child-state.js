@@ -18,7 +18,6 @@ class CreateChildState {
   }
 
   cancelCreation(elon) {
-    // Revert back
     elon.controls.disposeInput();
     let dm = elon.dataManager;
 
@@ -26,16 +25,9 @@ class CreateChildState {
     if (dm.revertBack()) {
       Utils.redraw(elon);
     }
-    
-    
   }
 
   spawnChildNode(elon) {
-    /*
-      Need to get the coordinates
-      Have to add it first to the list
-      Then remove it later on if the creation is cancelled
-    */
     let id = this.data.nodeId;
     let dm = elon.dataManager;
 

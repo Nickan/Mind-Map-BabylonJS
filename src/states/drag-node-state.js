@@ -48,25 +48,23 @@ class DragNodeState {
     let nodesG = elon.nodeManager.graphics;
 
     let metas = elon.dataManager.dataContainer.metas;
-    let p = getPotentialParent(ng, nodesG, metas, 
-      this.exceptions);
+    let p = getPotentialParent(ng, nodesG, metas, this.exceptions);
     if (p != undefined && this.potentialNodeId != p.nodeId) {
       this.potentialNodeId = p.nodeId;
       elon.dataManager.changeParent(this.data.nodeId, p.nodeId);
       Utils.redraw(elon);
     }
 
+    // if (changedBreadthLevel())
+
     function getPotentialParent(draggedG, nodesG, metas, exceptions) {
       let potentialParent;
       let distDetector = 1.75;
       let minDist = 9999;
 
-      let cloneM = _.cloneDeep(metas);
-      exceptions.forEach((nodeId) => {
-        cloneM.delete(nodeId);
-      });
+      let p = getPotentialParents(metas, getPotentialParent);
 
-      cloneM.forEach((meta, nodeId) => {
+      p.forEach((meta, nodeId) => {
         let nodeG = nodesG.get(nodeId);
         let d = draggedG.plane.position;
         let n = nodeG.plane.position;
@@ -92,8 +90,21 @@ class DragNodeState {
       function isPotentialParent(d, n) {
         return (d.x > n.x);
       }
+
+      function getPotentialParents(metas, fn) {
+        if (fn.potentialParents == undefined) {
+          fn.potentialParents = _.cloneDeep(metas);
+          exceptions.forEach((nodeId) => {
+            fn.potentialParents.delete(nodeId);
+          });
+        }
+    
+        return fn.potentialParents;
+      }
     }
   }
+
+  
 
   exit() {
 
