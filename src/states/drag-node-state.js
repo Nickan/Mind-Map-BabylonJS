@@ -29,8 +29,9 @@ class DragNodeState {
 
     this.controls = new DragNodeControls(elon.scene, this.data);
     this.controls.dragStopCb = () => {
-      console.log("Stop");
+      elon.scene.onPointerUp = undefined;
       new IdleState(elon, this.data);
+      Utils.redraw(elon);
     };
   }
 
