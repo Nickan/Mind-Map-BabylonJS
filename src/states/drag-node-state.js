@@ -49,13 +49,24 @@ class DragNodeState {
 
     let metas = elon.dataManager.dataContainer.metas;
     let p = getPotentialParent(ng, nodesG, metas, this.exceptions);
-    if (p != undefined && this.potentialNodeId != p.nodeId) {
-      this.potentialNodeId = p.nodeId;
-      elon.dataManager.changeParent(this.data.nodeId, p.nodeId);
+    if (p != undefined) {
+
+      if (this.potentialNodeId != p.nodeId) {
+        this.potentialNodeId = p.nodeId;
+        elon.dataManager.changeParent(this.data.nodeId, p.nodeId);
+      }
+      
       Utils.redraw(elon);
     }
 
-    // if (changedBreadthLevel())
+    if (this.potentialNodeId != -1) {
+      let pNode = elon.nodeManager.graphics.get(this.potentialNodeId);
+      let pMeta = metas.get(this.potentialNodeId);
+      let l = getBreadthLevel(nPos, pNode, pMeta);
+      console.log(l);
+    }
+
+    
 
     function getPotentialParent(draggedG, nodesG, metas, exceptions) {
       let potentialParent;
@@ -100,6 +111,31 @@ class DragNodeState {
         }
     
         return fn.potentialParents;
+      }
+    }
+
+    function getBreadthLevel(draggedNodePos, potentialParentNode, 
+      parentMeta) {
+      // What paramaters I need?
+      // How to do it?
+      // If the parent didn't change
+      // Detect the Y position relative to the parent
+
+      // How to detect then the breadth level?
+      // Know the total number of children
+      let totalChildren = parentMeta.childrenIds.length;
+      console.log("total " + totalChildren);
+      if (totalChildren == 1) {
+        return 0;
+      } else {
+        let pPos = potentialParentNode.plane.position;
+        let totalLocalSpanY = (totalChildren - 1) * NodeManager.Y_UNIT;
+        // How to get the position value?
+        let startingPosY = pPos.y + (totalLocalSpanY * 0.5);
+        
+        let index = (draggedNodePos.y - pPos.y);
+        index = Math.floor(index / NodeManager.Y_UNIT);
+        return index;
       }
     }
   }
