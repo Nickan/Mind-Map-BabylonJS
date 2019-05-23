@@ -30,6 +30,7 @@ class DragNodeState {
     this.controls = new DragNodeControls(elon.scene, this.data);
     this.controls.dragStopCb = () => {
       elon.scene.onPointerUp = undefined;
+      elon.dataManager.changeParent(this.data.nodeId, this.newPotentialParentId);
       new IdleState(elon, this.data);
       Utils.redraw(elon);
     };
@@ -49,7 +50,9 @@ class DragNodeState {
 
     let metas = elon.dataManager.dataContainer.metas;
     let pId = getNewPotentialParent(ng, nodesG, this.excludedNodeIds);
-    console.log(pId);
+    // console.log(pId);
+    this.newPotentialParentId = pId;
+
 
     function getNewPotentialParent(draggedNodeGraphic, nodeGraphics, excludedNodeIds) {
       return getFirstCollisionId(draggedNodeGraphic, nodeGraphics, excludedNodeIds);
