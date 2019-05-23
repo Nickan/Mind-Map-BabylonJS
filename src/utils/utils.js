@@ -182,6 +182,12 @@ class Utils {
     return Utils.getDistSqr(p1.x, p1.y, p2.x, p2.y);
   }
 
+  static getDistSqr2Node(node1, node2) {
+    let p1 = node1.plane.position;
+    let p2 = node2.plane.position;
+    return Utils.getDistSqr2(p1, p2);
+  }
+
   static redraw(elon) {
     let dm = elon.dataManager;
     let result = dm.getVisibleMetas();

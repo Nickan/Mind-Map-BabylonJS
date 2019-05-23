@@ -246,5 +246,17 @@ class DataManager {
       m.foldAncestors = undefined;
     }
   }
+
+  getChildrenIds(nodeId) {
+    return this.dataContainer.defaultMetas.get(nodeId).childrenIds;
+  }
+
+  changeSiblingIndex(nodeId, parentId, index) {
+    let m = this.dataContainer.defaultMetas;
+    let c = m.get(parentId).childrenIds;
+    let nodeIndex = c.indexOf(nodeId);
+    c.splice(nodeIndex, 1);
+    c.splice(index, 0, nodeId);
+  }
   
 }
