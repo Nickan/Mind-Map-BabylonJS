@@ -23,6 +23,7 @@ class Pool {
       nodeGraphics.plane.dispose();
       nodeGraphics.advancedTexture.dispose();
       nodeGraphics.textBlock.dispose();
+      nodeGraphics.obb.dispose();
     });
     this.pool = new Map();
   }
@@ -30,6 +31,8 @@ class Pool {
   newNodeGraphics(scene) {
     let plane = BABYLON.MeshBuilder.CreatePlane("textplane", 
       {width: 1.3, height: 1}, scene);
+
+    let d = this.newChildDetector(scene, plane);
 
     let at = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(
       plane, 512, 512);
@@ -54,9 +57,23 @@ class Pool {
     let nodeGraphics = {
       plane: plane,
       advancedTexture: at,
-      textBlock: tb
+      textBlock: tb,
+      obb: d
     }
     return nodeGraphics;
+  }
+
+  newChildDetector(scene, parent) {
+    let mat = new BABYLON.StandardMaterial("mat", scene);
+    mat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    mat.wireframe = false;
+    mat.alpha = 0;
+
+    let d = BABYLON.Mesh.CreateBox("OBB", 1, scene);
+    d.scaling = new BABYLON.Vector3(1.3, 1, -1);
+    d.parent = parent;
+    d.material = mat;
+    return d;
   }
 
 

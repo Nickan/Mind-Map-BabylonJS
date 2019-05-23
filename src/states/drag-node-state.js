@@ -23,8 +23,8 @@ class DragNodeState {
     this.potentialParent = undefined;
     this.potentialNodeId = -1;
 
-    this.exceptions = elon.dataManager.getDescendants(this.data.nodeId);
-    this.exceptions.push(this.data.nodeId);
+    this.excludedNodeIds = elon.dataManager.getDescendants(this.data.nodeId);
+    this.excludedNodeIds.push(this.data.nodeId);
 
 
     this.controls = new DragNodeControls(elon.scene, this.data);
@@ -48,69 +48,21 @@ class DragNodeState {
     let nodesG = elon.nodeManager.graphics;
 
     let metas = elon.dataManager.dataContainer.metas;
-    let p = getPotentialParent(ng, nodesG, metas, this.exceptions);
-    if (p != undefined) {
+    let pId = getNewPotentialParent(ng, nodesG, this.excludedNodeIds);
+    console.log(pId);
 
-      if (this.potentialNodeId != p.nodeId) {
-        this.potentialNodeId = p.nodeId;
-        elon.dataManager.changeParent(this.data.nodeId, p.nodeId);
-      }
-      
-      Utils.redraw(elon);
-    }
+    function getNewPotentialParent(draggedNodeGraphic, nodeGraphics, excludedNodeIds) {
+      return getFirstCollisionId(draggedNodeGraphic, nodeGraphics, excludedNodeIds);
 
-    if (this.potentialNodeId != -1) {
-      let pNode = elon.nodeManager.graphics.get(this.potentialNodeId);
-      let pMeta = metas.get(this.potentialNodeId);
-      let l = getBreadthLevel(nPos, pNode, pMeta);
-      console.log(l);
-    }
-
-    
-
-    function getPotentialParent(draggedG, nodesG, metas, exceptions) {
-      let potentialParent;
-      let distDetector = 1.75;
-      let minDist = 9999;
-
-      let p = getPotentialParents(metas, getPotentialParent);
-
-      p.forEach((meta, nodeId) => {
-        let nodeG = nodesG.get(nodeId);
-        let d = draggedG.plane.position;
-        let n = nodeG.plane.position;
-
-        if (isPotentialParent(d, n)) {
-          
-          // Using their center
-          let dSqr = Utils.getDistSqr2(d, n);
-
-          // console.log(dSqr);
-          let distDSqr = distDetector * distDetector;
-          if (dSqr < distDSqr) {
-            if (minDist > dSqr) {
-              potentialParent = nodeG;
-              potentialParent.nodeId = nodeId;
-              minDist = dSqr;
+      function getFirstCollisionId(draggedNodeGraphic, nodeGraphics, excludedNodeIds) {
+        for (let [nodeId, nodeG] of nodeGraphics) {
+          if (!excludedNodeIds.includes(nodeId)) {
+            if (draggedNodeGraphic.plane.intersectsMesh(nodeG.obb)) {
+              return nodeId;
             }
           }
         }
-      });
-      return potentialParent;
 
-      function isPotentialParent(d, n) {
-        return (d.x > n.x);
-      }
-
-      function getPotentialParents(metas, fn) {
-        if (fn.potentialParents == undefined) {
-          fn.potentialParents = _.cloneDeep(metas);
-          exceptions.forEach((nodeId) => {
-            fn.potentialParents.delete(nodeId);
-          });
-        }
-    
-        return fn.potentialParents;
       }
     }
 
@@ -124,18 +76,30 @@ class DragNodeState {
       // How to detect then the breadth level?
       // Know the total number of children
       let totalChildren = parentMeta.childrenIds.length;
-      console.log("total " + totalChildren);
+      // console.log("total " + totalChildren);
       if (totalChildren == 1) {
         return 0;
       } else {
         let pPos = potentialParentNode.plane.position;
-        let totalLocalSpanY = (totalChildren - 1) * NodeManager.Y_UNIT;
-        // How to get the position value?
-        let startingPosY = pPos.y + (totalLocalSpanY * 0.5);
+
+        let startingPoint = getStartingPoint(pPos, totalChildren);
         
-        let index = (draggedNodePos.y - pPos.y);
-        index = Math.floor(index / NodeManager.Y_UNIT);
-        return index;
+        let posIndex = (draggedNodePos.y - startingPoint);
+        // console.log("posIndex " + startingPoint);
+        let breadthLevel = Math.floor(posIndex / (totalChildren - 1));
+        return breadthLevel;
+        // let totalLocalSpanY = (totalChildren - 1) * NodeManager.Y_UNIT;
+        // // How to get the position value?
+        // let startingPosY = pPos.y + (totalLocalSpanY * 0.5);
+        
+        // let index = (draggedNodePos.y - pPos.y);
+        // index = Math.floor(index / NodeManager.Y_UNIT);
+        // return index;
+      }
+
+      function getStartingPoint(parentPos, totalChildren) {
+        let startPointDiff = (NodeManager.Y_UNIT * (totalChildren - 1));
+        return (parentPos.y - (startPointDiff * 0.5));
       }
     }
   }

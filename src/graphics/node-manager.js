@@ -13,7 +13,7 @@ class NodeManager {
 
     visibleMetas.forEach((meta, id) => {
       let node = n.get(id);
-      this.addTextBlock(node, scene);
+      this.addTextBlock(node, scene, meta.childrenIds.length);
     });
   }
 
@@ -30,10 +30,12 @@ class NodeManager {
       nodeGraphics.plane.nodeId = -1;
       nodeGraphics.textBlock.node = undefined;
       nodeGraphics.textBlock.text = "";
+      nodeGraphics.obb.parent = undefined;
+      nodeGraphics.obb.isVisible = false;
     }
   }
 
-  addTextBlock(node, scene) {
+  addTextBlock(node, scene, childrenCount) {
     let nodeGraphics = this.pool.get(scene);
     
     let plane = nodeGraphics.plane;
@@ -54,8 +56,19 @@ class NodeManager {
     
     this.graphics.set(node.id, nodeGraphics);
 
+    let obb = nodeGraphics.obb;
+    obb.isVisible = true;
+    obb.scaling.y = 1;
+    obb.parent = plane;
+    obb.position.x = NodeManager.X_UNIT;
+    obb.isPickable = false;
+    if (childrenCount > 1) {
+      obb.scaling.y = Math.abs(childrenCount * NodeManager.Y_UNIT);
+    }
+
     at.addControl(tb);
     plane.nodeId = node.id;
+    // console.log("p.y " + p.y);
   }
 
   editText(node) {
