@@ -25,6 +25,7 @@ class SelectedControls {
     // Will change when node can be dragged
     scene.onPointerUp = (event, pickResult) => {
       this.detectIfNodeOnDrag = false;
+      console.log("detect " + this.detectIfNodeOnDrag)
     }
 
     function clear() {
