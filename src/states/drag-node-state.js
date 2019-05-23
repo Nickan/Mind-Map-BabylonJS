@@ -58,10 +58,58 @@ class DragNodeState {
         elon.dataManager.changeParent(this.data.nodeId, this.newPotentialParentId);
         Utils.redraw(elon);
       } else {
+        let cIds = elon.dataManager.getChildrenIds(this.newPotentialParentId);
+
+        let graphics = elon.nodeManager.graphics;
+        let nIndex = getNearestIndex(cIds, this.data.nodeId, graphics);
+
+        if (nIndex != undefined) {
+          if (this.breadthLevel != nIndex) {
+            this.breadthLevel = nIndex;
+            console.log("breadthLevel " + this.breadthLevel);
+            elon.dataManager.changeSiblingIndex(this.data.nodeId, 
+              this.newPotentialParentId, nIndex);
+            Utils.redraw(elon);
+          }
+          
+        }
         
+        function getNearestIndex(childrenIds, draggedNodeId, graphics) {
+          let nC = getNearestChildId(childrenIds, draggedNodeId, graphics);
+          if (nC != undefined)
+            return childrenIds.indexOf(nC);
+          return undefined;
+
+          function getNearestChildId(childrenIds, draggedNodeId, graphics) {
+            let distDetector = NodeManager.Y_UNIT * 0.75;
+            distDetector = distDetector * distDetector;
+            let minDist = 9999;
+            let nearestChildId = undefined;
+
+            let draggedGraphics = graphics.get(draggedNodeId);
+            for (let cId of childrenIds) {
+              if (cId == draggedNodeId)
+                continue;
+
+              let nodeG = graphics.get(cId);
+              let dSqr2 = Utils.getDistSqr2Node(draggedGraphics, nodeG);
+              // console.log("dSqr2 " + cId + ": " + dSqr2);
+              if (dSqr2 < distDetector) {
+                if (minDist > dSqr2) {
+                  nearestChildId = cId;
+                  minDist = dSqr2;
+                }
+              }
+            }
+            return nearestChildId;
+          }
+          
+        }
       }
       
     }
+
+
     
 
 
