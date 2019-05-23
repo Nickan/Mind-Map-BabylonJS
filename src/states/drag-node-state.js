@@ -50,8 +50,19 @@ class DragNodeState {
 
     let metas = elon.dataManager.dataContainer.metas;
     let pId = getNewPotentialParent(ng, nodesG, this.excludedNodeIds);
-    // console.log(pId);
-    this.newPotentialParentId = pId;
+
+    if (pId != undefined) {
+
+      if (this.newPotentialParentId != pId) {
+        this.newPotentialParentId = pId;
+        elon.dataManager.changeParent(this.data.nodeId, this.newPotentialParentId);
+        Utils.redraw(elon);
+      } else {
+        
+      }
+      
+    }
+    
 
 
     function getNewPotentialParent(draggedNodeGraphic, nodeGraphics, excludedNodeIds) {
@@ -71,6 +82,17 @@ class DragNodeState {
 
     function getBreadthLevel(draggedNodePos, potentialParentNode, 
       parentMeta) {
+
+      if (totalChildren == 1) {
+        return 0;
+      } else {
+        let pPos = potentialParentNode.plane.position;
+
+        let startingPoint = getStartingPoint(pPos, totalChildren);
+      }
+
+
+
       // What paramaters I need?
       // How to do it?
       // If the parent didn't change
