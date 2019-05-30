@@ -4,6 +4,7 @@
 class IdleState {
   constructor(elon, data) {
     elon.state = this;
+    elon.controls.initKeyboard(elon);
 
     this.controls = new IdleControls(elon.scene);
     this.controls.onSelectedNode((result) => {
@@ -26,8 +27,6 @@ class IdleState {
         //   new LoadNodesState(elon);
         // })
       });
-
-      elon.controls.initKeyboard(elon);
   }
 
   update(delta) {
