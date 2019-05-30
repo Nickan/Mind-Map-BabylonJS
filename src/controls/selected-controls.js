@@ -36,16 +36,24 @@ class SelectedControls {
     }
 
     this.initDefaultFunctionCallbacks();
+
+    this.shiftIsPressed = false;
   }
 
   initKeyboard(scene, data) {
     scene.onKeyboardObservable.add((keyInfo) => {
       const KEY_UP = 2;
-      if (keyInfo.type == KEY_UP)
-          return;
+      let key = keyInfo.event.key;
+      if (keyInfo.type == KEY_UP) {
+        switch (key) {
+          case "Shift":
+            this.shiftIsPressed = false;
+            break;
+        }
+        return;
+      }
       
-      let code = keyInfo.event.code;
-      switch (code) {
+      switch (key) {
         case "F2":
           if (data.nodeId != undefined)
             this.edit(scene);
@@ -61,6 +69,23 @@ class SelectedControls {
           break;
         case "F10":
           this.onUnfold();
+          break;
+        case "Shift":
+          this.shiftIsPressed = true;
+          break;
+        case "d":
+        case "D":
+          if (this.shiftIsPressed) {
+            if (this.toggleFoldDescendants != undefined)
+              this.toggleFoldDescendants();
+          }
+          break;
+        case "a":
+          case "A":
+            if (this.shiftIsPressed) {
+              if (this.toggleFoldAncestors != undefined)
+                this.toggleFoldAncestors();
+            }
           break;
       }
     });  
