@@ -117,6 +117,48 @@ class Controls {
   }
 
 
+  initKeyboard(elon) {
+    let scene = elon.scene;
+    this.clear(scene);
 
+    this.shiftIsPressed = true;
+
+    scene.onKeyboardObservable.add((keyInfo) => {
+      const KEY_UP = 2;
+      let key = keyInfo.event.key;
+      if (keyInfo.type == KEY_UP) {
+        switch (key) {
+          case "Shift":
+            this.shiftIsPressed = false;
+            break;
+        }
+        return;
+      }
+      
+      switch (key) {
+        case "Shift":
+          this.shiftIsPressed = true;
+          break;
+        case "s":
+        case "S":
+          if (this.shiftIsPressed) {
+            if (this.onSave != undefined) {
+              this.onSave();
+              elon.dataManager.save();
+            }
+          }
+          break;
+        case "o":
+          case "O":
+            if (this.shiftIsPressed) {
+              if (this.onOpen != undefined) {
+                this.onOpen();
+                new LoadNodesState(elon);
+              }
+            }
+          break;
+      }
+    });
+  }
   
 }

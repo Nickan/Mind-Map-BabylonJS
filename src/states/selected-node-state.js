@@ -49,6 +49,8 @@ class SelectedNodeState {
       elon.dataManager.toggleFoldUnfoldAncestors(data.nodeId);
       new LoadNodesState(elon);
     }
+
+    elon.controls.initKeyboard(elon);
   }
 
   update(delta) {

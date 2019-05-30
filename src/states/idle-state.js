@@ -18,14 +18,13 @@ class IdleState {
         elon.cameraManager.zoom(deltaY);
       })
       .onSave(() => {
-        elon.dataManager.save();
+        // elon.dataManager.save();
       })
       .onOpen(() => {
-        elon.dataManager.open(() => {
-          this.controls.dispose();
-          new LoadNodesState(elon);
-        })
+
       });
+
+      elon.controls.initKeyboard(elon);
   }
 
   update(delta) {
