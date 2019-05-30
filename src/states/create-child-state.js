@@ -35,7 +35,9 @@ class CreateChildState {
     Utils.redraw(elon);
 
     this.data.detectIfNodeOnDrag = false;
-    this.handleEdit(elon, childNode, this.data);
+    elon.controls.handleEdit(elon, childNode, () => {
+      new SelectedNodeState(elon, this.data);
+    });
     elon.scene.render(); // Have to remove later
   }
 
@@ -44,17 +46,17 @@ class CreateChildState {
     elon.lines.drawLines(elon.scene, dc);
   }
 
-  handleEdit(elon, node, data) {
-    let ctrl = elon.controls;
-    ctrl.createInputText(node, 
-      function enteredText(text) {
-        node.text = text;
-        elon.nodeManager.editText(node);
-        elon.dataManager.editText(data.nodeId, text);
-        new SelectedNodeState(elon, data);
-      }
-    );
-  }
+  // handleEdit(elon, node, data) {
+  //   let ctrl = elon.controls;
+  //   ctrl.createInputText(node, 
+  //     function enteredText(text) {
+  //       node.text = text;
+  //       elon.nodeManager.editText(node);
+  //       elon.dataManager.editText(node.id, text);
+  //       new SelectedNodeState(elon, data);
+  //     }
+  //   );
+  // }
 
 
   update(delta) {
