@@ -4,7 +4,7 @@ class EditNodeState {
   }
 
   handleEdit(elon, data) {
-    let node = elon.dataManager.dataContainer.nodes.get(data.nodeId);
+    let node = elon.dataManager.dataContainer.defaultNodes.get(data.nodeId);
     elon.controls.createInputText(node, 
       function enteredText(text) {
         node.text = text;

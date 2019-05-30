@@ -50,6 +50,7 @@ class CreateChildState {
       function enteredText(text) {
         node.text = text;
         elon.nodeManager.editText(node);
+        elon.dataManager.editText(data.nodeId, text);
         new SelectedNodeState(elon, data);
       }
     );
