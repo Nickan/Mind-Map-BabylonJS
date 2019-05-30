@@ -5,7 +5,9 @@ class SelectedNodeState {
   constructor(elon, data) {
     this.elon = elon;
     this.data = data;
+    elon.controls.initKeyboard(elon);
     elon.state = this;
+    
 
     this.controls = new SelectedControls(elon.scene, this.data);
     this.controls.onEdit(() => {
@@ -34,7 +36,7 @@ class SelectedNodeState {
       .onDeleteNode(() => {
         this.exit();
         elon.dataManager.deleteNode(this.data.nodeId);
-        new LoadNodesState(elon);
+        Utils.redraw(elon);
       });
     this.controls.nodeDragCb = () => {
       new DragNodeState(elon, this.data);
@@ -42,15 +44,13 @@ class SelectedNodeState {
 
     this.controls.toggleFoldDescendants = () => {
       elon.dataManager.toggleFoldDescendants(data.nodeId);
-      new LoadNodesState(elon);
+      Utils.redraw(elon);
     };
 
     this.controls.toggleFoldAncestors = () => {
       elon.dataManager.toggleFoldUnfoldAncestors(data.nodeId);
-      new LoadNodesState(elon);
+      Utils.redraw(elon);
     }
-
-    elon.controls.initKeyboard(elon);
   }
 
   update(delta) {
