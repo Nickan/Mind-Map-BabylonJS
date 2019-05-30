@@ -218,11 +218,6 @@ class Utils {
     elon.nodeManager.loadNodes(dc, vm, elon.scene);
     elon.lines.drawLines(elon.scene, dc, vm);
 
-    // if (elon.nodeManager.graphics.get(2) != undefined) {
-    //   let p = elon.nodeManager.graphics.get(2).plane.position;
-    //   elon.cameraManager.setCenter(p);
-    // }
-    
   }
 
 }
