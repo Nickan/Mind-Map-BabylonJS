@@ -51,7 +51,8 @@ class NodeManager {
     // tb.text = node.id + ": " + node.text; // For debugging
     // tb.text = node.id + " : " + node.y + ": " + node.x 
     //   + " : " + node.text; // For debugging
-    tb.text = node.text;
+    // tb.text = node.text;
+    tb.text = node.id + " : " + p.x + ": " + p.y + " : " + node.text;
     tb.node = node;
     
     this.graphics.set(node.id, nodeGraphics);

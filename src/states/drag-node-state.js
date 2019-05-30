@@ -13,6 +13,7 @@ class DragNodeState {
   init(elon) {
     let ng = elon.nodeManager.graphics.get(this.data.nodeId);
     let nPos = ng.plane.position;
+    this.unmodNodePos = _.cloneDeep(nPos);
     let mPos = Utils.getPickedMousePos(elon.scene);
 
     this.nodePosRelativeToMouse = {
@@ -20,8 +21,7 @@ class DragNodeState {
       y: mPos.y - nPos.y
     };
 
-    this.potentialParent = undefined;
-    this.potentialNodeId = -1;
+    this.newPotentialParentId = elon.dataManager.getParentId(this.data.nodeId);
 
     this.excludedNodeIds = elon.dataManager.getDescendants(this.data.nodeId);
     this.excludedNodeIds.push(this.data.nodeId);
@@ -30,15 +30,20 @@ class DragNodeState {
     this.controls = new DragNodeControls(elon.scene, this.data);
     this.controls.dragStopCb = () => {
       elon.scene.onPointerUp = undefined;
-      elon.dataManager.changeParent(this.data.nodeId, this.newPotentialParentId);
       new IdleState(elon, this.data);
       Utils.redraw(elon);
     };
+
+    this.stopUpdate = false;
   }
 
   update(delta) {
     let elon = this.elon;
     let mPos = Utils.getPickedMousePos(elon.scene);
+
+    if (!Utils.mousePosHasChanged(elon.scene)) {
+      return;
+    }
 
     let ng = elon.nodeManager.graphics.get(this.data.nodeId);
     let nPos = ng.plane.position;
@@ -51,25 +56,41 @@ class DragNodeState {
     let metas = elon.dataManager.dataContainer.metas;
     let pId = getNewPotentialParent(ng, nodesG, this.excludedNodeIds);
 
+    if (this.stopUpdate) {
+      return;
+    }
     if (pId != undefined) {
+      let nm = elon.nodeManager;
 
       if (this.newPotentialParentId != pId) {
         this.newPotentialParentId = pId;
         elon.dataManager.changeParent(this.data.nodeId, this.newPotentialParentId);
+
+        let n = nm.graphics.get(this.data.nodeId);
+        let prevP = _.cloneDeep(n.plane.position);
         Utils.redraw(elon);
+        n = nm.graphics.get(this.data.nodeId);
+        let curP = _.cloneDeep(n.plane.position);
+
+        elon.cameraManager.setSamePositionOnScreen(curP, mPos, this.nodePosRelativeToMouse);
       } else {
         let cIds = elon.dataManager.getChildrenIds(this.newPotentialParentId);
 
-        let graphics = elon.nodeManager.graphics;
-        let nIndex = getNearestIndex(cIds, this.data.nodeId, graphics);
+        
+        let nIndex = getNearestIndex(cIds, this.data.nodeId, nm.graphics);
 
         if (nIndex != undefined) {
           if (this.breadthLevel != nIndex) {
             this.breadthLevel = nIndex;
-            console.log("breadthLevel " + this.breadthLevel);
+            let prevSibling = nodesG.get(cIds[nIndex]);
             elon.dataManager.changeSiblingIndex(this.data.nodeId, 
               this.newPotentialParentId, nIndex);
+            
             Utils.redraw(elon);
+            let n = nm.graphics.get(this.data.nodeId);
+            let curP = _.cloneDeep(n.plane.position);
+            
+            elon.cameraManager.setSamePositionOnScreen(curP, mPos, this.nodePosRelativeToMouse);
           }
           
         }
@@ -81,7 +102,7 @@ class DragNodeState {
           return undefined;
 
           function getNearestChildId(childrenIds, draggedNodeId, graphics) {
-            let distDetector = NodeManager.Y_UNIT * 0.75;
+            let distDetector = NodeManager.Y_UNIT * 0.5;
             distDetector = distDetector * distDetector;
             let minDist = 9999;
             let nearestChildId = undefined;

@@ -48,7 +48,7 @@ class SelectedNodeState {
 
     }, elon.scene);
 
-    console.log("Selected node state " + this.data.nodeId);
+    // console.log("Selected node state " + this.data.nodeId);
   }
 
   initToggleFoldUnfoldDescendants(elon, data) {
