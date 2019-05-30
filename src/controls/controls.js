@@ -161,5 +161,18 @@ class Controls {
       }
     });
   }
+
+  handleEdit(elon, node, cbFn) {
+    let ctrl = elon.controls;
+    ctrl.createInputText(node, 
+      function enteredText(text) {
+        node.text = text;
+        elon.nodeManager.editText(node);
+        elon.dataManager.editText(node.id, text);
+        console.log("Test");
+        cbFn();
+      }
+    );
+  }
   
 }
