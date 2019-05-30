@@ -21,7 +21,10 @@ class IdleState {
         // elon.dataManager.save();
       })
       .onOpen(() => {
-
+        // elon.dataManager.open(() => {
+        //   this.controls.dispose();
+        //   new LoadNodesState(elon);
+        // })
       });
 
       elon.controls.initKeyboard(elon);
