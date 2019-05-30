@@ -34,9 +34,9 @@ class SelectedNodeState {
         new DragScreenState(elon, result);
       })
       .onDeleteNode(() => {
-        this.exit();
         elon.dataManager.deleteNode(this.data.nodeId);
         Utils.redraw(elon);
+        new IdleState(elon);
       });
     this.controls.nodeDragCb = () => {
       new DragNodeState(elon, this.data);

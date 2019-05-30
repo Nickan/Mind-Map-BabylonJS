@@ -158,10 +158,10 @@ class DataManager {
 
   // !NOTE: Will have a profound effect when referencing is implemented
   deleteNode(nodeId) {
-    let metas = _.cloneDeep(this.dataContainer.metas);
+    let metas = _.cloneDeep(this.dataContainer.defaultMetas);
     metas = this.dataContainer.removeFromParentList(nodeId, metas);
     metas = deleteMeta(nodeId, metas);
-    this.dataContainer.metas = metas;
+    this.dataContainer.defaultMetas = metas;
 
     function deleteMeta(nodeId, metas) {
       let meta = metas.get(nodeId);
