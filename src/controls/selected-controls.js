@@ -64,12 +64,6 @@ class SelectedControls {
         case "Delete":
           this.deleteNode();
           break;
-        case "F9":
-          this.onFold();
-          break;
-        case "F10":
-          this.onUnfold();
-          break;
         case "Shift":
           this.shiftIsPressed = true;
           break;
