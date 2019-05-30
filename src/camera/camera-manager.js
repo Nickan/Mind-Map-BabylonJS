@@ -13,6 +13,7 @@ class CameraManager {
 
     this.cam1;
     this.zoomValue = CameraManager.ORTHOVALUE;
+    this.shifted = false; // For debuuging
   }
 
   init(canvas, scene) {
@@ -181,9 +182,22 @@ class CameraManager {
 
       pos.y += yDiff;
       this.currentPos.y += yDiff;
-
-      Utils.fireEvent(CameraManager.ON_SCREEN_DRAG, []);
     }
+
+    // this.cam1.position.x = worldCoord.x;
+    // this.cam1.position.y = worldCoord.y;
+    // console.log("cam " + this.cam1.position);
+    // console.log("world " + worldCoord);
+  }
+  
+  /* Should only be called once */
+  setSamePositionOnScreen(curNodePos, mPos, nodePosRelativeToMouse) {
+    let xDiff = curNodePos.x - mPos.x;
+    let yDiff = curNodePos.y - mPos.y;
+
+    let pos = this.cam1.position;
+    pos.x += xDiff + nodePosRelativeToMouse.x;
+    pos.y += yDiff + nodePosRelativeToMouse.y;
   }
 }
 
