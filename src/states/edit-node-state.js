@@ -9,6 +9,7 @@ class EditNodeState {
       function enteredText(text) {
         node.text = text;
         elon.nodeManager.editText(node, text);
+        elon.dataManager.editText(data.nodeId, text);
         new IdleState(elon);
       }
     );

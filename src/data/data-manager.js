@@ -258,5 +258,9 @@ class DataManager {
     c.splice(nodeIndex, 1);
     c.splice(index, 0, nodeId);
   }
+
+  editText(nodeId, text) {
+    this.dataContainer.defaultNodes.get(nodeId).text = text;
+  }
   
 }

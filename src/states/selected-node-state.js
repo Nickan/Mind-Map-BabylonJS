@@ -40,32 +40,15 @@ class SelectedNodeState {
       new DragNodeState(elon, this.data);
     }
 
-    this.initToggleFoldUnfoldDescendants(elon, data);
-    this.initToggleFoldUnfoldAncestors(elon, data);
-    
-
-    elon.controls.onFoldAncestors(() => {
-
-    }, elon.scene);
-
-    // console.log("Selected node state " + this.data.nodeId);
-  }
-
-  initToggleFoldUnfoldDescendants(elon, data) {
-    elon.controls.onFoldDescendants(() => {
-      // Main node should not be able to be folded
-      // Node without a parent
+    this.controls.toggleFoldDescendants = () => {
       elon.dataManager.toggleFoldDescendants(data.nodeId);
       new LoadNodesState(elon);
-    }, elon.scene);
-  }
+    };
 
-  initToggleFoldUnfoldAncestors(elon, data) {
-    elon.controls.onFoldAncestors(() => {
+    this.controls.toggleFoldAncestors = () => {
       elon.dataManager.toggleFoldUnfoldAncestors(data.nodeId);
-
       new LoadNodesState(elon);
-    }, elon.scene);
+    }
   }
 
   update(delta) {
