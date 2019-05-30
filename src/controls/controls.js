@@ -135,6 +135,7 @@ class Controls {
         return;
       }
       
+      
       switch (key) {
         case "Shift":
           this.shiftIsPressed = true;
@@ -142,20 +143,20 @@ class Controls {
         case "s":
         case "S":
           if (this.shiftIsPressed) {
-            if (this.onSave != undefined) {
+            elon.dataManager.save();
+            if (this.onSave != undefined)
               this.onSave();
-              elon.dataManager.save();
-            }
           }
           break;
         case "o":
-          case "O":
-            if (this.shiftIsPressed) {
-              if (this.onOpen != undefined) {
-                this.onOpen();
-                new LoadNodesState(elon);
-              }
-            }
+        case "O":
+          if (this.shiftIsPressed) {
+            elon.dataManager.open(() => {
+              new LoadNodesState(elon);
+            })
+            if (this.onOpen != undefined)
+              this.onOpen();
+          }
           break;
       }
     });
