@@ -41,6 +41,23 @@ class Lines {
     
   }
 
+  drawLineBetweenPoints(point1, point2, scene) {
+    this.disposeLineBetweenPoints();
+    let points = { points: [point1, point2] };
+    this.lineBetweenPoints = BABYLON.MeshBuilder.CreateLines(
+      "lines", 
+      points, 
+      scene, 
+      true);
+  }
+
+  disposeLineBetweenPoints() {
+    if (this.lineBetweenPoints != undefined) {
+      this.lineBetweenPoints.dispose();
+      this.lineBetweenPoints == undefined;
+    }
+  }
+
   dispose() {
     let m = this.meshLines;
     if (m != undefined) {
@@ -49,5 +66,6 @@ class Lines {
       })
       this.meshLines = undefined;
     }
+    this.disposeLineBetweenPoints();
   }
 }

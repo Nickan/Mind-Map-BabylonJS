@@ -16,7 +16,7 @@ class DataContainer {
   }
 
   getChildren(nodeId, nodeStateCheck = true) {
-    let mData = this.metas.get(nodeId);
+    let mData = this.defaultMetas.get(nodeId);
 
     if (nodeStateCheck) {
       if (mData.foldDescendants != undefined) {
@@ -110,7 +110,7 @@ class DataContainer {
   }
 
   getParent(nodeId) {
-    let pId = this.metas.get(nodeId).parentId;
+    let pId = this.defaultMetas.get(nodeId).parentId;
     return this.nodes.get(pId);
   }
 

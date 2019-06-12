@@ -67,7 +67,7 @@ class Pool {
     let mat = new BABYLON.StandardMaterial("mat", scene);
     mat.emissiveColor = new BABYLON.Color3(1, 1, 1);
     mat.wireframe = false;
-    mat.alpha = 0;
+    mat.alpha = 0.5;
 
     let d = BABYLON.Mesh.CreateBox("OBB", 1, scene);
     d.scaling = new BABYLON.Vector3(1.3, 1, -1);

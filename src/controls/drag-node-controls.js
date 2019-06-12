@@ -14,16 +14,6 @@ class DragNodeControls {
     }
 
   }
-
-  update(delta) {
-
-  }
-
-  dispose() {
-
-  }
-  
-
   
 }
 
