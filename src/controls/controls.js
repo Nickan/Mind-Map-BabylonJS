@@ -158,6 +158,8 @@ class Controls {
               this.onOpen();
           }
           break;
+        default:
+          break;
       }
     });
   }
