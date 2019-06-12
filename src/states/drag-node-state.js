@@ -30,6 +30,7 @@ class DragNodeState {
     this.controls = new DragNodeControls(elon.scene, this.data);
     this.controls.dragStopCb = () => {
       elon.scene.onPointerUp = undefined;
+      this.changeParent(elon);
       new IdleState(elon, this.data);
       Utils.redraw(elon);
     };
@@ -62,22 +63,25 @@ class DragNodeState {
       let nm = elon.nodeManager;
 
       if (this.newPotentialParentId != pId) {
-        handleChangeParent(elon, this);
+        handleChangeParent(elon);
 
-        function handleChangeParent(elon, state) {
+        function handleChangeParent(elon) {
+          let state = elon.state;
           state.newPotentialParentId = pId;
-          elon.dataManager.changeParent(state.data.nodeId, state.newPotentialParentId);
+          elon.nodeManager.drawPotentialParentLine(state.data.nodeId,
+            state.newPotentialParentId, elon);
+          // elon.dataManager.changeParent(state.data.nodeId, state.newPotentialParentId);
 
-          let n = nm.graphics.get(state.data.nodeId);
-          Utils.redraw(elon);
-          n = nm.graphics.get(state.data.nodeId);
-          let curP = _.cloneDeep(n.plane.position);
+          // let n = nm.graphics.get(state.data.nodeId);
+          // Utils.redraw(elon);
+          // n = nm.graphics.get(state.data.nodeId);
+          // let curP = _.cloneDeep(n.plane.position);
 
-          elon.cameraManager.setSamePositionOnScreen(curP, mPos, state.nodePosRelativeToMouse);
+          // elon.cameraManager.setSamePositionOnScreen(curP, mPos, state.nodePosRelativeToMouse);
         }
         
       } else {
-        handleSameParent(elon, this);
+        // handleSameParent(elon, this);
 
         function handleSameParent(elon, state) {
           let cIds = elon.dataManager.getChildrenIds(state.newPotentialParentId);
@@ -153,6 +157,19 @@ class DragNodeState {
 
   }
 
+  changeParent(elon) {
+    let state = elon.state;
+    let nm = elon.nodeManager;
+    elon.dataManager.changeParent(state.data.nodeId, state.newPotentialParentId);
+
+    let n = nm.graphics.get(state.data.nodeId);
+    Utils.redraw(elon);
+    n = nm.graphics.get(state.data.nodeId);
+    let curP = _.cloneDeep(n.plane.position);
+
+    let mPos = Utils.getPickedMousePos(elon.scene);
+    elon.cameraManager.setSamePositionOnScreen(curP, mPos, state.nodePosRelativeToMouse);
+  }
   
 
   exit() {

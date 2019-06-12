@@ -31,7 +31,7 @@ class NodeManager {
       nodeGraphics.textBlock.node = undefined;
       nodeGraphics.textBlock.text = "";
       nodeGraphics.obb.parent = undefined;
-      nodeGraphics.obb.isVisible = false;
+      // nodeGraphics.obb.isVisible = false;
     }
   }
 
@@ -58,7 +58,7 @@ class NodeManager {
     this.graphics.set(node.id, nodeGraphics);
 
     let obb = nodeGraphics.obb;
-    obb.isVisible = true;
+    // obb.isVisible = true;
     obb.scaling.y = 1;
     obb.parent = plane;
     obb.position.x = NodeManager.X_UNIT;
@@ -77,6 +77,19 @@ class NodeManager {
     tb.text = node.text;
   }
 
+  drawPotentialParentLine(nodeId1, nodeId2, elon) {
+    let p1 = getPoint(nodeId1, this.graphics);
+    let p2 = getPoint(nodeId2, this.graphics);
+
+    elon.lines.drawLineBetweenPoints(p1, p2, elon.scene);
+
+    function getPoint(nodeId, graphics) {
+      return graphics.get(nodeId).plane.position;
+    }
+  
+  }
+
+  
   disposeGraphics() {
     this.pool.dispose();
   }
