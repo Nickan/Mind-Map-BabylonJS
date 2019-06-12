@@ -205,7 +205,7 @@ class DataManager {
   }
 
   getDescendants(nodeId) {
-    let metas = this.dataContainer.metas;
+    let metas = this.dataContainer.defaultMetas;
     let d = getDescendantsRecursive(metas, nodeId, []);
     return d;
 
