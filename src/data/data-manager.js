@@ -1,7 +1,3 @@
-
-
-
-
 class DataManager {
   constructor() {
     this.clear();
@@ -190,7 +186,11 @@ class DataManager {
   }
 
   getParentId(nodeId) {
-    return this.dataContainer.getParent(nodeId).id;
+    let parent = this.dataContainer.getParent(nodeId);
+    if (parent == undefined) {
+      return undefined
+    }
+    return parent.id;
   }
 
   save() {
